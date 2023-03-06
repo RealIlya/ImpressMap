@@ -5,8 +5,7 @@ import android.os.Bundle;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.impressmap.databinding.ActivityMainBinding;
-import com.example.impressmap.ui.fragment.MapFragment;
-import com.google.android.material.navigation.NavigationView;
+import com.example.impressmap.ui.fragment.MainFragment;
 
 
 public class MainActivity extends FragmentActivity
@@ -22,8 +21,8 @@ public class MainActivity extends FragmentActivity
         setContentView(binding.getRoot());
 
         getSupportFragmentManager().beginTransaction()
-                                   .replace(binding.container.getId(), new MapFragment())
+                                   .replace(binding.container.getId(), new MainFragment())
+                                   .setReorderingAllowed(true)
                                    .commit();
     }
-
 }
