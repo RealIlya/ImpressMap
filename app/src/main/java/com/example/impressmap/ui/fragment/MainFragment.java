@@ -12,13 +12,6 @@ import androidx.fragment.app.Fragment;
 import com.example.impressmap.databinding.FragmentMainBinding;
 import com.example.mobv2.ui.view.navigationDrawer.NavigationDrawer;
 
-import org.osmdroid.events.DelayedMapListener;
-import org.osmdroid.events.MapAdapter;
-import org.osmdroid.events.ScrollEvent;
-import org.osmdroid.events.ZoomEvent;
-import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.Marker;
-
 public class MainFragment extends Fragment
 {
     private FragmentMainBinding binding;
@@ -39,9 +32,9 @@ public class MainFragment extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
 
-        Marker marker = new Marker(binding.mapView);
-        marker.setTitle("Ыыы");
-        binding.mapView.getOverlays().add(marker);
+        getChildFragmentManager().beginTransaction()
+                                 .replace(binding.map.getId(), new MapFragment())
+                                 .commit();
 
         com.example.mobv2.ui.view.navigationDrawer.NavigationDrawer navigationDrawer = new NavigationDrawer(
                 getContext(), binding.navigationView, binding.drawerLayout,

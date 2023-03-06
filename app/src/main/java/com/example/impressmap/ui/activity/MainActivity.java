@@ -22,7 +22,6 @@ public class MainActivity extends FragmentActivity
 
         getSupportFragmentManager().beginTransaction()
                                    .replace(binding.container.getId(), new MainFragment())
-                                   .setReorderingAllowed(true)
                                    .commit();
     }
 }
