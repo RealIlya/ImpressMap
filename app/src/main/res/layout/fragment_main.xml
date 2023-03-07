@@ -64,7 +64,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-
                         <com.google.android.material.appbar.AppBarLayout
                             android:id="@+id/posts_app_bar"
                             android:layout_width="match_parent"
@@ -84,7 +83,8 @@
                         android:id="@+id/posts_recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        tools:itemCount="1" />
+                        tools:listitem="@layout/item_post"
+                        tools:itemCount="2" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>

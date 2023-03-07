@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.impressmap.databinding.FragmentMainBinding;
 import com.example.mobv2.ui.view.navigationDrawer.NavigationDrawer;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.card.MaterialCardView;
 
 public class MainFragment extends Fragment
 {
@@ -41,5 +43,26 @@ public class MainFragment extends Fragment
                 getChildFragmentManager());
 
         binding.toolbar.setNavigationOnClickListener(view1 -> navigationDrawer.open());
+
+
+        BottomSheetBehavior<MaterialCardView> bottomSheetBehavior = BottomSheetBehavior.from(binding.framePosts);
+        bottomSheetBehavior.setPeekHeight(100, true);
+        bottomSheetBehavior.setHalfExpandedRatio(0.1f);
+        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback()
+        {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet,
+                                       int newState)
+            {
+
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet,
+                                float slideOffset)
+            {
+
+            }
+        });
     }
 }
