@@ -1,16 +1,18 @@
-package com.example.impressmap.model.data;
+package com.example.impressmap.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.example.impressmap.model.data.User;
+
 import java.util.Date;
 
 @Entity
-public class Post
+public class Comment
 {
     @PrimaryKey
-    @ColumnInfo(name = "postid")
+    @ColumnInfo(name = "commentid")
     private long id;
     @ColumnInfo
     private User user;
@@ -22,11 +24,11 @@ public class Post
     private String text;
     private String firebaseId;
 
-    public Post(long id,
-                User user,
-                Date date,
-                String title,
-                String text)
+    public Comment(long id,
+                   User user,
+                   Date date,
+                   String title,
+                   String text)
     {
         this.id = id;
         this.user = user;

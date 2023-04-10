@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "986695345793",
+    "project_id": "impressmap-939c5",
+    "storage_bucket": "impressmap-939c5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:986695345793:android:1a8fb3d83106c120818f80",
+        "android_client_info": {
+          "package_name": "com.example.impressmap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "986695345793-sobiic5kubv9k53p3nptddbjtb8urh9d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBT59fXJ5qqXRjFgBVdTWT27Xz5yR2W_Io"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "986695345793-sobiic5kubv9k53p3nptddbjtb8urh9d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
