@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="authTextStyle">
+        <item name="android:backgroundTint">?colorAccent</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/gray</item>
+        <item name="android:textColorHighlight">@color/light_gray</item>
+        <item name="android:textCursorDrawable">@drawable/background_cursor</item>
+    </style>
+</resources>

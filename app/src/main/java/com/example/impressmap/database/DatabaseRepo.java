@@ -51,4 +51,12 @@ public interface DatabaseRepo
     void updateGMarkerMetadata(GMarkerMetadata gMarkerMetadata);
 
     void deleteGMarkerMetadata(GMarkerMetadata gMarkerMetadata);
+
+    default void signOut()
+    {
+    }
+
+    default void connectToDatabase()
+    {
+    }
 }

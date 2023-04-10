@@ -1,5 +1,6 @@
 package com.example.impressmap.database.firebase;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import com.example.impressmap.database.DatabaseRepo;
@@ -8,7 +9,8 @@ import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.Post;
 import com.example.impressmap.model.data.User;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.impressmap.ui.util.Constants;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -16,10 +18,11 @@ import java.util.List;
 
 public abstract class FirebaseRepo implements DatabaseRepo
 {
-    private FirebaseAuth auth = FirebaseAuth.getInstance();
-    private DatabaseReference database = FirebaseDatabase.getInstance()
-                                                         .getReference()
-                                                         .child(auth.getCurrentUser().getUid());
+
+    private final DatabaseReference database = FirebaseDatabase.getInstance()
+                                                               .getReference()
+                                                               .child(Constants.AUTH.getCurrentUser()
+                                                                                    .getUid());
 
     @Override
     public LiveData<List<Address>> getAllAddresses()
@@ -139,5 +142,17 @@ public abstract class FirebaseRepo implements DatabaseRepo
     public void deleteGMarkerMetadata(GMarkerMetadata gMarkerMetadata)
     {
 
+    }
+
+    @Override
+    public void signOut()
+    {
+        Constants.AUTH.signOut();
+    }
+
+    @Override
+    public void connectToDatabase()
+    {
+        DatabaseRepo.super.connectToDatabase();
     }
 }

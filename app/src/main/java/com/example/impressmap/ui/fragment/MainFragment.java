@@ -29,7 +29,6 @@ import com.google.android.material.card.MaterialCardView;
 public class MainFragment extends Fragment implements OnMapReadyCallback
 {
     private FragmentMainBinding binding;
-    private GoogleMap googleMap;
     private BottomSheetBehavior<MaterialCardView> bottomSheetBehavior;
 
     @Nullable
@@ -109,8 +108,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback
             {
                 isExpanding = oldOffset < slideOffset;
                 isCollapsing = oldOffset > slideOffset;
-                if (slideOffset < 1 && slideOffset >= 0.5 && isCollapsing ||
-                        slideOffset < 0.4 && slideOffset >= 0 && isExpanding)
+                if (slideOffset < 1 && slideOffset >= 0.5 && isCollapsing || slideOffset < 0.4 && slideOffset >= 0 && isExpanding)
                 {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
                 }
@@ -136,7 +134,6 @@ public class MainFragment extends Fragment implements OnMapReadyCallback
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap)
     {
-        this.googleMap = googleMap;
         GMapAdapter gMapAdapter = new GMapAdapter(getContext(), googleMap);
 
         // temporary

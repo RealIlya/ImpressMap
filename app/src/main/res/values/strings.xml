@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">ImpressMap</string>
-    <string name="title_activity_maps">MapsActivity</string>
+
+    <string name="check_internet_connection">"Check your Internet connection"</string>
+    <string name="user_does_not_exist">This user does not exist</string>
+    <string name="field_is_necessary"><u>Field is necessary</u></string>
 
     <!--  nav drawer item titles  -->
     <string name="menu_profile">Profile</string>
@@ -8,4 +11,10 @@
     <string name="menu_notification_and_sound">Notification and Sound</string>
     <string name="menu_map_features">Map Features</string>
     <string name="menu_language">Select Language</string>
+
+    <!--  auth fragment  -->
+    <string name="auth_phone_hint">Enter your login</string>
+    <string name="auth_password_hint">Enter your password</string>
+    <string name="auth_button">Next -&gt;</string>
+    <string name="remember_me_check_box">Remember me</string>
 </resources>
