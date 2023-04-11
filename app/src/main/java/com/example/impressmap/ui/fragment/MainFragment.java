@@ -1,5 +1,7 @@
 package com.example.impressmap.ui.fragment;
 
+import static com.example.impressmap.ui.util.HelperKt.getMainViewModel;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,12 +10,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.R;
 import com.example.impressmap.adapter.Adapter;
 import com.example.impressmap.adapter.GMapAdapter;
 import com.example.impressmap.databinding.FragmentMainBinding;
 import com.example.impressmap.model.data.GMarkerMetadata;
+import com.example.impressmap.ui.activity.MainViewModel;
 import com.example.impressmap.ui.util.GMarkersRepository;
 import com.example.mobv2.ui.view.navigationDrawer.NavigationDrawer;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,6 +32,8 @@ import com.google.android.material.card.MaterialCardView;
 
 public class MainFragment extends Fragment implements OnMapReadyCallback
 {
+    private MainViewModel viewModel = getMainViewModel(this);
+
     private FragmentMainBinding binding;
     private BottomSheetBehavior<MaterialCardView> bottomSheetBehavior;
 
@@ -143,7 +149,9 @@ public class MainFragment extends Fragment implements OnMapReadyCallback
         }
 
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                GMarkersRepository.getGMarkerMetadata().get(0).getLatLng(), Adapter.ZOOM));
+                GMarkersRepository.getGMarkerMetadata()
+                                  .get(0)
+                                  .getLatLng(), Adapter.ZOOM));
 
         gMapAdapter.setOnMapClickListener(new GoogleMap.OnMapClickListener()
         {

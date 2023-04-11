@@ -16,9 +16,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
-public abstract class FirebaseRepo implements DatabaseRepo
+public class FirebaseRepo implements DatabaseRepo
 {
-
     private final DatabaseReference database = FirebaseDatabase.getInstance()
                                                                .getReference()
                                                                .child(Constants.AUTH.getCurrentUser()
@@ -153,6 +152,16 @@ public abstract class FirebaseRepo implements DatabaseRepo
     @Override
     public void connectToDatabase()
     {
-        DatabaseRepo.super.connectToDatabase();
+        String email = Constants.EMAIL;
+        String password = Constants.PASSWORD;
+        Constants.AUTH.signInWithEmailAndPassword(email, password)
+                      .addOnFailureListener(new OnFailureListener()
+                      {
+                          @Override
+                          public void onFailure(@NonNull Exception e)
+                          {
+                              Constants.AUTH.createUserWithEmailAndPassword(email, password);
+                          }
+                      });
     }
 }

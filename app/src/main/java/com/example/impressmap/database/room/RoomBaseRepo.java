@@ -16,7 +16,7 @@ import com.example.impressmap.model.data.User;
 
 import java.util.List;
 
-public abstract class RoomBaseRepo implements DatabaseRepo
+public class RoomBaseRepo implements DatabaseRepo
 {
     private final AppRoomDatabase database;
 

@@ -1,5 +1,6 @@
 package com.example.impressmap.database;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import com.example.impressmap.model.Comment;
@@ -7,6 +8,9 @@ import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.Post;
 import com.example.impressmap.model.data.User;
+import com.example.impressmap.ui.util.Constants;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.auth.AuthCredential;
 
 import java.util.List;
 

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import com.example.impressmap.model.data.GMarkerMetadata;
+import com.example.impressmap.ui.util.Constants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,8 +20,7 @@ public class AllGMarkerMetadataLiveData extends LiveData<List<GMarkerMetadata>>
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final DatabaseReference database = FirebaseDatabase.getInstance()
                                                                .getReference()
-                                                               .child(auth.getCurrentUser()
-                                                                          .getUid());
+                                                               .child(Constants.Key.GMARKERS);
 
     private final ValueEventListener listener = new ValueEventListener()
     {
