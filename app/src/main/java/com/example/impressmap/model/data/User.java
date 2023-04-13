@@ -1,64 +1,82 @@
 package com.example.impressmap.model.data;
 
+import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
+import static com.example.impressmap.util.Constants.Keys.EMAIL_NODE;
+import static com.example.impressmap.util.Constants.Keys.FULL_NAME_NODE;
+import static com.example.impressmap.util.Constants.Keys.PHONE_NUMBER_NODE;
+
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
-public class User
+public class User implements TransferableToDatabase
 {
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "userid")
-    private long id;
+    private String id;
     @ColumnInfo
-    private String nickname;
-    @ColumnInfo
-    private String name;
-    @ColumnInfo
-    private String surname;
+    private String fullName;
     @ColumnInfo
     private String email;
     @ColumnInfo
     private String phoneNumber;
-    @ColumnInfo
-    private String password;
-    private String firebaseId;
 
-    public User(long id,
-                String nickname,
-                String name,
-                String surname,
-                String email,
-                String phoneNumber,
-                String password)
+    @Override
+    public Map<String, Object> prepareToTransferToDatabase()
     {
-        this.id = id;
-        this.nickname = nickname;
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.password = password;
+        Map<String, Object> data = new HashMap<>();
+
+        data.put(CHILD_ID_NODE, id);
+        data.put(FULL_NAME_NODE, fullName);
+        data.put(EMAIL_NODE, email);
+        data.put(PHONE_NUMBER_NODE, phoneNumber);
+
+        return data;
     }
 
-    public long getId()
+    @NonNull
+    public static User createUser(String email)
+    {
+        User user = new User();
+        user.email = email;
+        user.fullName = email;
+        user.phoneNumber = "";
+
+        return user;
+    }
+
+    public String getId()
     {
         return id;
     }
 
-    public String getNickname()
+    public void setId(String id)
     {
-        return nickname;
+        this.id = id;
+    }
+
+    public String getFullName()
+    {
+        return fullName;
+    }
+
+    public void setFullName(String fullName)
+    {
+        this.fullName = fullName;
     }
 
     public String getName()
     {
-        return name;
+        String[] split = fullName.split("");
+        return split[0];
     }
 
     public String getSurname()
     {
-        return surname;
+        String[] split = fullName.split("");
+        return split.length > 1 ? split[1] : "";
     }
 
     public String getEmail()
@@ -66,18 +84,18 @@ public class User
         return email;
     }
 
+    public void setEmail(String email)
+    {
+        this.email = email;
+    }
+
     public String getPhoneNumber()
     {
         return phoneNumber;
     }
 
-    public String getPassword()
+    public void setPhoneNumber(String phoneNumber)
     {
-        return password;
-    }
-
-    public String getFirebaseId()
-    {
-        return firebaseId;
+        this.phoneNumber = phoneNumber;
     }
 }

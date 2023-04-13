@@ -26,8 +26,8 @@
                     android:visibility="invisible" />
 
                 <EditText
-                    style="@style/authTextStyle"
                     android:id="@+id/login_view"
+                    style="@style/authTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/horizontal_margin"
@@ -50,8 +50,8 @@
                     android:visibility="invisible" />
 
                 <EditText
-                    style="@style/authTextStyle"
                     android:id="@+id/password_view"
+                    style="@style/authTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/horizontal_margin"
@@ -66,6 +66,14 @@
                     android:layout_marginHorizontal="@dimen/horizontal_margin"
                     android:buttonTint="?colorAccent"
                     android:text="@string/remember_me_check_box" />
+
+                <CheckBox
+                    android:id="@+id/sign_up_check_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/horizontal_margin"
+                    android:buttonTint="?colorAccent"
+                    android:text="@string/sign_up_check_box" />
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -75,6 +83,15 @@
                 android:layout_height="match_parent"
                 android:backgroundTint="?colorAccent"
                 android:text="@string/auth_button" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/sign_up_button"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="?colorAccent"
+                android:text="@string/sign_up_button"
+                android:visibility="gone" />
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

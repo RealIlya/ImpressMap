@@ -1,4 +1,4 @@
-package com.example.impressmap.model;
+package com.example.impressmap.model.data;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

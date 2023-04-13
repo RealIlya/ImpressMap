@@ -7,7 +7,6 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.example.impressmap.model.Comment;
 import com.example.impressmap.model.data.GMarkerMetadata;
 
 import java.util.List;

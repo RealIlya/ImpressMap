@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.annotation.DrawableRes;
 
-import com.example.impressmap.ui.util.Converter;
+import com.example.impressmap.util.Converter;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
 

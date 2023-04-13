@@ -14,8 +14,8 @@ import com.example.impressmap.adapter.Adapter;
 import com.example.impressmap.adapter.GMapAdapter;
 import com.example.impressmap.databinding.FragmentMainBinding;
 import com.example.impressmap.model.data.GMarkerMetadata;
-import com.example.impressmap.ui.util.GMarkersRepository;
-import com.example.mobv2.ui.view.navigationDrawer.NavigationDrawer;
+import com.example.impressmap.util.GMarkersRepository;
+import com.example.impressmap.util.NavigationDrawer;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -55,7 +55,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback
             supportMapFragment.getMapAsync(this);
         }
 
-        com.example.mobv2.ui.view.navigationDrawer.NavigationDrawer navigationDrawer = new NavigationDrawer(
+        NavigationDrawer navigationDrawer = new NavigationDrawer(
                 getContext(), binding.navigationView, binding.drawerLayout,
                 getChildFragmentManager());
 

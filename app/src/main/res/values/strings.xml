@@ -16,5 +16,7 @@
     <string name="auth_phone_hint">Enter your login</string>
     <string name="auth_password_hint">Enter your password</string>
     <string name="auth_button">Next -&gt;</string>
+    <string name="sign_up_button">Sign up!</string>
     <string name="remember_me_check_box">Remember me</string>
+    <string name="sign_up_check_box">Sign up</string>
 </resources>

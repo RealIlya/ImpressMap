@@ -17,7 +17,7 @@ public interface AddressDao
     @Query("SELECT * FROM address")
     List<Address> getAll();
 
-    @Query("SELECT * FROM address WHERE addressid = :id")
+    @Query("SELECT * FROM address WHERE id = :id")
     Address getById(String id);
 
     @Insert

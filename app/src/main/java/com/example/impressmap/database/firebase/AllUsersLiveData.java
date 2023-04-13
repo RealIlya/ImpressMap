@@ -1,12 +1,12 @@
 package com.example.impressmap.database.firebase;
 
 import static com.example.impressmap.util.Constants.DATABASE_REF;
-import static com.example.impressmap.util.Constants.Keys.GMARKERS_NODE;
+import static com.example.impressmap.util.Constants.Keys.USERS_NODE;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
-import com.example.impressmap.model.data.GMarkerMetadata;
+import com.example.impressmap.model.data.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -15,23 +15,23 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllGMarkerMetadataLiveData extends LiveData<List<GMarkerMetadata>>
+// you don't need to AllUsersLiveData
+public class AllUsersLiveData extends LiveData<List<User>>
 {
-    private final DatabaseReference database;
+    private final DatabaseReference usersRef;
 
     private final ValueEventListener listener = new ValueEventListener()
     {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot)
         {
-            List<GMarkerMetadata> gMarkerMetadata = new ArrayList<>();
+            List<User> users = new ArrayList<>();
             for (DataSnapshot dataSnapshot : snapshot.getChildren())
             {
-                GMarkerMetadata value = dataSnapshot.getValue(GMarkerMetadata.class);
-                gMarkerMetadata.add(value);
+                User value = dataSnapshot.getValue(User.class);
+                users.add(value);
             }
-
-            setValue(gMarkerMetadata);
+            setValue(users);
         }
 
         @Override
@@ -41,22 +41,22 @@ public class AllGMarkerMetadataLiveData extends LiveData<List<GMarkerMetadata>>
         }
     };
 
-    public AllGMarkerMetadataLiveData()
+    public AllUsersLiveData()
     {
-        database = DATABASE_REF.child(GMARKERS_NODE);
+        usersRef = DATABASE_REF.child(USERS_NODE);
     }
 
     @Override
     protected void onActive()
     {
-        database.addValueEventListener(listener);
+        usersRef.addValueEventListener(listener);
         super.onActive();
     }
 
     @Override
     protected void onInactive()
     {
-        database.removeEventListener(listener);
+        usersRef.removeEventListener(listener);
         super.onInactive();
     }
 }

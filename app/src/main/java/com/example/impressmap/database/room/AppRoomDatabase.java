@@ -11,12 +11,12 @@ import com.example.impressmap.database.room.daos.CommentDao;
 import com.example.impressmap.database.room.daos.GMarkerMetadataDao;
 import com.example.impressmap.database.room.daos.PostDao;
 import com.example.impressmap.database.room.daos.UserDao;
-import com.example.impressmap.model.Comment;
+import com.example.impressmap.model.data.Comment;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.Post;
 import com.example.impressmap.model.data.User;
-import com.example.impressmap.ui.util.Constants;
+import com.example.impressmap.util.Constants;
 
 @Database(entities = {Address.class, User.class, Post.class, Comment.class,
         GMarkerMetadata.class}, version = 1)
