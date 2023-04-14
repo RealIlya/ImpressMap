@@ -31,11 +31,9 @@ public class UsersRepo implements DatabaseRepo<User>
     @Override
     public void insert(User user)
     {
-        String userKey = usersRef.push().getKey();
-
         Map<String, Object> data = user.prepareToTransferToDatabase();
 
-        usersRef.child(userKey).updateChildren(data);
+        usersRef.child(user.getId()).updateChildren(data);
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.example.impressmap.model.data;
 
+import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
 import static com.example.impressmap.util.Constants.Keys.FULL_ADDRESS_NODE;
+import static com.example.impressmap.util.Constants.Keys.OWNER_ID_NODE;
 import static com.example.impressmap.util.Constants.Keys.USER_IDS_NODE;
 
 import androidx.room.Entity;
@@ -28,11 +30,12 @@ public class Address implements TransferableToDatabase
     {
         Map<String, Object> data = new HashMap<>();
 
+        data.put(CHILD_ID_NODE, id);
+        data.put(OWNER_ID_NODE, ownerId);
         data.put(FULL_ADDRESS_NODE,
                 String.format("%s %s %s %s %s", country, city, district, street, house));
 
         StringBuilder userIdsS = new StringBuilder();
-
         for (String userId : userIds)
         {
             userIdsS.append(userId);

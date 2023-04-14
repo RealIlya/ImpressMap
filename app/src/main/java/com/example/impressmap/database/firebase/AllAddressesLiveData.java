@@ -60,9 +60,9 @@ public class AllAddressesLiveData extends LiveData<List<Address>>
         }
     };
 
-    public AllAddressesLiveData()
+    public AllAddressesLiveData(DatabaseReference userAddressesRef)
     {
-        userAddressesRef = DATABASE_REF.child(MAIN_LIST_NODE).child(UID);
+        this.userAddressesRef = userAddressesRef;
     }
 
     @Override

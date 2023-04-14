@@ -1,6 +1,7 @@
 package com.example.impressmap.database.firebase;
 
 import static com.example.impressmap.util.Constants.AUTH;
+import static com.example.impressmap.util.Constants.UID;
 
 import android.util.Log;
 
@@ -23,17 +24,22 @@ public class Authorization
                        String password,
                        SuccessCallback onSuccessCallback)
     {
-        AUTH.createUserWithEmailAndPassword(email, password).addOnSuccessListener(authResult ->
-        {
-            User user = User.createUser(email);
-            FirebaseUser firebaseUser = authResult.getUser();
+        AUTH.createUserWithEmailAndPassword(email, password)
+            .addOnSuccessListener(authResult ->
+            {
+                User user = User.createUser(email);
+                FirebaseUser firebaseUser = authResult.getUser();
 
-            user.setId(firebaseUser.getUid());
-            user.setPhoneNumber(firebaseUser.getPhoneNumber());
+                user.setId(firebaseUser.getUid());
+                user.setPhoneNumber(firebaseUser.getPhoneNumber());
 
-            usersRepo.insert(user);
-            onSuccessCallback.onSuccess();
-        }).addOnFailureListener(e -> Log.e("signUp", e.getMessage()));
+                usersRepo.insert(user);
+
+                UID = AUTH.getCurrentUser().getUid();
+
+                onSuccessCallback.onSuccess();
+            })
+            .addOnFailureListener(e -> Log.e("signUp", e.getMessage()));
     }
 
     public void signIn(String email,
@@ -41,7 +47,12 @@ public class Authorization
                        SuccessCallback onSuccessCallback)
     {
         AUTH.signInWithEmailAndPassword(email, password)
-            .addOnSuccessListener(authResult -> onSuccessCallback.onSuccess())
+            .addOnSuccessListener(authResult ->
+            {
+                UID = AUTH.getCurrentUser().getUid();
+
+                onSuccessCallback.onSuccess();
+            })
             .addOnFailureListener(e -> Log.e("signIn", e.getMessage()));
     }
 

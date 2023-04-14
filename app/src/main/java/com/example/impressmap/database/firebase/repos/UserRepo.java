@@ -13,11 +13,14 @@ public class UserRepo
 
     public UserRepo()
     {
-        userRef = DATABASE_REF.child(USERS_NODE).child(UID);
+        userRef = DATABASE_REF.child(USERS_NODE)
+                              .child(UID);
     }
 
     public User getCurrentUser()
     {
-        return userRef.get().getResult().getValue(User.class);
+        return userRef.get()
+                      .getResult()
+                      .getValue(User.class);
     }
 }

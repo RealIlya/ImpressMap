@@ -9,7 +9,7 @@ public class Constants
     public static String DATABASE_NAME = "impress_database";
 
     public static final FirebaseAuth AUTH = FirebaseAuth.getInstance();
-    public static final String UID = AUTH.getCurrentUser().getUid();
+    public static String UID;
 
     public static final DatabaseReference DATABASE_REF;
 
@@ -41,5 +41,6 @@ public class Constants
         public static final String EMAIL_NODE = "email";
         public static final String USER_IDS_NODE = "user_ids";
         public static final String OWNER_ID_NODE = "owner_id";
+        public static final String TYPE_NODE = "type";
     }
 }

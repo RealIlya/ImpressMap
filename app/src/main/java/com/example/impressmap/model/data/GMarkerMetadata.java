@@ -1,38 +1,49 @@
 package com.example.impressmap.model.data;
 
-import androidx.room.ColumnInfo;
+import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
+import static com.example.impressmap.util.Constants.Keys.POSITION_NODE;
+import static com.example.impressmap.util.Constants.Keys.TITLE_NODE;
+import static com.example.impressmap.util.Constants.Keys.TYPE_NODE;
+
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.HashMap;
+import java.util.Map;
+
 // for database store
 @Entity
-public class GMarkerMetadata
+public class GMarkerMetadata implements TransferableToDatabase
 {
     public static final int ADDRESS_MARKER = 0, COMMON_MARKER = 1;
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "mmid")
-    private long id;
-    @ColumnInfo
-    private String title;
-    @ColumnInfo
-    private LatLng latLng;
-    @ColumnInfo
-    private int type;
+    private String id = "";
+    private String title = "";
+    private LatLng latLng = new LatLng(-1, -1);
+    private int type = -1;
 
-    private String firebaseId;
+    public Map<String, Object> prepareToTransferToDatabase()
+    {
+        Map<String, Object> data = new HashMap<>();
 
-    public GMarkerMetadata(long id,
-                           String title,
-                           LatLng latLng,
-                           int type)
+        data.put(CHILD_ID_NODE, id);
+        data.put(TITLE_NODE, title);
+        data.put(POSITION_NODE,
+                String.format("%s %s", latLng.latitude, latLng.longitude));
+        data.put(TYPE_NODE, type);
+
+        return data;
+    }
+
+    public String getId()
+    {
+        return id;
+    }
+
+    public void setId(String id)
     {
         this.id = id;
-        this.title = title;
-        this.latLng = latLng;
-        this.type = type;
     }
 
     public String getTitle()
@@ -40,13 +51,28 @@ public class GMarkerMetadata
         return title;
     }
 
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
+
     public LatLng getLatLng()
     {
         return latLng;
     }
 
+    public void setLatLng(LatLng latLng)
+    {
+        this.latLng = latLng;
+    }
+
     public int getType()
     {
         return type;
+    }
+
+    public void setType(int type)
+    {
+        this.type = type;
     }
 }

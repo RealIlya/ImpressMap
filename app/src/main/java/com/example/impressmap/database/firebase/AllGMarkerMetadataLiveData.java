@@ -1,8 +1,5 @@
 package com.example.impressmap.database.firebase;
 
-import static com.example.impressmap.util.Constants.DATABASE_REF;
-import static com.example.impressmap.util.Constants.Keys.GMARKERS_NODE;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
@@ -17,7 +14,7 @@ import java.util.List;
 
 public class AllGMarkerMetadataLiveData extends LiveData<List<GMarkerMetadata>>
 {
-    private final DatabaseReference database;
+    private final DatabaseReference databaseReference;
 
     private final ValueEventListener listener = new ValueEventListener()
     {
@@ -41,22 +38,22 @@ public class AllGMarkerMetadataLiveData extends LiveData<List<GMarkerMetadata>>
         }
     };
 
-    public AllGMarkerMetadataLiveData()
+    public AllGMarkerMetadataLiveData(DatabaseReference databaseReference)
     {
-        database = DATABASE_REF.child(GMARKERS_NODE);
+        this.databaseReference = databaseReference;
     }
 
     @Override
     protected void onActive()
     {
-        database.addValueEventListener(listener);
+        databaseReference.addValueEventListener(listener);
         super.onActive();
     }
 
     @Override
     protected void onInactive()
     {
-        database.removeEventListener(listener);
+        databaseReference.removeEventListener(listener);
         super.onInactive();
     }
 }

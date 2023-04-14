@@ -14,7 +14,6 @@ import com.example.impressmap.adapter.Adapter;
 import com.example.impressmap.adapter.GMapAdapter;
 import com.example.impressmap.databinding.FragmentMainBinding;
 import com.example.impressmap.model.data.GMarkerMetadata;
-import com.example.impressmap.util.GMarkersRepository;
 import com.example.impressmap.util.NavigationDrawer;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -64,7 +63,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback
         bottomSheetBehavior = BottomSheetBehavior.from(binding.framePosts);
         bottomSheetBehavior.setHalfExpandedRatio(0.4f);
         bottomSheetBehavior.setPeekHeight(200);
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback()
         {
             private boolean isCollapsing = false;
@@ -137,13 +136,13 @@ public class MainFragment extends Fragment implements OnMapReadyCallback
         GMapAdapter gMapAdapter = new GMapAdapter(getContext(), googleMap);
 
         // temporary
-        for (GMarkerMetadata gMarkerMetadata : GMarkersRepository.getGMarkerMetadata())
+/*        for (GMarkerMetadata gMarkerMetadata : GMarkersRepository.getGMarkerMetadata())
         {
             gMapAdapter.addMarker(gMarkerMetadata);
         }
 
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                GMarkersRepository.getGMarkerMetadata().get(0).getLatLng(), Adapter.ZOOM));
+                GMarkersRepository.getGMarkerMetadata().get(0).getLatLng(), Adapter.ZOOM));*/
 
         gMapAdapter.setOnMapClickListener(new GoogleMap.OnMapClickListener()
         {
