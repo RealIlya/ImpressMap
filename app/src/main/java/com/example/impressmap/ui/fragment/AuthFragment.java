@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.impressmap.R;
-import com.example.impressmap.database.firebase.Authorization;
+import com.example.impressmap.database.firebase.cases.AuthorizationCase;
 import com.example.impressmap.databinding.FragmentAuthBinding;
 import com.example.impressmap.util.SuccessCallback;
 import com.google.android.material.snackbar.Snackbar;
@@ -35,11 +35,10 @@ public class AuthFragment extends Fragment
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState)
     {
-        super.onViewCreated(view, savedInstanceState);
-        Authorization authorization = new Authorization();
-        binding.nextButton.setOnClickListener(v -> userWay(authorization, SIGN_IN_TYPE));
+        AuthorizationCase authorizationCase = new AuthorizationCase();
+        binding.nextButton.setOnClickListener(v -> userWay(authorizationCase, SIGN_IN_TYPE));
 
-        binding.signUpButton.setOnClickListener(v -> userWay(authorization, SIGN_UP_TYPE));
+        binding.signUpButton.setOnClickListener(v -> userWay(authorizationCase, SIGN_UP_TYPE));
 
         binding.signUpCheckBox.setOnCheckedChangeListener((compoundButton, checked) ->
         {
@@ -56,25 +55,25 @@ public class AuthFragment extends Fragment
         });
     }
 
-    private void userWay(Authorization authorization,
+    private void userWay(AuthorizationCase authorizationCase,
                          int type)
     {
         String loginText = String.valueOf(binding.loginView.getText());
         String passwordText = String.valueOf(binding.passwordView.getText());
         if (!loginText.isEmpty() && !passwordText.isEmpty())
         {
-            SuccessCallback successCallback = () -> getParentFragmentManager().beginTransaction()
-                                                                              .replace(
-                                                                                      R.id.container,
-                                                                                      new MainFragment())
-                                                                              .commit();
+            SuccessCallback successCallback = () -> requireActivity().getSupportFragmentManager()
+                                                                     .beginTransaction()
+                                                                     .replace(R.id.container,
+                                                                             new MainFragment())
+                                                                     .commit();
             switch (type)
             {
                 case SIGN_IN_TYPE:
-                    authorization.signIn(loginText, passwordText, successCallback);
+                    authorizationCase.signIn(loginText, passwordText, successCallback);
                     break;
                 case SIGN_UP_TYPE:
-                    authorization.signUp(loginText, passwordText, successCallback);
+                    authorizationCase.signUp(loginText, passwordText, successCallback);
                     break;
             }
         }

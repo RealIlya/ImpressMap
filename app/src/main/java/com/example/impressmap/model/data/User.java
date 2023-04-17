@@ -6,7 +6,6 @@ import static com.example.impressmap.util.Constants.Keys.FULL_NAME_NODE;
 import static com.example.impressmap.util.Constants.Keys.PHONE_NUMBER_NODE;
 
 import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 
 import java.util.HashMap;
@@ -16,11 +15,8 @@ import java.util.Map;
 public class User implements TransferableToDatabase
 {
     private String id;
-    @ColumnInfo
     private String fullName;
-    @ColumnInfo
     private String email;
-    @ColumnInfo
     private String phoneNumber;
 
     @Override

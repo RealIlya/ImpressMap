@@ -1,4 +1,4 @@
-package com.example.impressmap.database.firebase;
+package com.example.impressmap.database.firebase.data;
 
 import static com.example.impressmap.util.Constants.DATABASE_REF;
 import static com.example.impressmap.util.Constants.Keys.USERS_NODE;
@@ -50,13 +50,11 @@ public class AllUsersLiveData extends LiveData<List<User>>
     protected void onActive()
     {
         usersRef.addValueEventListener(listener);
-        super.onActive();
     }
 
     @Override
     protected void onInactive()
     {
         usersRef.removeEventListener(listener);
-        super.onInactive();
     }
 }

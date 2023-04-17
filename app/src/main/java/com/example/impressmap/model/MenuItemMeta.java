@@ -10,9 +10,12 @@ public class MenuItemMeta
         this.clickListener = clickListener;
     }
 
-    public OnClickListener getClickListener()
+    public void onClick()
     {
-        return clickListener;
+        if (clickListener != null)
+        {
+            clickListener.onClick();
+        }
     }
 
     public interface OnClickListener

@@ -1,4 +1,4 @@
-package com.example.impressmap.util;
+package com.example.impressmap.ui;
 
 import android.content.Context;
 import android.view.Menu;
@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.impressmap.R;
 import com.example.impressmap.model.MenuItemMeta;
+import com.example.impressmap.ui.fragment.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.HashMap;
@@ -39,12 +40,13 @@ public class NavigationDrawer implements NavigationView.OnNavigationItemSelected
         this.fragmentManager = fragmentManager;
 
         initNavigationMenu();
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item)
     {
-        menuItemMetas.get(item.getItemId()).getClickListener().onClick();
+        menuItemMetas.get(item.getItemId()).onClick();
 
         close();
 
@@ -58,11 +60,15 @@ public class NavigationDrawer implements NavigationView.OnNavigationItemSelected
 
         int order = 0;
 
-        addNavigationMenuItem(menu, PROFILE_GROUP, order++, R.string.menu_profile, new MenuItemMeta(
-                () -> fragmentManager.beginTransaction()
-                                     .replace(R.id.container, new Fragment())
-                                     .addToBackStack("")
-                                     .commit()), R.drawable.ic_menu_profile);
+        addNavigationMenuItem(menu, PROFILE_GROUP, order++, R.string.menu_profile,
+                new MenuItemMeta(() ->
+                {
+                    String name = ProfileFragment.class.getSimpleName();
+                    fragmentManager.beginTransaction()
+                                   .replace(R.id.container, new ProfileFragment())
+                                   .addToBackStack(name)
+                                   .commit();
+                }), R.drawable.ic_menu_profile);
 
         // the next submenu
         Menu submenuSettings = menu.addSubMenu(SETTINGS_GROUP, Menu.NONE, order,

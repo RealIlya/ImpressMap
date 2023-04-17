@@ -3,13 +3,15 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="@dimen/vertical_margin"
+            android:fitsSystemWindows="true"
             android:orientation="vertical">
 
             <LinearLayout
@@ -32,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/horizontal_margin"
                     android:autofillHints="phone"
-                    android:hint="@string/auth_phone_hint"
+                    android:hint="@string/login_hint"
                     android:inputType="text" />
             </LinearLayout>
 
@@ -56,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/horizontal_margin"
                     android:autofillHints="password"
-                    android:hint="@string/auth_password_hint"
+                    android:hint="@string/password_hint"
                     android:inputType="textPassword" />
 
                 <CheckBox
@@ -82,7 +84,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:backgroundTint="?colorAccent"
-                android:text="@string/auth_button" />
+                android:text="@string/sign_in_button" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/sign_up_button"

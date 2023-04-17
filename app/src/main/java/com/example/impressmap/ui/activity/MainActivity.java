@@ -1,6 +1,8 @@
 package com.example.impressmap.ui.activity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.view.WindowInsetsController;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -19,6 +21,7 @@ public class MainActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+
         setContentView(binding.getRoot());
 
         getSupportFragmentManager().beginTransaction()

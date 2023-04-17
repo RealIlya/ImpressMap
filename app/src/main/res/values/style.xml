@@ -8,4 +8,31 @@
         <item name="android:textColorHighlight">@color/light_gray</item>
         <item name="android:textCursorDrawable">@drawable/background_cursor</item>
     </style>
+
+    <style name="settingsItemStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@drawable/ripple_effect</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:paddingStart">@dimen/horizontal_margin</item>
+        <item name="android:paddingTop">@dimen/horizontal_small_margin</item>
+        <item name="android:paddingBottom">@dimen/horizontal_small_margin</item>
+    </style>
+
+    <style name="settingsItemHeaderTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/dim_gray</item>
+        <item name="android:textSize">@dimen/medium_text_size</item>
+    </style>
+
+    <style name="settingsItemSubheaderTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/vertical_very_small_margin</item>
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textSize">@dimen/pre_medium_text_size</item>
+    </style>
 </resources>

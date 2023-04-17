@@ -1,50 +1,43 @@
 package com.example.impressmap.model.data;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
-import com.example.impressmap.model.data.User;
 
 import java.util.Date;
+import java.util.Map;
 
 @Entity
-public class Comment
+public class Comment implements TransferableToDatabase
 {
-    @PrimaryKey
-    @ColumnInfo(name = "commentid")
-    private long id;
-    @ColumnInfo
-    private User user;
-    @ColumnInfo
+    private String id;
+    private OwnerUser ownerUser;
     private Date date;
-    @ColumnInfo
     private String title;
-    @ColumnInfo
     private String text;
-    private String firebaseId;
 
-    public Comment(long id,
-                   User user,
-                   Date date,
-                   String title,
-                   String text)
+    @Override
+    public Map<String, Object> prepareToTransferToDatabase()
     {
-        this.id = id;
-        this.user = user;
-        this.date = date;
-        this.title = title;
-        this.text = text;
+        return null;
     }
 
-    public long getId()
+    public String getId()
     {
         return id;
     }
 
-    public User getUser()
+    public void setId(String id)
     {
-        return user;
+        this.id = id;
+    }
+
+    public OwnerUser getOwnerUser()
+    {
+        return ownerUser;
+    }
+
+    public void setOwnerUser(OwnerUser ownerUser)
+    {
+        this.ownerUser = ownerUser;
     }
 
     public Date getDate()
@@ -52,9 +45,19 @@ public class Comment
         return date;
     }
 
+    public void setDate(Date date)
+    {
+        this.date = date;
+    }
+
     public String getTitle()
     {
         return title;
+    }
+
+    public void setTitle(String title)
+    {
+        this.title = title;
     }
 
     public String getText()
@@ -62,8 +65,8 @@ public class Comment
         return text;
     }
 
-    public String getFirebaseId()
+    public void setText(String text)
     {
-        return firebaseId;
+        this.text = text;
     }
 }

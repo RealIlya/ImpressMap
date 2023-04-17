@@ -1,9 +1,7 @@
-package com.example.impressmap.database.firebase;
+package com.example.impressmap.database.firebase.data;
 
 import static com.example.impressmap.util.Constants.DATABASE_REF;
 import static com.example.impressmap.util.Constants.Keys.ADDRESSES_NODE;
-import static com.example.impressmap.util.Constants.Keys.MAIN_LIST_NODE;
-import static com.example.impressmap.util.Constants.UID;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -69,13 +67,11 @@ public class AllAddressesLiveData extends LiveData<List<Address>>
     protected void onActive()
     {
         userAddressesRef.addValueEventListener(listener);
-        super.onActive();
     }
 
     @Override
     protected void onInactive()
     {
         userAddressesRef.removeEventListener(listener);
-        super.onInactive();
     }
 }

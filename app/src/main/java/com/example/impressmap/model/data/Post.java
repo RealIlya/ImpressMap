@@ -1,48 +1,58 @@
 package com.example.impressmap.model.data;
 
-import androidx.room.ColumnInfo;
+import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
+import static com.example.impressmap.util.Constants.Keys.DATE_NODE;
+import static com.example.impressmap.util.Constants.Keys.GMARKER_ID;
+import static com.example.impressmap.util.Constants.Keys.OWNER_ID_NODE;
+import static com.example.impressmap.util.Constants.Keys.TEXT_NODE;
+
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
-public class Post
+public class Post implements TransferableToDatabase
 {
-    @PrimaryKey
-    @ColumnInfo(name = "postid")
-    private long id;
-    @ColumnInfo
-    private User user;
-    @ColumnInfo
-    private Date date;
-    @ColumnInfo
-    private String title;
-    @ColumnInfo
-    private String text;
-    private String firebaseId;
+    private String id = "";
+    private OwnerUser ownerUser = new OwnerUser();
+    private Date date = new Date();
+    private String text = "";
+    private String gMarkerId;
 
-    public Post(long id,
-                User user,
-                Date date,
-                String title,
-                String text)
+    @Override
+    public Map<String, Object> prepareToTransferToDatabase()
     {
-        this.id = id;
-        this.user = user;
-        this.date = date;
-        this.title = title;
-        this.text = text;
+        Map<String, Object> data = new HashMap<>();
+
+        data.put(CHILD_ID_NODE, id);
+        data.put(OWNER_ID_NODE, ownerUser.getId());
+        data.put(DATE_NODE, date.getTime());
+        data.put(TEXT_NODE, text);
+        data.put(GMARKER_ID, gMarkerId);
+
+        return data;
     }
 
-    public long getId()
+    public String getId()
     {
         return id;
     }
 
-    public User getUser()
+    public void setId(String id)
     {
-        return user;
+        this.id = id;
+    }
+
+    public OwnerUser getOwnerUser()
+    {
+        return ownerUser;
+    }
+
+    public void setOwnerUser(OwnerUser ownerUser)
+    {
+        this.ownerUser = ownerUser;
     }
 
     public Date getDate()
@@ -50,9 +60,9 @@ public class Post
         return date;
     }
 
-    public String getTitle()
+    public void setDate(Date date)
     {
-        return title;
+        this.date = date;
     }
 
     public String getText()
@@ -60,8 +70,18 @@ public class Post
         return text;
     }
 
-    public String getFirebaseId()
+    public void setText(String text)
     {
-        return firebaseId;
+        this.text = text;
+    }
+
+    public String getGMarkerId()
+    {
+        return gMarkerId;
+    }
+
+    public void setGMarkerId(String gMarkerId)
+    {
+        this.gMarkerId = gMarkerId;
     }
 }

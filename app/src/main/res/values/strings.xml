@@ -13,10 +13,24 @@
     <string name="menu_language">Select Language</string>
 
     <!--  auth fragment  -->
-    <string name="auth_phone_hint">Enter your login</string>
-    <string name="auth_password_hint">Enter your password</string>
-    <string name="auth_button">Next -&gt;</string>
+    <string name="login_hint">Enter your login</string>
+    <string name="password_hint">Enter your password</string>
+    <string name="sign_in_button">Next -&gt;</string>
     <string name="sign_up_button">Sign up!</string>
     <string name="remember_me_check_box">Remember me</string>
     <string name="sign_up_check_box">Sign up</string>
+
+    <!--  bottom sheet fragment  -->
+    <string name="create_marker">Create marker</string>
+    <string name="marker_title_hint">Title</string>
+    <string name="marker_text_hint">Text</string>
+
+    <!--  profile fragment  -->
+    <string name="phone_number_sub">Your phone number</string>
+    <string name="nickname_sub">Your nickname</string>
+    <string name="title_bio">About yourself</string>
+    <string name="desc_bio_sub">Write a few words about yourself</string>
+    <string name="title_addresses">Your addresses</string>
+    <string name="desc_addresses_sub">Tap to change your places of residence</string>
+    <string name="email_sub">Your email</string>
 </resources>

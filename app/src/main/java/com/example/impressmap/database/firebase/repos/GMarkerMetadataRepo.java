@@ -9,7 +9,7 @@ import static com.example.impressmap.util.Constants.UID;
 import androidx.lifecycle.LiveData;
 
 import com.example.impressmap.database.DatabaseRepo;
-import com.example.impressmap.database.firebase.AllGMarkerMetadataLiveData;
+import com.example.impressmap.database.firebase.data.AllGMarkerMetadataLiveData;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.google.firebase.database.DatabaseReference;
 
@@ -22,13 +22,13 @@ public class GMarkerMetadataRepo implements DatabaseRepo<GMarkerMetadata>
     private final DatabaseReference gMarkersRef;
     private DatabaseReference userGMarkersRef;
 
-    public GMarkerMetadataRepo(String addressNode)
+    public GMarkerMetadataRepo(String addressId)
     {
         gMarkersRef = DATABASE_REF.child(GMARKERS_NODE);
         userGMarkersRef = DATABASE_REF.child(MAIN_LIST_NODE)
                                       .child(UID)
                                       .child(GMARKERS_NODE)
-                                      .child(addressNode);
+                                      .child(addressId);
     }
 
     @Override
@@ -40,18 +40,16 @@ public class GMarkerMetadataRepo implements DatabaseRepo<GMarkerMetadata>
     @Override
     public void insert(GMarkerMetadata gMarkerMetadata)
     {
-        String gMarkerKey = userGMarkersRef.push()
-                                           .getKey();
+        String gMarkerKey = userGMarkersRef.push().getKey();
 
         gMarkerMetadata.setId(gMarkerKey);
         Map<String, Object> data = gMarkerMetadata.prepareToTransferToDatabase();
 
         Map<String, Object> sData = new HashMap<>();
         sData.put(CHILD_ID_NODE, gMarkerKey);
-        gMarkersRef.child(gMarkerKey)
-                   .updateChildren(data);
-        userGMarkersRef.child(gMarkerKey)
-                       .updateChildren(sData);
+
+        gMarkersRef.child(gMarkerKey).updateChildren(data);
+        userGMarkersRef.child(gMarkerKey).updateChildren(sData);
     }
 
     @Override

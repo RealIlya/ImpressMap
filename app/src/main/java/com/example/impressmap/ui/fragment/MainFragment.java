@@ -8,27 +8,34 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.R;
-import com.example.impressmap.adapter.Adapter;
-import com.example.impressmap.adapter.GMapAdapter;
+import com.example.impressmap.adapter.PostsAdapter;
+import com.example.impressmap.adapter.map.GMapAdapter;
 import com.example.impressmap.databinding.FragmentMainBinding;
 import com.example.impressmap.model.data.GMarkerMetadata;
-import com.example.impressmap.util.NavigationDrawer;
-import com.google.android.gms.maps.CameraUpdateFactory;
+import com.example.impressmap.ui.NavigationDrawer;
+import com.example.impressmap.ui.PostsBottomSheetBehavior;
+import com.example.impressmap.ui.fragment.bottom.BottomSheetFragment;
+import com.example.impressmap.ui.viewModels.MainFragmentViewModel;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.card.MaterialCardView;
 
 public class MainFragment extends Fragment implements OnMapReadyCallback
 {
     private FragmentMainBinding binding;
-    private BottomSheetBehavior<MaterialCardView> bottomSheetBehavior;
+    private MainFragmentViewModel viewModel;
+    private NavigationDrawer navigationDrawer;
+    private PostsBottomSheetBehavior<MaterialCardView> postsSheetBehavior;
+    private PostsAdapter postsAdapter;
 
     @Nullable
     @Override
@@ -44,7 +51,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState)
     {
-        super.onViewCreated(view, savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(MainFragmentViewModel.class);
 
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(
                 R.id.map);
@@ -54,80 +61,18 @@ public class MainFragment extends Fragment implements OnMapReadyCallback
             supportMapFragment.getMapAsync(this);
         }
 
-        NavigationDrawer navigationDrawer = new NavigationDrawer(
-                getContext(), binding.navigationView, binding.drawerLayout,
-                getChildFragmentManager());
+        navigationDrawer = new NavigationDrawer(getContext(), binding.navigationView,
+                binding.drawerLayout, requireActivity().getSupportFragmentManager());
 
         binding.toolbar.setNavigationOnClickListener(view1 -> navigationDrawer.open());
 
-        bottomSheetBehavior = BottomSheetBehavior.from(binding.framePosts);
-        bottomSheetBehavior.setHalfExpandedRatio(0.4f);
-        bottomSheetBehavior.setPeekHeight(200);
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback()
-        {
-            private boolean isCollapsing = false;
-            private boolean isExpanding = false;
-            private boolean isSettling = false;
-            private float oldOffset = 0f;
+        postsSheetBehavior = new PostsBottomSheetBehavior<>(
+                BottomSheetBehavior.from(binding.framePosts));
 
-            private void setDefaultState()
-            {
-                isCollapsing = false;
-                isExpanding = false;
-                isSettling = false;
-            }
-
-            @Override
-            public void onStateChanged(@NonNull View bottomSheet,
-                                       int newState)
-            {
-                MaterialCardView framePosts = binding.framePosts;
-                AppBarLayout postsAppBar = binding.postsAppBar;
-
-                switch (newState)
-                {
-                    case BottomSheetBehavior.STATE_COLLAPSED:
-                        break;
-                    case BottomSheetBehavior.STATE_HIDDEN:
-                        setDefaultState();
-                        break;
-                    case BottomSheetBehavior.STATE_HALF_EXPANDED:
-                    case BottomSheetBehavior.STATE_EXPANDED:
-                    case BottomSheetBehavior.STATE_DRAGGING:
-                    case BottomSheetBehavior.STATE_SETTLING:
-                        isSettling = true;
-                        break;
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet,
-                                float slideOffset)
-            {
-                isExpanding = oldOffset < slideOffset;
-                isCollapsing = oldOffset > slideOffset;
-                if (slideOffset < 1 && slideOffset >= 0.5 && isCollapsing || slideOffset < 0.4 && slideOffset >= 0 && isExpanding)
-                {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
-                }
-
-                oldOffset = slideOffset;
-
-                // fix
-                if (slideOffset < 0 && bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
-                {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }
-
-               /* AppBarLayout postsAppBar = binding.postsAppBar;
-                postsAppBar.animate()
-                           .translationY(((float) -Math.pow(postsAppBar.getHeight(),
-                                   1 - slideOffset / 1.5)))
-                           .setDuration(0)
-                           .start();*/
-            }
-        });
+        postsAdapter = new PostsAdapter();
+        RecyclerView postsRecyclerView = binding.postsRecyclerView;
+        postsRecyclerView.setAdapter(postsAdapter);
+        postsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     @Override
@@ -135,31 +80,46 @@ public class MainFragment extends Fragment implements OnMapReadyCallback
     {
         GMapAdapter gMapAdapter = new GMapAdapter(getContext(), googleMap);
 
-        // temporary
-/*        for (GMarkerMetadata gMarkerMetadata : GMarkersRepository.getGMarkerMetadata())
+//        viewModel.getGMarkerMetadataByAddress().observe(this, gMapAdapter::setItems);
+
+        gMapAdapter.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener()
         {
-            gMapAdapter.addMarker(gMarkerMetadata);
-        }
+            @Override
+            public void onMapLongClick(@NonNull LatLng latLng)
+            {
+                gMapAdapter.setPointer(latLng);
+                gMapAdapter.zoomTo(latLng);
 
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                GMarkersRepository.getGMarkerMetadata().get(0).getLatLng(), Adapter.ZOOM));*/
-
+                BottomSheetFragment bottomSheetFragment = BottomSheetFragment.newInstance(latLng);
+                bottomSheetFragment.show(getChildFragmentManager(), null);
+                bottomSheetFragment.setOnDismissListener(
+                        dialogInterface -> gMapAdapter.removePointer());
+                bottomSheetFragment.setOnCanselListener(
+                        dialogInterface -> gMapAdapter.removePointer());
+            }
+        });
         gMapAdapter.setOnMapClickListener(new GoogleMap.OnMapClickListener()
         {
             @Override
             public void onMapClick(@NonNull LatLng latLng)
             {
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                postsSheetBehavior.hide();
             }
         });
-
         gMapAdapter.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener()
         {
             @Override
             public boolean onMarkerClick(@NonNull Marker marker)
             {
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
+                postsAdapter.clear();
+
+                postsSheetBehavior.showHalf();
                 binding.postsToolbar.setTitle(marker.getTitle());
+
+                GMarkerMetadata gMarkerMetadata = (GMarkerMetadata) marker.getTag();
+                viewModel.getPostByGMarker(gMarkerMetadata)
+                         .observe(MainFragment.this, postsAdapter::addPost);
+
                 return true;
             }
         });

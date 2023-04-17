@@ -4,13 +4,12 @@ import static com.example.impressmap.util.Constants.DATABASE_REF;
 import static com.example.impressmap.util.Constants.Keys.ADDRESSES_NODE;
 import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
 import static com.example.impressmap.util.Constants.Keys.MAIN_LIST_NODE;
-import static com.example.impressmap.util.Constants.Keys.OWNER_ID_NODE;
 import static com.example.impressmap.util.Constants.UID;
 
 import androidx.lifecycle.LiveData;
 
 import com.example.impressmap.database.DatabaseRepo;
-import com.example.impressmap.database.firebase.AllAddressesLiveData;
+import com.example.impressmap.database.firebase.data.AllAddressesLiveData;
 import com.example.impressmap.model.data.Address;
 import com.google.firebase.database.DatabaseReference;
 
