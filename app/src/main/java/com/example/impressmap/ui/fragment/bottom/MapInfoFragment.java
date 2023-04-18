@@ -3,32 +3,27 @@ package com.example.impressmap.ui.fragment.bottom;
 import android.content.DialogInterface;
 import android.location.Address;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.R;
-import com.example.impressmap.databinding.FragmentBottomSheetBinding;
-import com.example.impressmap.ui.fragment.CreatorMarkerFragment;
-import com.example.impressmap.ui.viewModels.MainFragmentViewModel;
+import com.example.impressmap.databinding.FragmentMapInfoBinding;
+import com.example.impressmap.ui.fragment.CreatorCommonMarkerFragment;
 import com.example.impressmap.util.Locations;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class BottomSheetFragment extends BottomSheetDialogFragment
+public class MapInfoFragment extends BottomSheetDialogFragment
 {
     public static final String LAT_LNG_KEY = "LAT_LNG_KEY";
 
-    private FragmentBottomSheetBinding binding;
-    private MainFragmentViewModel viewModel;
+    private FragmentMapInfoBinding binding;
 
     private DialogInterface.OnDismissListener onDismissListener;
-    private DialogInterface.OnCancelListener onCancelListener;
 
     @Nullable
     @Override
@@ -36,7 +31,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState)
     {
-        binding = FragmentBottomSheetBinding.inflate(inflater, container, false);
+        binding = FragmentMapInfoBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -45,9 +40,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment
                               @Nullable Bundle savedInstanceState)
     {
         requireDialog().setOnDismissListener(onDismissListener);
-        requireDialog().setOnCancelListener(onCancelListener);
-
-        viewModel = new ViewModelProvider(this).get(MainFragmentViewModel.class);
 
         double[] rawLatLng = requireArguments().getDoubleArray(LAT_LNG_KEY);
         LatLng latLng = new LatLng(rawLatLng[0], rawLatLng[1]);
@@ -69,29 +61,24 @@ public class BottomSheetFragment extends BottomSheetDialogFragment
 
                 requireActivity().getSupportFragmentManager()
                                  .beginTransaction()
-                                 .add(R.id.container, CreatorMarkerFragment.newInstance(latLng))
+                                 .add(R.id.container, CreatorCommonMarkerFragment.newInstance(latLng))
                                  .commit();
             }
         });
     }
 
-    public static BottomSheetFragment newInstance(LatLng latLng)
+    public static MapInfoFragment newInstance(LatLng latLng)
     {
         Bundle arguments = new Bundle();
         arguments.putDoubleArray(LAT_LNG_KEY, new double[]{latLng.latitude, latLng.longitude});
 
-        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
-        bottomSheetFragment.setArguments(arguments);
-        return bottomSheetFragment;
+        MapInfoFragment mapInfoFragment = new MapInfoFragment();
+        mapInfoFragment.setArguments(arguments);
+        return mapInfoFragment;
     }
 
     public void setOnDismissListener(DialogInterface.OnDismissListener listener)
     {
         onDismissListener = listener;
-    }
-
-    public void setOnCanselListener(DialogInterface.OnCancelListener listener)
-    {
-        onCancelListener = listener;
     }
 }

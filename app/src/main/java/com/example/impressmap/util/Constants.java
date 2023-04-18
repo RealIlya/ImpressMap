@@ -41,6 +41,7 @@ public class Constants
         public static final String EMAIL_NODE = "email";
         public static final String USER_IDS_NODE = "user_ids";
         public static final String OWNER_ID_NODE = "owner_id";
+        public static final String DESC_NODE = "desc";
         public static final String GMARKER_ID = "gmarker_id";
         public static final String TYPE_NODE = "type";
     }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -14,9 +13,10 @@
             android:fitsSystemWindows="true">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraint_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fitsSystemWindows="true">
+                android:background="@color/white">
 
                 <com.google.android.material.appbar.AppBarLayout
                     android:id="@+id/app_bar_layout"
@@ -34,32 +34,56 @@
                         app:popupTheme="@style/Theme.ImpressMap.PopupOverlay" />
                 </com.google.android.material.appbar.AppBarLayout>
 
-                <androidx.coordinatorlayout.widget.CoordinatorLayout
+                <LinearLayout
+                    android:id="@+id/linear_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:orientation="vertical"
+                    android:paddingVertical="@dimen/vertical_medium_margin"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/app_bar_layout">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/addresses_recycler_view"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:listitem="@layout/item_address" />
-                </androidx.coordinatorlayout.widget.CoordinatorLayout>
+                        android:layout_marginHorizontal="@dimen/horizontal_margin"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/title_view"
+                            style="@style/authTextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/marker_title_hint"
+                            android:importantForAutofill="no"
+                            android:inputType="text" />
+
+                        <EditText
+                            android:id="@+id/desc_view"
+                            style="@style/authTextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/address_desc_hint"
+                            android:importantForAutofill="no"
+                            android:inputType="textMultiLine"
+                            android:minLines="1"
+                            android:scrollbars="vertical"
+                            android:scrollHorizontally="false" />
+                    </LinearLayout>
+                </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/add_address_button"
+            android:id="@+id/confirm_address_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:layout_margin="@dimen/vertical_medium_margin"
-            android:background="@drawable/ripple_effect"
-            app:elevation="3dp"
-            app:srcCompat="@drawable/ic_add"
+            android:scaleType="centerCrop"
+            app:elevation="2dp"
+            app:srcCompat="@drawable/ic_check"
             app:tint="@color/white" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

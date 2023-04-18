@@ -1,6 +1,6 @@
 package com.example.impressmap.ui.fragment;
 
-import static com.example.impressmap.ui.fragment.bottom.BottomSheetFragment.LAT_LNG_KEY;
+import static com.example.impressmap.ui.fragment.bottom.MapInfoFragment.LAT_LNG_KEY;
 import static com.example.impressmap.util.Constants.AUTH;
 import static com.example.impressmap.util.Constants.UID;
 
@@ -14,16 +14,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.impressmap.databinding.FragmentCreatorMarkerBinding;
+import com.example.impressmap.databinding.FragmentCreatorCommonMarkerBinding;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.OwnerUser;
 import com.example.impressmap.model.data.Post;
 import com.example.impressmap.ui.viewModels.MainFragmentViewModel;
 import com.google.android.gms.maps.model.LatLng;
 
-public class CreatorMarkerFragment extends Fragment
+public class CreatorCommonMarkerFragment extends Fragment
 {
-    private FragmentCreatorMarkerBinding binding;
+    private FragmentCreatorCommonMarkerBinding binding;
     private MainFragmentViewModel viewModel;
 
     @Nullable
@@ -32,7 +32,7 @@ public class CreatorMarkerFragment extends Fragment
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState)
     {
-        binding = FragmentCreatorMarkerBinding.inflate(inflater, container, false);
+        binding = FragmentCreatorCommonMarkerBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -48,15 +48,17 @@ public class CreatorMarkerFragment extends Fragment
         binding.toolbar.setNavigationOnClickListener(
                 v -> requireActivity().getSupportFragmentManager()
                                       .beginTransaction()
-                                      .remove(CreatorMarkerFragment.this)
+                                      .remove(CreatorCommonMarkerFragment.this)
                                       .commit());
-        binding.confirmAddingMarkerButton.setOnClickListener(new View.OnClickListener()
+        binding.confirmMarkerButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                String title = binding.markerTitleView.getText().toString();
-                String text = binding.markerTextView.getText().toString();
+                String title = binding.markerTitleView.getText()
+                                                      .toString();
+                String text = binding.markerTextView.getText()
+                                                    .toString();
                 if (!title.isEmpty() && !text.isEmpty())
                 {
                     GMarkerMetadata gMarkerMetadata = new GMarkerMetadata();
@@ -66,7 +68,8 @@ public class CreatorMarkerFragment extends Fragment
 
                     OwnerUser ownerUser = new OwnerUser();
                     ownerUser.setId(UID);
-                    ownerUser.setFullName(AUTH.getCurrentUser().getEmail());
+                    ownerUser.setFullName(AUTH.getCurrentUser()
+                                              .getEmail());
 
                     Post post = new Post();
                     post.setText(text);
@@ -77,13 +80,13 @@ public class CreatorMarkerFragment extends Fragment
         });
     }
 
-    public static CreatorMarkerFragment newInstance(LatLng latLng)
+    public static CreatorCommonMarkerFragment newInstance(LatLng latLng)
     {
         Bundle arguments = new Bundle();
         arguments.putDoubleArray(LAT_LNG_KEY, new double[]{latLng.latitude, latLng.longitude});
 
-        CreatorMarkerFragment creatorMarkerFragment = new CreatorMarkerFragment();
-        creatorMarkerFragment.setArguments(arguments);
-        return creatorMarkerFragment;
+        CreatorCommonMarkerFragment creatorCommonMarkerFragment = new CreatorCommonMarkerFragment();
+        creatorCommonMarkerFragment.setArguments(arguments);
+        return creatorCommonMarkerFragment;
     }
 }

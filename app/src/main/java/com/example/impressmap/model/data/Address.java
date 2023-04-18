@@ -1,6 +1,7 @@
 package com.example.impressmap.model.data;
 
 import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
+import static com.example.impressmap.util.Constants.Keys.DESC_NODE;
 import static com.example.impressmap.util.Constants.Keys.FULL_ADDRESS_NODE;
 import static com.example.impressmap.util.Constants.Keys.OWNER_ID_NODE;
 import static com.example.impressmap.util.Constants.Keys.USER_IDS_NODE;
@@ -17,23 +18,23 @@ public class Address implements TransferableToDatabase
 {
     private String id = "";
 
-    private String ownerId;
+    private String desc = "";
+    private String ownerId = "";
     //    @TypeConverters(StringListConverter.class)
     private List<String> userIds = new ArrayList<>();
     private String country = "";
     private String city = "";
-    private String district = "";
-    private String street = "";
-    private String house = "";
+    private String state = "";
 
     public Map<String, Object> prepareToTransferToDatabase()
     {
         Map<String, Object> data = new HashMap<>();
 
         data.put(CHILD_ID_NODE, id);
+        data.put(DESC_NODE, desc);
         data.put(OWNER_ID_NODE, ownerId);
         data.put(FULL_ADDRESS_NODE,
-                String.format("%s %s %s %s %s", country, city, district, street, house));
+                String.format("%s %s %s", country, city, state));
 
         StringBuilder userIdsS = new StringBuilder();
         for (String userId : userIds)
@@ -54,6 +55,16 @@ public class Address implements TransferableToDatabase
     public void setId(String id)
     {
         this.id = id;
+    }
+
+    public String getDesc()
+    {
+        return desc;
+    }
+
+    public void setDesc(String desc)
+    {
+        this.desc = desc;
     }
 
     public String getOwnerId()
@@ -96,33 +107,13 @@ public class Address implements TransferableToDatabase
         this.city = city;
     }
 
-    public String getDistrict()
+    public String getState()
     {
-        return district;
+        return state;
     }
 
-    public void setDistrict(String district)
+    public void setState(String state)
     {
-        this.district = district;
-    }
-
-    public String getStreet()
-    {
-        return street;
-    }
-
-    public void setStreet(String street)
-    {
-        this.street = street;
-    }
-
-    public String getHouse()
-    {
-        return house;
-    }
-
-    public void setHouse(String house)
-    {
-        this.house = house;
+        this.state = state;
     }
 }

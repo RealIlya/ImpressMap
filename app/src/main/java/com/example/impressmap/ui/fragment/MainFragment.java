@@ -1,5 +1,6 @@
 package com.example.impressmap.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,17 +20,15 @@ import com.example.impressmap.databinding.FragmentMainBinding;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.ui.NavigationDrawer;
 import com.example.impressmap.ui.PostsBottomSheetBehavior;
-import com.example.impressmap.ui.fragment.bottom.BottomSheetFragment;
+import com.example.impressmap.ui.fragment.bottom.MapInfoFragment;
 import com.example.impressmap.ui.viewModels.MainFragmentViewModel;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.card.MaterialCardView;
 
-public class MainFragment extends Fragment implements OnMapReadyCallback
+public class MainFragment extends Fragment
 {
     private FragmentMainBinding binding;
     private MainFragmentViewModel viewModel;
@@ -53,12 +52,52 @@ public class MainFragment extends Fragment implements OnMapReadyCallback
     {
         viewModel = new ViewModelProvider(this).get(MainFragmentViewModel.class);
 
+        setShowMode();
+    }
+
+    private void setShowMode()
+    {
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(
                 R.id.map);
 
         if (supportMapFragment != null)
         {
-            supportMapFragment.getMapAsync(this);
+            supportMapFragment.getMapAsync(new OnMapReadyCallback()
+            {
+                @SuppressLint("FragmentLiveDataObserve")
+                @Override
+                public void onMapReady(@NonNull GoogleMap googleMap)
+                {
+                    GMapAdapter gMapAdapter = new GMapAdapter(getContext(), googleMap);
+
+//        viewModel.getGMarkerMetadataByAddress().observe(this, gMapAdapter::setItems);
+
+                    gMapAdapter.setOnMapLongClickListener(latLng ->
+                    {
+                        gMapAdapter.setPointer(latLng);
+                        gMapAdapter.zoomTo(latLng);
+
+                        MapInfoFragment mapInfoFragment = MapInfoFragment.newInstance(latLng);
+                        mapInfoFragment.show(getChildFragmentManager(), null);
+                        mapInfoFragment.setOnDismissListener(
+                                dialogInterface -> gMapAdapter.removePointer());
+                    });
+                    gMapAdapter.setOnMapClickListener(latLng -> postsSheetBehavior.hide());
+                    gMapAdapter.setOnMarkerClickListener(marker ->
+                    {
+                        postsAdapter.clear();
+
+                        postsSheetBehavior.showHalf();
+                        binding.postsToolbar.setTitle(marker.getTitle());
+
+                        GMarkerMetadata gMarkerMetadata = (GMarkerMetadata) marker.getTag();
+                        viewModel.getPostByGMarker(gMarkerMetadata)
+                                 .observe(MainFragment.this, postsAdapter::addPost);
+
+                        return true;
+                    });
+                }
+            });
         }
 
         navigationDrawer = new NavigationDrawer(getContext(), binding.navigationView,
@@ -75,53 +114,30 @@ public class MainFragment extends Fragment implements OnMapReadyCallback
         postsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap)
+    private void setAddingMode()
     {
-        GMapAdapter gMapAdapter = new GMapAdapter(getContext(), googleMap);
+        SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(
+                R.id.map);
 
-//        viewModel.getGMarkerMetadataByAddress().observe(this, gMapAdapter::setItems);
-
-        gMapAdapter.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener()
+        if (supportMapFragment != null)
         {
-            @Override
-            public void onMapLongClick(@NonNull LatLng latLng)
+            supportMapFragment.getMapAsync(new OnMapReadyCallback()
             {
-                gMapAdapter.setPointer(latLng);
-                gMapAdapter.zoomTo(latLng);
+                @Override
+                public void onMapReady(@NonNull GoogleMap googleMap)
+                {
+                    GMapAdapter gMapAdapter = new GMapAdapter(getContext(), googleMap);
 
-                BottomSheetFragment bottomSheetFragment = BottomSheetFragment.newInstance(latLng);
-                bottomSheetFragment.show(getChildFragmentManager(), null);
-                bottomSheetFragment.setOnDismissListener(
-                        dialogInterface -> gMapAdapter.removePointer());
-                bottomSheetFragment.setOnCanselListener(
-                        dialogInterface -> gMapAdapter.removePointer());
-            }
-        });
-        gMapAdapter.setOnMapClickListener(new GoogleMap.OnMapClickListener()
-        {
-            @Override
-            public void onMapClick(@NonNull LatLng latLng)
-            {
-                postsSheetBehavior.hide();
-            }
-        });
-        gMapAdapter.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener()
-        {
-            @Override
-            public boolean onMarkerClick(@NonNull Marker marker)
-            {
-                postsAdapter.clear();
+                    gMapAdapter.setOnMapLongClickListener(latLng ->
+                    {
 
-                postsSheetBehavior.showHalf();
-                binding.postsToolbar.setTitle(marker.getTitle());
-
-                GMarkerMetadata gMarkerMetadata = (GMarkerMetadata) marker.getTag();
-                viewModel.getPostByGMarker(gMarkerMetadata)
-                         .observe(MainFragment.this, postsAdapter::addPost);
-
-                return true;
-            }
-        });
+                    });
+                    gMapAdapter.setOnMapClickListener(latLng ->
+                    {
+                    });
+                    gMapAdapter.setOnMarkerClickListener(marker -> true);
+                }
+            });
+        }
     }
 }

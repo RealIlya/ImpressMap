@@ -39,7 +39,7 @@
                 <LinearLayout
                     android:id="@+id/linear_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:paddingVertical="@dimen/vertical_medium_margin"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -76,12 +76,10 @@
                     </LinearLayout>
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/confirm_adding_marker_button"
+            android:id="@+id/confirm_marker_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/horizontal_margin"

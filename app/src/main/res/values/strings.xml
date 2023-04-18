@@ -25,6 +25,8 @@
     <string name="marker_title_hint">Title</string>
     <string name="marker_text_hint">Text</string>
 
+    <string name="address_desc_hint">Description</string>
+
     <!--  profile fragment  -->
     <string name="phone_number_sub">Your phone number</string>
     <string name="nickname_sub">Your nickname</string>
