@@ -1,5 +1,7 @@
 package com.example.impressmap.ui.fragment;
 
+import static com.example.impressmap.ui.fragment.MainFragment.ADDING_MODE;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +10,16 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.impressmap.adapter.AddressesAdapter;
 import com.example.impressmap.databinding.FragmentAddressesBinding;
+import com.example.impressmap.model.data.Address;
+import com.example.impressmap.ui.viewModels.AddressesFragmentViewModel;
+import com.example.impressmap.ui.viewModels.MainViewModel;
 
 public class AddressesFragment extends Fragment
 {
@@ -29,18 +39,49 @@ public class AddressesFragment extends Fragment
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState)
     {
+        AddressesFragmentViewModel viewModel = new ViewModelProvider(this).get(
+                AddressesFragmentViewModel.class);
+
         binding.toolbar.setNavigationOnClickListener(
                 v -> requireActivity().getSupportFragmentManager().popBackStack());
 
-        binding.addAddressButton.setOnClickListener(new View.OnClickListener()
+        binding.addAddressButton.setOnClickListener(v ->
         {
-            @Override
-            public void onClick(View view)
-            {
+            MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
+                    MainViewModel.class);
+            mainViewModel.setMode(ADDING_MODE);
 
-            }
+            FragmentManager supportFragmentManager = requireActivity().getSupportFragmentManager();
+            supportFragmentManager.popBackStack(
+                    supportFragmentManager.getBackStackEntryAt(0).getId(),
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE);
         });
 
-
+        RecyclerView recyclerView = binding.addressesRecyclerView;
+        AddressesAdapter addressesAdapter = new AddressesAdapter(getContext());
+        recyclerView.setAdapter(addressesAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        addressesAdapter.setOnAddressClickListener(address ->
+        {
+            MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
+                    MainViewModel.class);
+            mainViewModel.switchSelectionAddress(address);
+        });
+        viewModel.getByUser().observe(getViewLifecycleOwner(), addressList ->
+        {
+            MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
+                    MainViewModel.class);
+            for (Address address : mainViewModel.getSelectedAddresses().getValue())
+            {
+                for (Address addressSub : addressList)
+                {
+                    if (address.getId().equals(addressSub.getId()))
+                    {
+                        addressSub.setSelected(true);
+                    }
+                }
+            }
+            addressesAdapter.setAddressList(addressList);
+        });
     }
 }

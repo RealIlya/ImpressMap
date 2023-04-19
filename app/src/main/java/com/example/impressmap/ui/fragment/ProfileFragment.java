@@ -33,18 +33,14 @@ public class ProfileFragment extends Fragment
         binding.toolbar.setNavigationOnClickListener(
                 v -> requireActivity().getSupportFragmentManager().popBackStack());
 
-        binding.settingsAddressesView.setOnClickListener(new View.OnClickListener()
+        binding.settingsAddressesView.setOnClickListener(v ->
         {
-            @Override
-            public void onClick(View view)
-            {
-                String name = AddressesFragment.class.getSimpleName();
-                requireActivity().getSupportFragmentManager()
-                                 .beginTransaction()
-                                 .replace(R.id.container, new AddressesFragment())
-                                 .addToBackStack(name)
-                                 .commit();
-            }
+            String name = AddressesFragment.class.getSimpleName();
+            requireActivity().getSupportFragmentManager()
+                             .beginTransaction()
+                             .replace(R.id.container, new AddressesFragment())
+                             .addToBackStack(name)
+                             .commit();
         });
     }
 }

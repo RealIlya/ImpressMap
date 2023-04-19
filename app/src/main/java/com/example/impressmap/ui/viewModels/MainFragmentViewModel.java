@@ -9,14 +9,16 @@ import com.example.impressmap.database.firebase.cases.PostGMarkerCase;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.Post;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
 public class MainFragmentViewModel extends ViewModel
 {
-    private GMarkerAddressCase gMarkerAddressCase;
-    private GMarkerCommonCase gMarkerCommonCase;
-    private PostGMarkerCase postGMarkerCase;
+    private final GMarkerAddressCase gMarkerAddressCase;
+    private final GMarkerCommonCase gMarkerCommonCase;
+    private final PostGMarkerCase postGMarkerCase;
 
     public MainFragmentViewModel()
     {

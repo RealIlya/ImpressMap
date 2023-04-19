@@ -1,14 +1,11 @@
 package com.example.impressmap.ui.activity;
 
 import android.os.Bundle;
-import android.view.View;
-import android.view.WindowInsetsController;
 
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.impressmap.databinding.ActivityMainBinding;
 import com.example.impressmap.ui.fragment.AuthFragment;
-import com.example.impressmap.ui.fragment.MainFragment;
 
 
 public class MainActivity extends FragmentActivity

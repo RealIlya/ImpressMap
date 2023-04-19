@@ -25,6 +25,17 @@ public class CreatorAddressFragment extends Fragment
     private FragmentCreatorAddressBinding binding;
     private CreatorAddressViewModel viewModel;
 
+    @NonNull
+    public static CreatorAddressFragment newInstance(@NonNull LatLng latLng)
+    {
+        Bundle arguments = new Bundle();
+        arguments.putDoubleArray(LAT_LNG_KEY, new double[]{latLng.latitude, latLng.longitude});
+
+        CreatorAddressFragment creatorAddressFragment = new CreatorAddressFragment();
+        creatorAddressFragment.setArguments(arguments);
+        return creatorAddressFragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -44,53 +55,38 @@ public class CreatorAddressFragment extends Fragment
         double[] rawLatLng = requireArguments().getDoubleArray(LAT_LNG_KEY);
         LatLng latLng = new LatLng(rawLatLng[0], rawLatLng[1]);
 
-        binding.confirmAddressButton.setOnClickListener(new View.OnClickListener()
+        binding.toolbar.setNavigationOnClickListener(
+                v -> requireActivity().getSupportFragmentManager().popBackStack());
+
+        binding.confirmAddressButton.setOnClickListener(v ->
         {
-            @Override
-            public void onClick(View view)
+            String title = binding.titleView.getText().toString();
+            String desc = binding.descView.getText().toString();
+            if (!title.isEmpty() && !desc.isEmpty())
             {
-                String title = binding.titleView.getText()
-                                                .toString();
-                String desc = binding.descView.getText()
-                                              .toString();
-                if (!title.isEmpty() && !desc.isEmpty())
+                String[] addressLine = Locations.getAddressLine(getContext(), latLng);
+                if (addressLine == null)
                 {
-                    String[] addressLine = Locations.getAddressLine(getContext(), latLng);
-                    if (addressLine == null)
-                    {
-                        Toast.makeText(getContext(), "Address does not exist", Toast.LENGTH_LONG)
-                             .show();
-                        return;
-                    }
-
-                    String country = addressLine[0];
-                    String city = addressLine[1];
-                    String state = addressLine[2];
-
-                    Address address = new Address();
-                    address.setDesc(desc);
-                    address.setCountry(country);
-                    address.setCity(city);
-                    address.setState(state);
-
-                    GMarkerMetadata gMarkerMetadata = new GMarkerMetadata();
-                    gMarkerMetadata.setTitle(title);
-                    gMarkerMetadata.setLatLng(latLng);
-                    gMarkerMetadata.setType(GMarkerMetadata.ADDRESS_MARKER);
-
-                    viewModel.insert(address, gMarkerMetadata);
+                    Toast.makeText(getContext(), "Address does not exist", Toast.LENGTH_LONG)
+                         .show();
+                    return;
                 }
+
+                String country = addressLine[0];
+                String city = addressLine[1];
+                String state = addressLine[2];
+
+                Address address = new Address();
+                address.setDesc(desc);
+                address.setFullAddress(String.format("%s %s %s", country, city, state));
+
+                GMarkerMetadata gMarkerMetadata = new GMarkerMetadata();
+                gMarkerMetadata.setTitle(title);
+                gMarkerMetadata.setLatLng(latLng);
+                gMarkerMetadata.setType(GMarkerMetadata.ADDRESS_MARKER);
+
+                viewModel.insert(address, gMarkerMetadata);
             }
         });
-    }
-
-    public static CreatorAddressFragment newInstance(LatLng latLng)
-    {
-        Bundle arguments = new Bundle();
-        arguments.putDoubleArray(LAT_LNG_KEY, new double[]{latLng.latitude, latLng.longitude});
-
-        CreatorAddressFragment creatorAddressFragment = new CreatorAddressFragment();
-        creatorAddressFragment.setArguments(arguments);
-        return creatorAddressFragment;
     }
 }

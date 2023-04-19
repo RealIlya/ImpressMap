@@ -9,6 +9,7 @@ import static com.example.impressmap.util.Constants.Keys.USER_IDS_NODE;
 import androidx.room.Entity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,15 +17,19 @@ import java.util.Map;
 @Entity
 public class Address implements TransferableToDatabase
 {
+    //    @TypeConverters(StringListConverter.class)
+    private String userIds = "";
     private String id = "";
-
     private String desc = "";
     private String ownerId = "";
-    //    @TypeConverters(StringListConverter.class)
-    private List<String> userIds = new ArrayList<>();
-    private String country = "";
-    private String city = "";
-    private String state = "";
+    private String fullAddress = "";
+
+    private boolean selected;
+
+    public Address()
+    {
+        selected = false;
+    }
 
     public Map<String, Object> prepareToTransferToDatabase()
     {
@@ -33,16 +38,8 @@ public class Address implements TransferableToDatabase
         data.put(CHILD_ID_NODE, id);
         data.put(DESC_NODE, desc);
         data.put(OWNER_ID_NODE, ownerId);
-        data.put(FULL_ADDRESS_NODE,
-                String.format("%s %s %s", country, city, state));
-
-        StringBuilder userIdsS = new StringBuilder();
-        for (String userId : userIds)
-        {
-            userIdsS.append(userId);
-        }
-
-        data.put(USER_IDS_NODE, userIdsS.toString());
+        data.put(FULL_ADDRESS_NODE, fullAddress);
+        data.put(USER_IDS_NODE, userIds);
 
         return data;
     }
@@ -79,41 +76,46 @@ public class Address implements TransferableToDatabase
 
     public List<String> getUserIds()
     {
-        return userIds;
+        return new ArrayList<>(Arrays.asList(this.userIds.split(" ")));
     }
 
-    public void setUserIds(List<String> userIds)
+    public void setUserIds(String userIds)
     {
         this.userIds = userIds;
     }
 
-    public String getCountry()
+    public String getFullAddress()
     {
-        return country;
+        return fullAddress;
     }
 
-    public void setCountry(String country)
+    public void setFullAddress(String fullAddress)
     {
-        this.country = country;
+        this.fullAddress = fullAddress;
+    }
+
+    public String getCountry()
+    {
+        return fullAddress.split(" ")[0];
     }
 
     public String getCity()
     {
-        return city;
-    }
-
-    public void setCity(String city)
-    {
-        this.city = city;
+        return fullAddress.split(" ")[1];
     }
 
     public String getState()
     {
-        return state;
+        return fullAddress.split(" ")[2];
     }
 
-    public void setState(String state)
+    public boolean isSelected()
     {
-        this.state = state;
+        return selected;
+    }
+
+    public void setSelected(boolean selected)
+    {
+        this.selected = selected;
     }
 }

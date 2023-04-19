@@ -39,6 +39,7 @@ public class AllAddressesLiveData extends LiveData<List<Address>>
                                 {
                                     Address address = snapshot.getValue(Address.class);
                                     addresses.add(address);
+
                                     setValue(addresses);
                                 }
 

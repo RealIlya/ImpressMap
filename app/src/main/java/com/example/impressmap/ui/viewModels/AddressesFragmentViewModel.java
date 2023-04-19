@@ -1,23 +1,24 @@
 package com.example.impressmap.ui.viewModels;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.impressmap.database.firebase.cases.GMarkerAddressCase;
 import com.example.impressmap.model.data.Address;
-import com.example.impressmap.model.data.GMarkerMetadata;
 
-public class CreatorAddressViewModel extends ViewModel
+import java.util.List;
+
+public class AddressesFragmentViewModel extends ViewModel
 {
     private final GMarkerAddressCase gMarkerAddressCase;
 
-    public CreatorAddressViewModel()
+    public AddressesFragmentViewModel()
     {
         gMarkerAddressCase = new GMarkerAddressCase();
     }
 
-    public void insert(Address address,
-                       GMarkerMetadata gMarkerMetadata)
+    public LiveData<List<Address>> getByUser()
     {
-        gMarkerAddressCase.insert(address, gMarkerMetadata);
+        return gMarkerAddressCase.getByUser();
     }
 }

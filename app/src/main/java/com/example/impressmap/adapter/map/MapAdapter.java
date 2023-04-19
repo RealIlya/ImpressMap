@@ -1,11 +1,16 @@
 package com.example.impressmap.adapter.map;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.impressmap.model.CircleMeta;
 import com.example.impressmap.model.data.GMarkerMetadata;
-import com.example.impressmap.model.data.markers.GMarker;
+import com.example.impressmap.model.data.gmarker.GMarker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -19,11 +24,10 @@ public abstract class MapAdapter
     public static final int MIN_ZOOM = 10;
 
     protected final List<Marker> markers = new ArrayList<>();
+    protected final List<Circle> circles = new ArrayList<>();
+    private final GoogleMap googleMap;
     protected Marker lastSelected;
     protected Marker pointer = null;
-
-    private GoogleMap googleMap;
-
     private GoogleMap.OnMapClickListener onMapClickListener;
     private GoogleMap.OnMapLongClickListener onMapLongClickListener;
     private GoogleMap.OnMarkerClickListener onMarkerClickListener;
@@ -41,6 +45,13 @@ public abstract class MapAdapter
                                                                        gMarkerMetadata.getLatLng()));
         markers.add(marker);
         return marker;
+    }
+
+    public Circle addCircle(CircleMeta circleMeta)
+    {
+        Circle circle = googleMap.addCircle(new CircleOptions().center(circleMeta.getCenter()));
+        circles.add(circle);
+        return circle;
     }
 
     public void setPointer(LatLng latLng)
@@ -61,6 +72,7 @@ public abstract class MapAdapter
     {
         googleMap.clear();
         markers.clear();
+        circles.clear();
     }
 
     public void deselectLastMarker()
@@ -69,14 +81,6 @@ public abstract class MapAdapter
         {
             GMarker gMarker = (GMarker) lastSelected.getTag();
             gMarker.setSelected(false);
-        }
-    }
-
-    private void toggleMarkersVisibility(boolean visible)
-    {
-        for (Marker marker : markers)
-        {
-            marker.setVisible(visible);
         }
     }
 
@@ -101,6 +105,14 @@ public abstract class MapAdapter
         toggleMarkersVisibility(false);
     }
 
+    private void toggleMarkersVisibility(boolean visible)
+    {
+        for (Marker marker : markers)
+        {
+            marker.setVisible(visible);
+        }
+    }
+
     protected void onMapLongClicked(LatLng latLng)
     {
         onMapLongClickListener.onMapLongClick(latLng);
@@ -115,6 +127,17 @@ public abstract class MapAdapter
     {
         onMarkerClickListener.onMarkerClick(marker);
         return true;
+    }
+
+    @NonNull
+    public CameraPosition getCameraPosition()
+    {
+        return googleMap.getCameraPosition();
+    }
+
+    public void setOnCameraIdleListener(@Nullable GoogleMap.OnCameraIdleListener listener)
+    {
+        googleMap.setOnCameraIdleListener(listener);
     }
 
     public void setOnMapClickListener(@Nullable GoogleMap.OnMapClickListener listener)
@@ -135,5 +158,36 @@ public abstract class MapAdapter
     public void setOnMarkerDragListener(@Nullable GoogleMap.OnMarkerDragListener listener)
     {
         onMarkerDragListener = listener;
+    }
+
+    public void removeListeners()
+    {
+        onMapClickListener = latLng ->
+        {
+        };
+        onMapLongClickListener = latLng ->
+        {
+        };
+        onMarkerClickListener = marker -> false;
+        onMarkerDragListener = new GoogleMap.OnMarkerDragListener()
+        {
+            @Override
+            public void onMarkerDrag(@NonNull Marker marker)
+            {
+
+            }
+
+            @Override
+            public void onMarkerDragEnd(@NonNull Marker marker)
+            {
+
+            }
+
+            @Override
+            public void onMarkerDragStart(@NonNull Marker marker)
+            {
+
+            }
+        };
     }
 }

@@ -1,14 +1,15 @@
 package com.example.impressmap.ui.fragment;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +23,8 @@ import com.example.impressmap.ui.NavigationDrawer;
 import com.example.impressmap.ui.PostsBottomSheetBehavior;
 import com.example.impressmap.ui.fragment.bottom.MapInfoFragment;
 import com.example.impressmap.ui.viewModels.MainFragmentViewModel;
+import com.example.impressmap.ui.viewModels.MainViewModel;
+import com.example.impressmap.util.mode.Mode;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -30,11 +33,19 @@ import com.google.android.material.card.MaterialCardView;
 
 public class MainFragment extends Fragment
 {
+    public static final int COMMON_MODE = 0, ADDING_MODE = 1;
+
     private FragmentMainBinding binding;
     private MainFragmentViewModel viewModel;
     private NavigationDrawer navigationDrawer;
     private PostsBottomSheetBehavior<MaterialCardView> postsSheetBehavior;
     private PostsAdapter postsAdapter;
+
+    @NonNull
+    public static MainFragment newInstance()
+    {
+        return new MainFragment();
+    }
 
     @Nullable
     @Override
@@ -52,91 +63,143 @@ public class MainFragment extends Fragment
     {
         viewModel = new ViewModelProvider(this).get(MainFragmentViewModel.class);
 
-        setShowMode();
-    }
+        requireActivity().getOnBackPressedDispatcher()
+                         .addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true)
+                         {
+                             @Override
+                             public void handleOnBackPressed()
+                             {
+                                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                                 if (fragmentManager.getBackStackEntryCount() > 0)
+                                 {
+                                     fragmentManager.popBackStack();
+                                 }
+                                 else
+                                 {
+                                     setEnabled(false);
+                                     requireActivity().onBackPressed();
+                                 }
+                             }
+                         });
 
-    private void setShowMode()
-    {
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(
                 R.id.map);
+
 
         if (supportMapFragment != null)
         {
             supportMapFragment.getMapAsync(new OnMapReadyCallback()
             {
-                @SuppressLint("FragmentLiveDataObserve")
                 @Override
                 public void onMapReady(@NonNull GoogleMap googleMap)
                 {
                     GMapAdapter gMapAdapter = new GMapAdapter(getContext(), googleMap);
+                    gMapAdapter.removeListeners();
 
-//        viewModel.getGMarkerMetadataByAddress().observe(this, gMapAdapter::setItems);
-
-                    gMapAdapter.setOnMapLongClickListener(latLng ->
-                    {
-                        gMapAdapter.setPointer(latLng);
-                        gMapAdapter.zoomTo(latLng);
-
-                        MapInfoFragment mapInfoFragment = MapInfoFragment.newInstance(latLng);
-                        mapInfoFragment.show(getChildFragmentManager(), null);
-                        mapInfoFragment.setOnDismissListener(
-                                dialogInterface -> gMapAdapter.removePointer());
-                    });
-                    gMapAdapter.setOnMapClickListener(latLng -> postsSheetBehavior.hide());
-                    gMapAdapter.setOnMarkerClickListener(marker ->
-                    {
-                        postsAdapter.clear();
-
-                        postsSheetBehavior.showHalf();
-                        binding.postsToolbar.setTitle(marker.getTitle());
-
-                        GMarkerMetadata gMarkerMetadata = (GMarkerMetadata) marker.getTag();
-                        viewModel.getPostByGMarker(gMarkerMetadata)
-                                 .observe(MainFragment.this, postsAdapter::addPost);
-
-                        return true;
-                    });
+                    MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
+                            MainViewModel.class);
+                    mainViewModel.getMode()
+                                 .observe(getViewLifecycleOwner(),
+                                         mode -> switchMode(gMapAdapter, mode));
                 }
             });
         }
 
-        navigationDrawer = new NavigationDrawer(getContext(), binding.navigationView,
-                binding.drawerLayout, requireActivity().getSupportFragmentManager());
-
-        binding.toolbar.setNavigationOnClickListener(view1 -> navigationDrawer.open());
-
-        postsSheetBehavior = new PostsBottomSheetBehavior<>(
-                BottomSheetBehavior.from(binding.framePosts));
-
-        postsAdapter = new PostsAdapter();
-        RecyclerView postsRecyclerView = binding.postsRecyclerView;
-        postsRecyclerView.setAdapter(postsAdapter);
-        postsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    private void setAddingMode()
+    private void switchMode(GMapAdapter gMapAdapter,
+                            int mode)
     {
-        SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(
-                R.id.map);
+        Mode modeClass;
 
-        if (supportMapFragment != null)
+        switch (mode)
         {
-            supportMapFragment.getMapAsync(new OnMapReadyCallback()
+            case ADDING_MODE:
+                modeClass = new AddingMode();
+                break;
+            default:
+                modeClass = new CommonMode();
+                break;
+        }
+
+        modeClass.switchOn(gMapAdapter);
+    }
+
+    public class CommonMode implements Mode
+    {
+        @Override
+        public void switchOn(GMapAdapter gMapAdapter)
+        {
+            /*viewModel.getGMarkerMetadataByAddress()
+                     .observe(getViewLifecycleOwner(, gMapAdapter::setItems);*/
+
+            gMapAdapter.setOnMapLongClickListener(latLng ->
             {
-                @Override
-                public void onMapReady(@NonNull GoogleMap googleMap)
-                {
-                    GMapAdapter gMapAdapter = new GMapAdapter(getContext(), googleMap);
+                gMapAdapter.setPointer(latLng);
+                gMapAdapter.zoomTo(latLng);
 
-                    gMapAdapter.setOnMapLongClickListener(latLng ->
-                    {
+                MapInfoFragment mapInfoFragment = MapInfoFragment.newInstance(latLng);
+                String name = MapInfoFragment.class.getSimpleName();
+                mapInfoFragment.show(getChildFragmentManager(), name);
+                mapInfoFragment.setOnDismissListener(
+                        dialogInterface -> gMapAdapter.removePointer());
+            });
+            gMapAdapter.setOnMapClickListener(latLng -> postsSheetBehavior.hide());
+            gMapAdapter.setOnMarkerClickListener(marker ->
+            {
+                postsAdapter.clear();
 
-                    });
-                    gMapAdapter.setOnMapClickListener(latLng ->
-                    {
-                    });
-                    gMapAdapter.setOnMarkerClickListener(marker -> true);
-                }
+                postsSheetBehavior.showHalf();
+                binding.postsToolbar.setTitle(marker.getTitle());
+
+                GMarkerMetadata gMarkerMetadata = (GMarkerMetadata) marker.getTag();
+                viewModel.getPostByGMarker(gMarkerMetadata)
+                         .observe(getViewLifecycleOwner(), postsAdapter::addPost);
+
+                return true;
+            });
+
+            navigationDrawer = new NavigationDrawer(getContext(), binding.navigationView,
+                    binding.drawerLayout, requireActivity().getSupportFragmentManager());
+
+            binding.toolbar.setNavigationIcon(R.drawable.ic_menu_drawer);
+            binding.toolbar.setNavigationOnClickListener(v -> navigationDrawer.open());
+
+            postsSheetBehavior = new PostsBottomSheetBehavior<>(
+                    BottomSheetBehavior.from(binding.framePosts));
+
+            postsAdapter = new PostsAdapter();
+            RecyclerView recyclerView = binding.postsRecyclerView;
+            recyclerView.setAdapter(postsAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        }
+    }
+
+    public class AddingMode implements Mode
+    {
+        @Override
+        public void switchOn(GMapAdapter gMapAdapter)
+        {
+            gMapAdapter.setOnMapClickListener(latLng ->
+            {
+                gMapAdapter.setPointer(latLng);
+                gMapAdapter.zoomTo(latLng);
+
+                CreatorAddressFragment fragment = CreatorAddressFragment.newInstance(latLng);
+                String name = CreatorAddressFragment.class.getSimpleName();
+                requireActivity().getSupportFragmentManager()
+                                 .beginTransaction()
+                                 .replace(R.id.container, fragment)
+                                 .addToBackStack(name)
+                                 .commit();
+            });
+
+            binding.toolbar.setNavigationIcon(R.drawable.ic_arrow);
+            binding.toolbar.setNavigationOnClickListener(v ->
+            {
+                MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
+                        MainViewModel.class);
+                mainViewModel.setMode(COMMON_MODE);
             });
         }
     }

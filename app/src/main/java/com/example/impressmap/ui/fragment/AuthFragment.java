@@ -1,5 +1,7 @@
 package com.example.impressmap.ui.fragment;
 
+import static com.example.impressmap.ui.fragment.MainFragment.COMMON_MODE;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +10,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.R;
 import com.example.impressmap.database.firebase.cases.AuthorizationCase;
 import com.example.impressmap.databinding.FragmentAuthBinding;
+import com.example.impressmap.ui.viewModels.MainViewModel;
 import com.example.impressmap.util.SuccessCallback;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -62,11 +66,20 @@ public class AuthFragment extends Fragment
         String passwordText = String.valueOf(binding.passwordView.getText());
         if (!loginText.isEmpty() && !passwordText.isEmpty())
         {
-            SuccessCallback successCallback = () -> requireActivity().getSupportFragmentManager()
-                                                                     .beginTransaction()
-                                                                     .replace(R.id.container,
-                                                                             new MainFragment())
-                                                                     .commit();
+
+            SuccessCallback successCallback = () ->
+            {
+                MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
+                        MainViewModel.class);
+                mainViewModel.setMode(COMMON_MODE);
+
+                MainFragment fragment = MainFragment.newInstance();
+                requireActivity().getSupportFragmentManager()
+                                 .beginTransaction()
+                                 .replace(R.id.container, fragment)
+                                 .setReorderingAllowed(true)
+                                 .commit();
+            };
             switch (type)
             {
                 case SIGN_IN_TYPE:

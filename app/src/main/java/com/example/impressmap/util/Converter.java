@@ -4,9 +4,13 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.TypedValue;
 
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -39,5 +43,38 @@ public class Converter
         drawable.draw(canvas);
 
         return bitmap;
+    }
+
+    public static int getAttribute(Context context,
+                                   @AttrRes int resId)
+    {
+        TypedValue typedValue = new TypedValue();
+        boolean successful = context.getTheme().resolveAttribute(resId, typedValue, true);
+        return successful ? typedValue.resourceId : 0;
+    }
+
+    @ColorInt
+    public static int getAttributeColor(Context context,
+                                        @AttrRes int resId)
+    {
+        return ResourcesCompat.getColor(context.getResources(), getAttribute(context, resId),
+                context.getTheme());
+    }
+
+    public int getAttributeColorWithAlpha(Context context,
+                                          @AttrRes int resId,
+                                          float ratio)
+    {
+        return getColorWithAlpha(getAttributeColor(context, resId), ratio);
+    }
+
+    public int getColorWithAlpha(@ColorInt int color,
+                                 float ratio)
+    {
+        int alpha = Math.round(Color.alpha(color) * ratio);
+        int r = Color.red(color);
+        int g = Color.green(color);
+        int b = Color.blue(color);
+        return Color.argb(alpha, r, g, b);
     }
 }

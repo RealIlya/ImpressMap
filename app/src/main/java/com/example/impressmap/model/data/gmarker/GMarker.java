@@ -1,4 +1,4 @@
-package com.example.impressmap.model.data.markers;
+package com.example.impressmap.model.data.gmarker;
 
 import android.content.Context;
 
@@ -11,13 +11,12 @@ import com.google.android.gms.maps.model.Marker;
 public abstract class GMarker
 {
     private final Context context;
-    private Marker marker;
+    private final Marker marker;
+    @DrawableRes
+    private final int selectedStateResId;
+    @DrawableRes
+    private final int deselectedStateResId;
     private boolean selected;
-    @DrawableRes
-    private int selectedStateResId;
-
-    @DrawableRes
-    private int deselectedStateResId;
 
     public GMarker(Context context,
                    Marker marker,
@@ -34,6 +33,11 @@ public abstract class GMarker
         selected = false;
     }
 
+    public boolean isSelected()
+    {
+        return selected;
+    }
+
     public void setSelected(boolean selected)
     {
         if (this.selected == selected)
@@ -41,22 +45,9 @@ public abstract class GMarker
             return;
         }
 
-        if (selected)
-        {
-            marker.setIcon(BitmapDescriptorFactory.fromBitmap(
-                    Converter.drawableIdToBitmap(context, selectedStateResId)));
-        }
-        else
-        {
-            marker.setIcon(BitmapDescriptorFactory.fromBitmap(
-                    Converter.drawableIdToBitmap(context, deselectedStateResId)));
-        }
+        marker.setIcon(BitmapDescriptorFactory.fromBitmap(Converter.drawableIdToBitmap(context,
+                selected ? selectedStateResId : deselectedStateResId)));
 
         this.selected = selected;
-    }
-
-    public boolean isSelected()
-    {
-        return selected;
     }
 }

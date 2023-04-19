@@ -4,12 +4,16 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.example.impressmap.model.CircleMeta;
 import com.example.impressmap.model.data.GMarkerMetadata;
-import com.example.impressmap.model.data.markers.AddressGMarker;
-import com.example.impressmap.model.data.markers.CommonGMarker;
-import com.example.impressmap.model.data.markers.GMarker;
+import com.example.impressmap.model.data.gcircle.CommonGCircle;
+import com.example.impressmap.model.data.gcircle.GCircle;
+import com.example.impressmap.model.data.gmarker.AddressGMarker;
+import com.example.impressmap.model.data.gmarker.CommonGMarker;
+import com.example.impressmap.model.data.gmarker.GMarker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
@@ -100,19 +104,30 @@ public class GMapAdapter extends MapAdapter
     {
         Marker marker = super.addMarker(gMarkerMetadata);
 
-        GMarker gMarker = null;
+        GMarker gMarker;
         switch (gMarkerMetadata.getType())
         {
             case GMarkerMetadata.ADDRESS_MARKER:
                 gMarker = new AddressGMarker(context, marker);
                 break;
-            case GMarkerMetadata.COMMON_MARKER:
+            default:
                 gMarker = new CommonGMarker(context, marker);
                 break;
         }
 
         marker.setTag(gMarker);
-
         return marker;
+    }
+
+    @Override
+    public Circle addCircle(CircleMeta circleMeta)
+    {
+        Circle circle = super.addCircle(circleMeta);
+
+        GCircle gCircle = new CommonGCircle(context, circle);
+        gCircle.setAddressId(circleMeta.getAddressId());
+
+        circle.setTag(gCircle);
+        return circle;
     }
 }

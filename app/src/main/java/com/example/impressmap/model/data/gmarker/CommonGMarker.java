@@ -1,4 +1,4 @@
-package com.example.impressmap.model.data.markers;
+package com.example.impressmap.model.data.gmarker;
 
 import android.content.Context;
 

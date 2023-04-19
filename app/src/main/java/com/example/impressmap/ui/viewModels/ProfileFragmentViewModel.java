@@ -6,11 +6,11 @@ import com.example.impressmap.database.firebase.cases.UpdateUserCase;
 
 public class ProfileFragmentViewModel extends ViewModel
 {
-    private UpdateUserCase updateUserCase;
+    private final UpdateUserCase updateUserCase;
 
-    public ProfileFragmentViewModel(UpdateUserCase updateUserCase)
+    public ProfileFragmentViewModel()
     {
-        this.updateUserCase = updateUserCase;
+        updateUserCase = new UpdateUserCase();
     }
 
     public void changeFullName(String newFullName)

@@ -20,7 +20,7 @@ public class GMarkerMetadata implements TransferableToDatabase
 
     private String id = "";
     private String title = "";
-    private LatLng latLng = new LatLng(-1, -1);
+    private LatLng latLng = new LatLng(0, 0);
     private int type = -1;
 
     public Map<String, Object> prepareToTransferToDatabase()
@@ -29,8 +29,7 @@ public class GMarkerMetadata implements TransferableToDatabase
 
         data.put(CHILD_ID_NODE, id);
         data.put(TITLE_NODE, title);
-        data.put(POSITION_NODE,
-                String.format("%s %s", latLng.latitude, latLng.longitude));
+        data.put(POSITION_NODE, String.format("%s %s", latLng.latitude, latLng.longitude));
         data.put(TYPE_NODE, type);
 
         return data;
