@@ -16,14 +16,14 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.impressmap.databinding.FragmentCreatorAddressBinding;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GMarkerMetadata;
-import com.example.impressmap.ui.viewModels.CreatorAddressViewModel;
+import com.example.impressmap.ui.viewModels.CreatorAddressFragmentViewModel;
 import com.example.impressmap.util.Locations;
 import com.google.android.gms.maps.model.LatLng;
 
 public class CreatorAddressFragment extends Fragment
 {
     private FragmentCreatorAddressBinding binding;
-    private CreatorAddressViewModel viewModel;
+    private CreatorAddressFragmentViewModel viewModel;
 
     @NonNull
     public static CreatorAddressFragment newInstance(@NonNull LatLng latLng)
@@ -50,7 +50,7 @@ public class CreatorAddressFragment extends Fragment
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState)
     {
-        viewModel = new ViewModelProvider(this).get(CreatorAddressViewModel.class);
+        viewModel = new ViewModelProvider(this).get(CreatorAddressFragmentViewModel.class);
 
         double[] rawLatLng = requireArguments().getDoubleArray(LAT_LNG_KEY);
         LatLng latLng = new LatLng(rawLatLng[0], rawLatLng[1]);

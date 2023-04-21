@@ -16,21 +16,13 @@ import java.util.List;
 
 public class MainFragmentViewModel extends ViewModel
 {
-    private final GMarkerAddressCase gMarkerAddressCase;
     private final GMarkerCommonCase gMarkerCommonCase;
     private final PostGMarkerCase postGMarkerCase;
 
     public MainFragmentViewModel()
     {
-        gMarkerAddressCase = new GMarkerAddressCase();
         gMarkerCommonCase = new GMarkerCommonCase();
         postGMarkerCase = new PostGMarkerCase();
-    }
-
-    public void insertAddress(Address address,
-                              GMarkerMetadata gMarkerMetadata)
-    {
-        gMarkerAddressCase.insert(address, gMarkerMetadata);
     }
 
     public void insertCommonMarker(String addressId,

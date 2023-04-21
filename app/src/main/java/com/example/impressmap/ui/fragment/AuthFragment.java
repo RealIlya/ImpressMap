@@ -24,6 +24,19 @@ public class AuthFragment extends Fragment
     private static final int SIGN_IN_TYPE = 0, SIGN_UP_TYPE = 1;
 
     private FragmentAuthBinding binding;
+    private final SuccessCallback successCallback = () ->
+    {
+        MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
+                MainViewModel.class);
+        mainViewModel.setMode(COMMON_MODE);
+
+        MainFragment fragment = MainFragment.newInstance();
+        requireActivity().getSupportFragmentManager()
+                         .beginTransaction()
+                         .replace(R.id.container, fragment)
+                         .setReorderingAllowed(true)
+                         .commit();
+    };
 
     @Nullable
     @Override
@@ -40,59 +53,51 @@ public class AuthFragment extends Fragment
                               @Nullable Bundle savedInstanceState)
     {
         AuthorizationCase authorizationCase = new AuthorizationCase();
-        binding.nextButton.setOnClickListener(v -> userWay(authorizationCase, SIGN_IN_TYPE));
+        binding.signUpButton.setOnClickListener(v ->
+        {
+            String nameText = binding.nameView.getText().toString().trim();
+            String surnameText = binding.surnameView.getText().toString().trim();
+            String emailText = binding.emailView.getText().toString().trim();
+            String passwordText = binding.passwordView.getText().toString().trim();
+            if (!nameText.isEmpty() && !surnameText.isEmpty() && !emailText.isEmpty() && !passwordText.isEmpty())
+            {
+                authorizationCase.signUp(nameText, surnameText, emailText, passwordText, successCallback);
+            }
+            else
+            {
+                Snackbar.make(requireView(), R.string.field_is_necessary, Snackbar.LENGTH_LONG)
+                        .show();
+            }
+        });
 
-        binding.signUpButton.setOnClickListener(v -> userWay(authorizationCase, SIGN_UP_TYPE));
+        binding.nextButton.setOnClickListener(v -> {
+            String loginText = binding.nameView.getText().toString().trim();
+            String passwordText = binding.passwordView.getText().toString().trim();
+            if (!loginText.isEmpty() && !passwordText.isEmpty())
+            {
+                authorizationCase.signIn(loginText, passwordText, successCallback);
+            }
+            else
+            {
+                Snackbar.make(requireView(), R.string.field_is_necessary, Snackbar.LENGTH_LONG)
+                        .show();
+            }
+        });
 
         binding.signUpCheckBox.setOnCheckedChangeListener((compoundButton, checked) ->
         {
             if (checked)
             {
+                binding.registerView.setVisibility(View.VISIBLE);
                 binding.nextButton.setVisibility(View.GONE);
                 binding.signUpButton.setVisibility(View.VISIBLE);
             }
             else
             {
+                binding.registerView.setVisibility(View.GONE);
                 binding.nextButton.setVisibility(View.VISIBLE);
                 binding.signUpButton.setVisibility(View.GONE);
             }
         });
-    }
-
-    private void userWay(AuthorizationCase authorizationCase,
-                         int type)
-    {
-        String loginText = String.valueOf(binding.loginView.getText());
-        String passwordText = String.valueOf(binding.passwordView.getText());
-        if (!loginText.isEmpty() && !passwordText.isEmpty())
-        {
-
-            SuccessCallback successCallback = () ->
-            {
-                MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
-                        MainViewModel.class);
-                mainViewModel.setMode(COMMON_MODE);
-
-                MainFragment fragment = MainFragment.newInstance();
-                requireActivity().getSupportFragmentManager()
-                                 .beginTransaction()
-                                 .replace(R.id.container, fragment)
-                                 .setReorderingAllowed(true)
-                                 .commit();
-            };
-            switch (type)
-            {
-                case SIGN_IN_TYPE:
-                    authorizationCase.signIn(loginText, passwordText, successCallback);
-                    break;
-                case SIGN_UP_TYPE:
-                    authorizationCase.signUp(loginText, passwordText, successCallback);
-                    break;
-            }
-        }
-        else
-        {
-            Snackbar.make(requireView(), R.string.field_is_necessary, Snackbar.LENGTH_LONG).show();
-        }
     }
 }

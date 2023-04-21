@@ -19,13 +19,15 @@ public class AuthorizationCase
         usersRepo = new UsersRepo();
     }
 
-    public void signUp(String email,
+    public void signUp(String name,
+                       String surname,
+                       String email,
                        String password,
                        SuccessCallback onSuccessCallback)
     {
         AUTH.createUserWithEmailAndPassword(email, password).addOnSuccessListener(authResult ->
         {
-            User user = User.createUser(email);
+            User user = User.createUser(String.format("%s %s", name, surname), email);
             FirebaseUser firebaseUser = authResult.getUser();
 
             user.setId(firebaseUser.getUid());
@@ -33,7 +35,7 @@ public class AuthorizationCase
 
             usersRepo.insert(user);
 
-            UID = AUTH.getCurrentUser().getUid();
+            UID = firebaseUser.getUid();
 
             onSuccessCallback.onSuccess();
         }).addOnFailureListener(e -> Log.e("signUp", e.getMessage()));

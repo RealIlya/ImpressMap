@@ -33,11 +33,11 @@ public class User implements TransferableToDatabase
     }
 
     @NonNull
-    public static User createUser(String email)
+    public static User createUser(String fullName, String email)
     {
         User user = new User();
         user.email = email;
-        user.fullName = email;
+        user.fullName = fullName;
         user.phoneNumber = "";
 
         return user;

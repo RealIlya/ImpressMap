@@ -13,8 +13,10 @@
     <string name="menu_language">Select Language</string>
 
     <!--  auth fragment  -->
-    <string name="login_hint">Enter your login</string>
+    <string name="name_hint">Enter your name</string>
+    <string name="surname_hint">Enter your surname</string>
     <string name="password_hint">Enter your password</string>
+    <string name="email_hint">Enter your email</string>
     <string name="sign_in_button">Next -&gt;</string>
     <string name="sign_up_button">Sign up!</string>
     <string name="remember_me_check_box">Remember me</string>
@@ -35,4 +37,6 @@
     <string name="title_addresses">Your addresses</string>
     <string name="desc_addresses_sub">Tap to change your places of residence</string>
     <string name="email_sub">Your email</string>
+
+    <string name="phone_number_not_set"><i>Phone number not set</i></string>
 </resources>

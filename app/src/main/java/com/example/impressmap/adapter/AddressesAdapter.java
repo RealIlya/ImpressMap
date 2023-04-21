@@ -47,7 +47,7 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
 
         if (address.isSelected())
         {
-            holder.binding.getRoot().setBackgroundColor(context.getColor(R.color.gray));
+            holder.binding.getRoot().setBackgroundColor(context.getColor(R.color.light_gray));
         }
         else
         {

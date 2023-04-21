@@ -6,11 +6,11 @@ import com.example.impressmap.database.firebase.cases.GMarkerAddressCase;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GMarkerMetadata;
 
-public class CreatorAddressViewModel extends ViewModel
+public class CreatorAddressFragmentViewModel extends ViewModel
 {
     private final GMarkerAddressCase gMarkerAddressCase;
 
-    public CreatorAddressViewModel()
+    public CreatorAddressFragmentViewModel()
     {
         gMarkerAddressCase = new GMarkerAddressCase();
     }
