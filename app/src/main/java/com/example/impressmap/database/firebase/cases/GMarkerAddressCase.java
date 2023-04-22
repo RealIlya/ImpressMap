@@ -6,7 +6,7 @@ import com.example.impressmap.database.firebase.repos.AddressesRepo;
 import com.example.impressmap.database.firebase.repos.GMarkerMetadataRepo;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GMarkerMetadata;
-import com.example.impressmap.model.data.User;
+import com.example.impressmap.util.SuccessCallback;
 
 import java.util.List;
 
@@ -21,11 +21,14 @@ public class GMarkerAddressCase
     }
 
     public void insert(Address address,
-                       GMarkerMetadata gMarkerMetadata)
+                       GMarkerMetadata gMarkerMetadata,
+                       SuccessCallback successCallback)
     {
-        addressesRepo.insert(address);
+        addressesRepo.insert(address, successCallback);
         gMarkerMetadataRepo = new GMarkerMetadataRepo(address.getId());
-        gMarkerMetadataRepo.insert(gMarkerMetadata);
+        gMarkerMetadataRepo.insert(gMarkerMetadata, () ->
+        {
+        });
     }
 
     public LiveData<List<Address>> getByUser()

@@ -3,9 +3,9 @@ package com.example.impressmap.adapter.map;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.impressmap.model.CircleMeta;
+import com.example.impressmap.model.data.GCircleMeta;
 import com.example.impressmap.model.data.GMarkerMetadata;
-import com.example.impressmap.model.data.gmarker.GMarker;
+import com.example.impressmap.model.data.GObject;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -26,30 +26,33 @@ public abstract class MapAdapter
     protected final List<Marker> markers = new ArrayList<>();
     protected final List<Circle> circles = new ArrayList<>();
     private final GoogleMap googleMap;
-    protected Marker lastSelected;
+    protected Marker lastSelectedMarker;
+    protected Circle lastSelectedCircle;
     protected Marker pointer = null;
     private GoogleMap.OnMapClickListener onMapClickListener;
     private GoogleMap.OnMapLongClickListener onMapLongClickListener;
     private GoogleMap.OnMarkerClickListener onMarkerClickListener;
     private GoogleMap.OnMarkerDragListener onMarkerDragListener;
+    private GoogleMap.OnCircleClickListener onCircleClickListener;
 
     public MapAdapter(GoogleMap googleMap)
     {
         this.googleMap = googleMap;
+        removeListeners();
     }
 
     public Marker addMarker(GMarkerMetadata gMarkerMetadata)
     {
         Marker marker = googleMap.addMarker(new MarkerOptions().title(gMarkerMetadata.getTitle())
                                                                .position(
-                                                                       gMarkerMetadata.getLatLng()));
+                                                                       gMarkerMetadata.getPosition()));
         markers.add(marker);
         return marker;
     }
 
-    public Circle addCircle(CircleMeta circleMeta)
+    public Circle addCircle(GCircleMeta GCircleMeta)
     {
-        Circle circle = googleMap.addCircle(new CircleOptions().center(circleMeta.getCenter()));
+        Circle circle = googleMap.addCircle(new CircleOptions().center(GCircleMeta.getCenter()));
         circles.add(circle);
         return circle;
     }
@@ -77,11 +80,23 @@ public abstract class MapAdapter
 
     public void deselectLastMarker()
     {
-        if (lastSelected != null)
+        if (lastSelectedMarker != null)
         {
-            GMarker gMarker = (GMarker) lastSelected.getTag();
-            gMarker.setSelected(false);
+            deselectObject((GObject) lastSelectedMarker.getTag());
         }
+    }
+
+    public void deselectLastCircle()
+    {
+        if (lastSelectedCircle != null)
+        {
+            deselectObject((GObject) lastSelectedCircle.getTag());
+        }
+    }
+
+    private void deselectObject(GObject gObject)
+    {
+        gObject.setSelected(false);
     }
 
     public void zoomTo(LatLng latLng)
@@ -129,6 +144,11 @@ public abstract class MapAdapter
         return true;
     }
 
+    protected void onCircleClicked(Circle circle)
+    {
+        onCircleClickListener.onCircleClick(circle);
+    }
+
     @NonNull
     public CameraPosition getCameraPosition()
     {
@@ -160,6 +180,11 @@ public abstract class MapAdapter
         onMarkerDragListener = listener;
     }
 
+    public void setOnCircleClickListener(GoogleMap.OnCircleClickListener listener)
+    {
+        onCircleClickListener = listener;
+    }
+
     public void removeListeners()
     {
         onMapClickListener = latLng ->
@@ -188,6 +213,10 @@ public abstract class MapAdapter
             {
 
             }
+        };
+
+        onCircleClickListener = circle ->
+        {
         };
     }
 }

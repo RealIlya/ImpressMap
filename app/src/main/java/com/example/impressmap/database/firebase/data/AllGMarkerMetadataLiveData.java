@@ -13,13 +13,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class AllGMarkerMetadataLiveData extends LiveData<List<GMarkerMetadata>>
 {
     private final DatabaseReference userGMarkerRef;
-
-    private long valueCount = 0;
 
     private final ValueEventListener listener = new ValueEventListener()
     {
@@ -29,29 +28,35 @@ public class AllGMarkerMetadataLiveData extends LiveData<List<GMarkerMetadata>>
             DatabaseReference gMarkersRef = DATABASE_REF.child(GMARKERS_NODE);
 
             List<GMarkerMetadata> gMarkerMetadataList = new ArrayList<>();
-            Iterable<DataSnapshot> children = snapshot.getChildren();
-            valueCount = children.spliterator().getExactSizeIfKnown(); // something will go wrong
-            for (DataSnapshot dataSnapshot : children)
+            Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
+            while (iterator.hasNext())
             {
+                DataSnapshot dataSnapshot = iterator.next();
+                boolean hasNext = iterator.hasNext();
                 GMarkerMetadata value = dataSnapshot.getValue(GMarkerMetadata.class);
 
                 gMarkersRef.child(value.getId())
-                            .addListenerForSingleValueEvent(new ValueEventListener()
-                            {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot)
-                                {
-                                    GMarkerMetadata gMarkerMetadata = snapshot.getValue(GMarkerMetadata.class);
-                                    gMarkerMetadataList.add(gMarkerMetadata);
-                                    decreaseValue(gMarkerMetadataList);
-                                }
+                           .addListenerForSingleValueEvent(new ValueEventListener()
+                           {
+                               @Override
+                               public void onDataChange(@NonNull DataSnapshot snapshot)
+                               {
+                                   GMarkerMetadata gMarkerMetadata = snapshot.getValue(
+                                           GMarkerMetadata.class);
+                                   gMarkerMetadataList.add(gMarkerMetadata);
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error)
-                                {
+                                   if (!hasNext)
+                                   {
+                                       setValue(gMarkerMetadataList);
+                                   }
+                               }
 
-                                }
-                            });
+                               @Override
+                               public void onCancelled(@NonNull DatabaseError error)
+                               {
+
+                               }
+                           });
             }
         }
 
@@ -77,15 +82,5 @@ public class AllGMarkerMetadataLiveData extends LiveData<List<GMarkerMetadata>>
     protected void onInactive()
     {
         userGMarkerRef.removeEventListener(listener);
-    }
-
-    private void decreaseValue(List<GMarkerMetadata> gMarkerMetadataList)
-    {
-        valueCount--;
-
-        if (valueCount == 0)
-        {
-            setValue(gMarkerMetadataList);
-        }
     }
 }

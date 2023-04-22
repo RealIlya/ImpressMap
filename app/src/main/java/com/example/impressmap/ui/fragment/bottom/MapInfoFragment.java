@@ -1,5 +1,7 @@
 package com.example.impressmap.ui.fragment.bottom;
 
+import static com.example.impressmap.util.Constants.LAT_LNG_KEY;
+
 import android.content.DialogInterface;
 import android.location.Address;
 import android.os.Bundle;
@@ -19,11 +21,19 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class MapInfoFragment extends BottomSheetDialogFragment
 {
-    public static final String LAT_LNG_KEY = "LAT_LNG_KEY";
-
     private FragmentMapInfoBinding binding;
 
     private DialogInterface.OnDismissListener onDismissListener;
+
+    public static MapInfoFragment newInstance(LatLng latLng)
+    {
+        Bundle arguments = new Bundle();
+        arguments.putDoubleArray(LAT_LNG_KEY, new double[]{latLng.latitude, latLng.longitude});
+
+        MapInfoFragment mapInfoFragment = new MapInfoFragment();
+        mapInfoFragment.setArguments(arguments);
+        return mapInfoFragment;
+    }
 
     @Nullable
     @Override
@@ -52,29 +62,18 @@ public class MapInfoFragment extends BottomSheetDialogFragment
         }
         binding.toolbar.setSubtitle(latLng.latitude + " : " + latLng.longitude);
 
-        binding.createSubAddressMarkerButton.setOnClickListener(new View.OnClickListener()
+        binding.createSubAddressMarkerButton.setOnClickListener(v ->
         {
-            @Override
-            public void onClick(View view)
-            {
-                dismiss();
+            dismiss();
 
-                requireActivity().getSupportFragmentManager()
-                                 .beginTransaction()
-                                 .add(R.id.container, CreatorCommonMarkerFragment.newInstance(latLng))
-                                 .commit();
-            }
+            String name = CreatorCommonMarkerFragment.class.getSimpleName();
+            requireActivity().getSupportFragmentManager()
+                             .beginTransaction()
+                             .replace(R.id.container,
+                                     CreatorCommonMarkerFragment.newInstance(latLng))
+                             .addToBackStack(name)
+                             .commit();
         });
-    }
-
-    public static MapInfoFragment newInstance(LatLng latLng)
-    {
-        Bundle arguments = new Bundle();
-        arguments.putDoubleArray(LAT_LNG_KEY, new double[]{latLng.latitude, latLng.longitude});
-
-        MapInfoFragment mapInfoFragment = new MapInfoFragment();
-        mapInfoFragment.setArguments(arguments);
-        return mapInfoFragment;
     }
 
     public void setOnDismissListener(DialogInterface.OnDismissListener listener)

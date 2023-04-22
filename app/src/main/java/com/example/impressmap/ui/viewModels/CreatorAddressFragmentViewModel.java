@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.impressmap.database.firebase.cases.GMarkerAddressCase;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GMarkerMetadata;
+import com.example.impressmap.util.SuccessCallback;
 
 public class CreatorAddressFragmentViewModel extends ViewModel
 {
@@ -16,8 +17,9 @@ public class CreatorAddressFragmentViewModel extends ViewModel
     }
 
     public void insert(Address address,
-                       GMarkerMetadata gMarkerMetadata)
+                       GMarkerMetadata gMarkerMetadata,
+                       SuccessCallback successCallback)
     {
-        gMarkerAddressCase.insert(address, gMarkerMetadata);
+        gMarkerAddressCase.insert(address, gMarkerMetadata, successCallback);
     }
 }

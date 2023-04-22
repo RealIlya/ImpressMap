@@ -11,6 +11,7 @@ import androidx.lifecycle.LiveData;
 import com.example.impressmap.database.DatabaseRepo;
 import com.example.impressmap.database.firebase.data.AllAddressesLiveData;
 import com.example.impressmap.model.data.Address;
+import com.example.impressmap.util.SuccessCallback;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.HashMap;
@@ -35,7 +36,8 @@ public class AddressesRepo implements DatabaseRepo<Address>
     }
 
     @Override
-    public void insert(Address address)
+    public void insert(Address address,
+                       SuccessCallback successCallback)
     {
         String addressKey = userAddressesRef.push().getKey();
 
@@ -45,18 +47,25 @@ public class AddressesRepo implements DatabaseRepo<Address>
 
         Map<String, Object> sData = new HashMap<>();
         sData.put(CHILD_ID_NODE, addressKey);
-        addressesRef.child(addressKey).updateChildren(data);
-        userAddressesRef.child(addressKey).updateChildren(sData);
+        addressesRef.child(addressKey)
+                    .updateChildren(data)
+                    .addOnSuccessListener(unused -> userAddressesRef.child(addressKey)
+                                                                    .updateChildren(sData)
+                                                                    .addOnSuccessListener(
+                                                                            unused1 -> successCallback.onSuccess()));
+
     }
 
     @Override
-    public void update(Address address)
+    public void update(Address address,
+                       SuccessCallback successCallback)
     {
 
     }
 
     @Override
-    public void delete(Address address)
+    public void delete(Address address,
+                       SuccessCallback successCallback)
     {
 
     }

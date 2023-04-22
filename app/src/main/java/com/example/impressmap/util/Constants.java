@@ -13,6 +13,8 @@ public class Constants
 
     public static final DatabaseReference DATABASE_REF;
 
+    public static final String LAT_LNG_KEY = "LAT_LNG_KEY";
+
     static
     {
         DATABASE_REF = FirebaseDatabase.getInstance(

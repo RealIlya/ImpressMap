@@ -8,7 +8,7 @@ import com.example.impressmap.model.data.Post;
 
 public class PostGMarkerCase
 {
-    private PostsRepo postsRepo;
+    private final PostsRepo postsRepo;
 
     public PostGMarkerCase()
     {

@@ -11,6 +11,7 @@ import androidx.lifecycle.LiveData;
 import com.example.impressmap.database.DatabaseRepo;
 import com.example.impressmap.database.firebase.data.AllGMarkerMetadataLiveData;
 import com.example.impressmap.model.data.GMarkerMetadata;
+import com.example.impressmap.util.SuccessCallback;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.HashMap;
@@ -20,15 +21,17 @@ import java.util.Map;
 public class GMarkerMetadataRepo implements DatabaseRepo<GMarkerMetadata>
 {
     private final DatabaseReference gMarkersRef;
-    private DatabaseReference userGMarkersRef;
+    private final String addressId;
+    private final DatabaseReference userGMarkersRef;
 
     public GMarkerMetadataRepo(String addressId)
     {
         gMarkersRef = DATABASE_REF.child(GMARKERS_NODE);
+        this.addressId = addressId;
         userGMarkersRef = DATABASE_REF.child(MAIN_LIST_NODE)
                                       .child(UID)
                                       .child(GMARKERS_NODE)
-                                      .child(addressId);
+                                      .child(this.addressId);
     }
 
     @Override
@@ -38,9 +41,12 @@ public class GMarkerMetadataRepo implements DatabaseRepo<GMarkerMetadata>
     }
 
     @Override
-    public void insert(GMarkerMetadata gMarkerMetadata)
+    public void insert(GMarkerMetadata gMarkerMetadata,
+                       SuccessCallback successCallback)
     {
-        String gMarkerKey = userGMarkersRef.push().getKey();
+        DatabaseReference push = userGMarkersRef.push();
+        String gMarkerKey = gMarkerMetadata.getType() == GMarkerMetadata.ADDRESS_MARKER ? addressId
+                                                                                        : push.getKey();
 
         gMarkerMetadata.setId(gMarkerKey);
         Map<String, Object> data = gMarkerMetadata.prepareToTransferToDatabase();
@@ -48,18 +54,24 @@ public class GMarkerMetadataRepo implements DatabaseRepo<GMarkerMetadata>
         Map<String, Object> sData = new HashMap<>();
         sData.put(CHILD_ID_NODE, gMarkerKey);
 
-        gMarkersRef.child(gMarkerKey).updateChildren(data);
-        userGMarkersRef.child(gMarkerKey).updateChildren(sData);
+        gMarkersRef.child(gMarkerKey)
+                   .updateChildren(data)
+                   .addOnSuccessListener(unused -> userGMarkersRef.child(gMarkerKey)
+                                                                  .updateChildren(sData)
+                                                                  .addOnSuccessListener(
+                                                                          unused1 -> successCallback.onSuccess()));
     }
 
     @Override
-    public void update(GMarkerMetadata gMarkerMetadata)
+    public void update(GMarkerMetadata gMarkerMetadata,
+                       SuccessCallback successCallback)
     {
 
     }
 
     @Override
-    public void delete(GMarkerMetadata gMarkerMetadata)
+    public void delete(GMarkerMetadata gMarkerMetadata,
+                       SuccessCallback successCallback)
     {
 
     }

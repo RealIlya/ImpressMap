@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.example.impressmap.model.CircleMeta;
+import com.example.impressmap.model.data.GCircleMeta;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.gcircle.CommonGCircle;
 import com.example.impressmap.model.data.gcircle.GCircle;
@@ -78,7 +78,7 @@ public class GMapAdapter extends MapAdapter
 
                 deselectLastMarker();
 
-                lastSelected = marker;
+                lastSelectedMarker = marker;
 
                 googleMap.animateCamera(
                         CameraUpdateFactory.newLatLngZoom(marker.getPosition(), ZOOM));
@@ -89,14 +89,44 @@ public class GMapAdapter extends MapAdapter
                 return onMarkerClicked(marker);
             }
         });
+
+        googleMap.setOnCircleClickListener(new GoogleMap.OnCircleClickListener()
+        {
+            @Override
+            public void onCircleClick(@NonNull Circle circle)
+            {
+                Object circleTag = circle.getTag();
+                if (circleTag == null)
+                {
+                    return;
+                }
+
+                deselectLastCircle();
+
+                lastSelectedCircle = circle;
+
+                GCircle gCircle = (GCircle) circleTag;
+                gCircle.setSelected(true);
+
+                onCircleClicked(circle);
+            }
+        });
     }
 
     public void setItems(List<GMarkerMetadata> gMarkerMetadataList)
     {
         clearMap();
+
         for (GMarkerMetadata gMarkerMetadata : gMarkerMetadataList)
         {
             addMarker(gMarkerMetadata);
+            if (gMarkerMetadata.getType() == GMarkerMetadata.ADDRESS_MARKER)
+            {
+                GCircleMeta gCircleMeta = new GCircleMeta();
+                gCircleMeta.setAddressId(gMarkerMetadata.getId());
+                gCircleMeta.setCenter(gMarkerMetadata.getPosition());
+                addCircle(gCircleMeta);
+            }
         }
     }
 
@@ -108,10 +138,10 @@ public class GMapAdapter extends MapAdapter
         switch (gMarkerMetadata.getType())
         {
             case GMarkerMetadata.ADDRESS_MARKER:
-                gMarker = new AddressGMarker(context, marker);
+                gMarker = new AddressGMarker(context, marker, gMarkerMetadata);
                 break;
             default:
-                gMarker = new CommonGMarker(context, marker);
+                gMarker = new CommonGMarker(context, marker, gMarkerMetadata);
                 break;
         }
 
@@ -120,12 +150,11 @@ public class GMapAdapter extends MapAdapter
     }
 
     @Override
-    public Circle addCircle(CircleMeta circleMeta)
+    public Circle addCircle(GCircleMeta gCircleMeta)
     {
-        Circle circle = super.addCircle(circleMeta);
+        Circle circle = super.addCircle(gCircleMeta);
 
-        GCircle gCircle = new CommonGCircle(context, circle);
-        gCircle.setAddressId(circleMeta.getAddressId());
+        GCircle gCircle = new CommonGCircle(context, circle, gCircleMeta);
 
         circle.setTag(gCircle);
         return circle;

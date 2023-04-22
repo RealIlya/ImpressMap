@@ -10,6 +10,7 @@ import com.example.impressmap.database.DatabaseRepo;
 import com.example.impressmap.database.firebase.data.AllUsersLiveData;
 import com.example.impressmap.database.firebase.data.UserLiveData;
 import com.example.impressmap.model.data.User;
+import com.example.impressmap.util.SuccessCallback;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.List;
@@ -36,21 +37,28 @@ public class UsersRepo implements DatabaseRepo<User>
     }
 
     @Override
-    public void insert(User user)
+    public void insert(User user,
+                       SuccessCallback successCallback)
     {
         Map<String, Object> data = user.prepareToTransferToDatabase();
-        usersRef.child(user.getId()).updateChildren(data);
+        usersRef.child(user.getId())
+                .updateChildren(data)
+                .addOnSuccessListener(unused -> successCallback.onSuccess());
     }
 
     @Override
-    public void update(User user)
+    public void update(User user,
+                       SuccessCallback successCallback)
     {
         Map<String, Object> data = user.prepareToTransferToDatabase();
-        usersRef.child(user.getId()).updateChildren(data);
+        usersRef.child(user.getId())
+                .updateChildren(data)
+                .addOnSuccessListener(unused -> successCallback.onSuccess());
     }
 
     @Override
-    public void delete(User user)
+    public void delete(User user,
+                       SuccessCallback successCallback)
     {
 
     }

@@ -24,6 +24,7 @@ import com.example.impressmap.ui.viewModels.MainViewModel;
 public class AddressesFragment extends Fragment
 {
     private FragmentAddressesBinding binding;
+    private AddressesFragmentViewModel viewModel;
 
     @Nullable
     @Override
@@ -39,16 +40,15 @@ public class AddressesFragment extends Fragment
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState)
     {
-        AddressesFragmentViewModel viewModel = new ViewModelProvider(this).get(
-                AddressesFragmentViewModel.class);
+        viewModel = new ViewModelProvider(this).get(AddressesFragmentViewModel.class);
 
         binding.toolbar.setNavigationOnClickListener(
                 v -> requireActivity().getSupportFragmentManager().popBackStack());
 
+        MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
+                MainViewModel.class);
         binding.addAddressButton.setOnClickListener(v ->
         {
-            MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
-                    MainViewModel.class);
             mainViewModel.setMode(ADDING_MODE);
 
             FragmentManager supportFragmentManager = requireActivity().getSupportFragmentManager();
@@ -61,16 +61,9 @@ public class AddressesFragment extends Fragment
         AddressesAdapter addressesAdapter = new AddressesAdapter(getContext());
         recyclerView.setAdapter(addressesAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        addressesAdapter.setOnAddressClickListener(address ->
-        {
-            MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
-                    MainViewModel.class);
-            mainViewModel.switchSelectionAddress(address);
-        });
+        addressesAdapter.setOnAddressClickListener(mainViewModel::switchSelectionAddress);
         viewModel.getByUser().observe(getViewLifecycleOwner(), addressList ->
         {
-            MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
-                    MainViewModel.class);
             for (Address address : mainViewModel.getSelectedAddresses().getValue())
             {
                 for (Address addressSub : addressList)

@@ -23,7 +23,7 @@ public class AuthorizationCase
                        String surname,
                        String email,
                        String password,
-                       SuccessCallback onSuccessCallback)
+                       SuccessCallback successCallback)
     {
         AUTH.createUserWithEmailAndPassword(email, password).addOnSuccessListener(authResult ->
         {
@@ -33,23 +33,21 @@ public class AuthorizationCase
             user.setId(firebaseUser.getUid());
             user.setPhoneNumber(firebaseUser.getPhoneNumber());
 
-            usersRepo.insert(user);
+            usersRepo.insert(user, successCallback);
 
             UID = firebaseUser.getUid();
-
-            onSuccessCallback.onSuccess();
         }).addOnFailureListener(e -> Log.e("signUp", e.getMessage()));
     }
 
     public void signIn(String email,
                        String password,
-                       SuccessCallback onSuccessCallback)
+                       SuccessCallback successCallback)
     {
         AUTH.signInWithEmailAndPassword(email, password).addOnSuccessListener(authResult ->
         {
-            UID = AUTH.getCurrentUser().getUid();
+            UID = authResult.getUser().getUid();
 
-            onSuccessCallback.onSuccess();
+            successCallback.onSuccess();
         }).addOnFailureListener(e -> Log.e("signIn", e.getMessage()));
     }
 

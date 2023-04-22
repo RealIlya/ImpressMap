@@ -7,10 +7,11 @@ import androidx.lifecycle.LiveData;
 import com.example.impressmap.database.firebase.data.UserLiveData;
 import com.example.impressmap.database.firebase.repos.UsersRepo;
 import com.example.impressmap.model.data.User;
+import com.example.impressmap.util.SuccessCallback;
 
 public class UserCase
 {
-    private UsersRepo usersRepo;
+    private final UsersRepo usersRepo;
 
     public UserCase()
     {
@@ -22,10 +23,10 @@ public class UserCase
         return usersRepo.getUser();
     }
 
-    public void changeFullName(String newFullName)
+    public void changeFullName(String newFullName, SuccessCallback successCallback)
     {
         User user = usersRepo.getUser().getValue();
         user.setFullName(newFullName);
-        usersRepo.update(user);
+        usersRepo.update(user, successCallback);
     }
 }

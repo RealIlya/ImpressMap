@@ -1,6 +1,7 @@
 package com.example.impressmap.ui.fragment;
 
-import static com.example.impressmap.ui.fragment.bottom.MapInfoFragment.LAT_LNG_KEY;
+import static com.example.impressmap.ui.fragment.MainFragment.COMMON_MODE;
+import static com.example.impressmap.util.Constants.LAT_LNG_KEY;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,12 +12,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.databinding.FragmentCreatorAddressBinding;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.ui.viewModels.CreatorAddressFragmentViewModel;
+import com.example.impressmap.ui.viewModels.MainViewModel;
 import com.example.impressmap.util.Locations;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -55,8 +58,8 @@ public class CreatorAddressFragment extends Fragment
         double[] rawLatLng = requireArguments().getDoubleArray(LAT_LNG_KEY);
         LatLng latLng = new LatLng(rawLatLng[0], rawLatLng[1]);
 
-        binding.toolbar.setNavigationOnClickListener(
-                v -> requireActivity().getSupportFragmentManager().popBackStack());
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        binding.toolbar.setNavigationOnClickListener(v -> fragmentManager.popBackStack());
 
         binding.confirmAddressButton.setOnClickListener(v ->
         {
@@ -82,10 +85,16 @@ public class CreatorAddressFragment extends Fragment
 
                 GMarkerMetadata gMarkerMetadata = new GMarkerMetadata();
                 gMarkerMetadata.setTitle(title);
-                gMarkerMetadata.setLatLng(latLng);
+                gMarkerMetadata.setPositionLatLng(latLng);
                 gMarkerMetadata.setType(GMarkerMetadata.ADDRESS_MARKER);
 
-                viewModel.insert(address, gMarkerMetadata);
+                viewModel.insert(address, gMarkerMetadata, () ->
+                {
+                    fragmentManager.popBackStack();
+                    MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
+                            MainViewModel.class);
+                    mainViewModel.setMode(COMMON_MODE);
+                });
             }
         });
     }

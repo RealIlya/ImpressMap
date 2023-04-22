@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.impressmap.database.firebase.cases.UserCase;
 import com.example.impressmap.model.data.User;
+import com.example.impressmap.util.SuccessCallback;
 
 public class ProfileFragmentViewModel extends ViewModel
 {
@@ -20,8 +21,9 @@ public class ProfileFragmentViewModel extends ViewModel
         return userCase.getUser();
     }
 
-    public void changeFullName(String newFullName)
+    public void changeFullName(String newFullName,
+                               SuccessCallback successCallback)
     {
-        userCase.changeFullName(newFullName);
+        userCase.changeFullName(newFullName, successCallback);
     }
 }

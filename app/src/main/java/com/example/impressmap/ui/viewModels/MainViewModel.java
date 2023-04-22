@@ -11,9 +11,11 @@ import java.util.List;
 
 public class MainViewModel extends ViewModel
 {
-    private final MutableLiveData<Integer> mode = new MutableLiveData<>();
+    public static final int MAX_ADDRESSES_COUNT = 8;
 
+    private final MutableLiveData<Integer> mode = new MutableLiveData<>();
     private final MutableLiveData<List<Address>> selectedAddresses = new MutableLiveData<>();
+    private final MutableLiveData<String> selectedAddressId = new MutableLiveData<>();
 
     public MainViewModel()
     {
@@ -35,11 +37,21 @@ public class MainViewModel extends ViewModel
         return selectedAddresses;
     }
 
+    public LiveData<String> getSelectedAddressId()
+    {
+        return selectedAddressId;
+    }
+
+    public void setSelectedAddressId(String addressId)
+    {
+        selectedAddressId.setValue(addressId);
+    }
+
     public void switchSelectionAddress(Address address)
     {
         List<Address> addresses = selectedAddresses.getValue();
 
-        if (addresses == null)
+        if (addresses == null || (addresses.size() > MAX_ADDRESSES_COUNT && !address.isSelected()))
         {
             return;
         }

@@ -7,13 +7,14 @@ import com.example.impressmap.database.firebase.repos.PostsRepo;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.Post;
+import com.example.impressmap.util.SuccessCallback;
 
 import java.util.List;
 
 public class GMarkerCommonCase
 {
-    private GMarkerMetadataRepo gMarkerMetadataRepo;
     private final PostsRepo postsRepo;
+    private GMarkerMetadataRepo gMarkerMetadataRepo;
 
     public GMarkerCommonCase()
     {
@@ -22,12 +23,15 @@ public class GMarkerCommonCase
 
     public void insert(String addressId,
                        GMarkerMetadata gMarkerMetadata,
-                       Post post)
+                       Post post,
+                       SuccessCallback successCallback)
     {
         gMarkerMetadataRepo = new GMarkerMetadataRepo(addressId);
-        gMarkerMetadataRepo.insert(gMarkerMetadata);
+        gMarkerMetadataRepo.insert(gMarkerMetadata, successCallback);
         post.setGMarkerId(gMarkerMetadata.getId());
-        postsRepo.insert(post);
+        postsRepo.insert(post, () ->
+        {
+        });
     }
 
     public LiveData<List<GMarkerMetadata>> getByAddress(Address address)

@@ -6,6 +6,7 @@ import static com.example.impressmap.util.Constants.Keys.FULL_ADDRESS_NODE;
 import static com.example.impressmap.util.Constants.Keys.OWNER_ID_NODE;
 import static com.example.impressmap.util.Constants.Keys.USER_IDS_NODE;
 
+import androidx.annotation.Nullable;
 import androidx.room.Entity;
 
 import java.util.ArrayList;
@@ -76,7 +77,7 @@ public class Address implements TransferableToDatabase
 
     public List<String> getUserIds()
     {
-        return new ArrayList<>(Arrays.asList(this.userIds.split(" ")));
+        return new ArrayList<>(Arrays.asList(userIds.split(" ")));
     }
 
     public void setUserIds(String userIds)
@@ -117,5 +118,24 @@ public class Address implements TransferableToDatabase
     public void setSelected(boolean selected)
     {
         this.selected = selected;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (obj == this)
+        {
+            return true;
+        }
+        if (!(obj instanceof Address))
+        {
+            return false;
+        }
+        Address o = (Address) obj;
+        return o.id.equals(id);
     }
 }

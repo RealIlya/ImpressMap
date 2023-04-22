@@ -20,7 +20,7 @@ public class GMarkerMetadata implements TransferableToDatabase
 
     private String id = "";
     private String title = "";
-    private LatLng latLng = new LatLng(0, 0);
+    private String position = "";
     private int type = -1;
 
     public Map<String, Object> prepareToTransferToDatabase()
@@ -29,7 +29,7 @@ public class GMarkerMetadata implements TransferableToDatabase
 
         data.put(CHILD_ID_NODE, id);
         data.put(TITLE_NODE, title);
-        data.put(POSITION_NODE, String.format("%s %s", latLng.latitude, latLng.longitude));
+        data.put(POSITION_NODE, position);
         data.put(TYPE_NODE, type);
 
         return data;
@@ -55,14 +55,20 @@ public class GMarkerMetadata implements TransferableToDatabase
         this.title = title;
     }
 
-    public LatLng getLatLng()
+    public LatLng getPosition()
     {
-        return latLng;
+        String[] pos = position.split(" ");
+        return new LatLng(Double.parseDouble(pos[0]), Double.parseDouble(pos[1]));
     }
 
-    public void setLatLng(LatLng latLng)
+    public void setPosition(String position)
     {
-        this.latLng = latLng;
+        this.position = position;
+    }
+
+    public void setPositionLatLng(LatLng position)
+    {
+        this.position = String.format("%s %s", position.latitude, position.longitude);
     }
 
     public int getType()

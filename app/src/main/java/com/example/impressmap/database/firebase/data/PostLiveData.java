@@ -29,6 +29,11 @@ public class PostLiveData extends LiveData<Post>
         {
             PostDataBase value = snapshot.getValue(PostDataBase.class);
 
+            if (value == null)
+            {
+                return;
+            }
+
             usersRef.child(value.getOwnerUserId())
                     .addListenerForSingleValueEvent(new ValueEventListener()
                     {

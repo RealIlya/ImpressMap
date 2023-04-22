@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class AllAddressesLiveData extends LiveData<List<Address>>
@@ -26,9 +27,12 @@ public class AllAddressesLiveData extends LiveData<List<Address>>
         {
             DatabaseReference addressesRef = DATABASE_REF.child(ADDRESSES_NODE);
 
-            List<Address> addresses = new ArrayList<>();
-            for (DataSnapshot dataSnapshot : snapshot.getChildren())
+            List<Address> addressList = new ArrayList<>();
+            Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
+            while (iterator.hasNext())
             {
+                DataSnapshot dataSnapshot = iterator.next();
+                boolean hasNext = iterator.hasNext();
                 Address value = dataSnapshot.getValue(Address.class);
 
                 addressesRef.child(value.getId())
@@ -38,9 +42,12 @@ public class AllAddressesLiveData extends LiveData<List<Address>>
                                 public void onDataChange(@NonNull DataSnapshot snapshot)
                                 {
                                     Address address = snapshot.getValue(Address.class);
-                                    addresses.add(address);
+                                    addressList.add(address);
 
-                                    setValue(addresses);
+                                    if (!hasNext)
+                                    {
+                                        setValue(addressList);
+                                    }
                                 }
 
                                 @Override

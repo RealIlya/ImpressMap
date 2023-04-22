@@ -1,8 +1,8 @@
-package com.example.impressmap.model;
+package com.example.impressmap.model.data;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class CircleMeta
+public class GCircleMeta
 {
     private String addressId = "";
     private LatLng center = new LatLng(0, 0);

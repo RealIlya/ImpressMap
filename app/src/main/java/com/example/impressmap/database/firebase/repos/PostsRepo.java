@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import com.example.impressmap.database.DatabaseRepo;
 import com.example.impressmap.database.firebase.data.PostLiveData;
 import com.example.impressmap.model.data.Post;
+import com.example.impressmap.util.SuccessCallback;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.List;
@@ -34,22 +35,27 @@ public class PostsRepo implements DatabaseRepo<Post>
     }
 
     @Override
-    public void insert(Post post)
+    public void insert(Post post,
+                       SuccessCallback successCallback)
     {
         post.setId(post.getGMarkerId());
         Map<String, Object> data = post.prepareToTransferToDatabase();
 
-        postsRef.child(post.getGMarkerId()).updateChildren(data);
+        postsRef.child(post.getGMarkerId())
+                .updateChildren(data)
+                .addOnSuccessListener(unused -> successCallback.onSuccess());
     }
 
     @Override
-    public void update(Post post)
+    public void update(Post post,
+                       SuccessCallback successCallback)
     {
 
     }
 
     @Override
-    public void delete(Post post)
+    public void delete(Post post,
+                       SuccessCallback successCallback)
     {
 
     }

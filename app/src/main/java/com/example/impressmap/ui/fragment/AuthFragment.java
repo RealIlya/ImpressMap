@@ -34,7 +34,6 @@ public class AuthFragment extends Fragment
         requireActivity().getSupportFragmentManager()
                          .beginTransaction()
                          .replace(R.id.container, fragment)
-                         .setReorderingAllowed(true)
                          .commit();
     };
 
@@ -71,11 +70,11 @@ public class AuthFragment extends Fragment
         });
 
         binding.nextButton.setOnClickListener(v -> {
-            String loginText = binding.nameView.getText().toString().trim();
+            String emailText = binding.emailView.getText().toString().trim();
             String passwordText = binding.passwordView.getText().toString().trim();
-            if (!loginText.isEmpty() && !passwordText.isEmpty())
+            if (!emailText.isEmpty() && !passwordText.isEmpty())
             {
-                authorizationCase.signIn(loginText, passwordText, successCallback);
+                authorizationCase.signIn(emailText, passwordText, successCallback);
             }
             else
             {

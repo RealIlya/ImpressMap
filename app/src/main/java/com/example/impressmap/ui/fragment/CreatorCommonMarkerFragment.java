@@ -1,7 +1,7 @@
 package com.example.impressmap.ui.fragment;
 
-import static com.example.impressmap.ui.fragment.bottom.MapInfoFragment.LAT_LNG_KEY;
 import static com.example.impressmap.util.Constants.AUTH;
+import static com.example.impressmap.util.Constants.LAT_LNG_KEY;
 import static com.example.impressmap.util.Constants.UID;
 
 import android.os.Bundle;
@@ -19,12 +19,23 @@ import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.OwnerUser;
 import com.example.impressmap.model.data.Post;
 import com.example.impressmap.ui.viewModels.MainFragmentViewModel;
+import com.example.impressmap.ui.viewModels.MainViewModel;
 import com.google.android.gms.maps.model.LatLng;
 
 public class CreatorCommonMarkerFragment extends Fragment
 {
     private FragmentCreatorCommonMarkerBinding binding;
     private MainFragmentViewModel viewModel;
+
+    public static CreatorCommonMarkerFragment newInstance(LatLng latLng)
+    {
+        Bundle arguments = new Bundle();
+        arguments.putDoubleArray(LAT_LNG_KEY, new double[]{latLng.latitude, latLng.longitude});
+
+        CreatorCommonMarkerFragment creatorCommonMarkerFragment = new CreatorCommonMarkerFragment();
+        creatorCommonMarkerFragment.setArguments(arguments);
+        return creatorCommonMarkerFragment;
+    }
 
     @Nullable
     @Override
@@ -46,47 +57,33 @@ public class CreatorCommonMarkerFragment extends Fragment
         LatLng latLng = new LatLng(rawLatLng[0], rawLatLng[1]);
 
         binding.toolbar.setNavigationOnClickListener(
-                v -> requireActivity().getSupportFragmentManager()
-                                      .beginTransaction()
-                                      .remove(CreatorCommonMarkerFragment.this)
-                                      .commit());
-        binding.confirmMarkerButton.setOnClickListener(new View.OnClickListener()
+                v -> requireActivity().getSupportFragmentManager().popBackStack());
+        binding.confirmMarkerButton.setOnClickListener(v ->
         {
-            @Override
-            public void onClick(View view)
+            String title = binding.markerTitleView.getText().toString();
+            String text = binding.markerTextView.getText().toString();
+            if (!title.isEmpty() && !text.isEmpty())
             {
-                String title = binding.markerTitleView.getText()
-                                                      .toString();
-                String text = binding.markerTextView.getText()
-                                                    .toString();
-                if (!title.isEmpty() && !text.isEmpty())
-                {
-                    GMarkerMetadata gMarkerMetadata = new GMarkerMetadata();
-                    gMarkerMetadata.setTitle(title);
-                    gMarkerMetadata.setLatLng(latLng);
-                    gMarkerMetadata.setType(GMarkerMetadata.COMMON_MARKER);
+                GMarkerMetadata gMarkerMetadata = new GMarkerMetadata();
+                gMarkerMetadata.setTitle(title);
+                gMarkerMetadata.setPositionLatLng(latLng);
+                gMarkerMetadata.setType(GMarkerMetadata.COMMON_MARKER);
 
-                    OwnerUser ownerUser = new OwnerUser();
-                    ownerUser.setId(UID);
-                    ownerUser.setFullName(AUTH.getCurrentUser()
-                                              .getEmail());
+                OwnerUser ownerUser = new OwnerUser();
+                ownerUser.setId(UID);
+                ownerUser.setFullName(AUTH.getCurrentUser().getEmail());
 
-                    Post post = new Post();
-                    post.setText(text);
-                    post.setOwnerUser(ownerUser);
-                    viewModel.insertCommonMarker("", gMarkerMetadata, post);
-                }
+                Post post = new Post();
+                post.setText(text);
+                post.setOwnerUser(ownerUser);
+
+                MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
+                        MainViewModel.class);
+                viewModel.insertCommonMarker(mainViewModel.getSelectedAddressId().getValue(),
+                        gMarkerMetadata, post, () ->
+                        {
+                        });
             }
         });
-    }
-
-    public static CreatorCommonMarkerFragment newInstance(LatLng latLng)
-    {
-        Bundle arguments = new Bundle();
-        arguments.putDoubleArray(LAT_LNG_KEY, new double[]{latLng.latitude, latLng.longitude});
-
-        CreatorCommonMarkerFragment creatorCommonMarkerFragment = new CreatorCommonMarkerFragment();
-        creatorCommonMarkerFragment.setArguments(arguments);
-        return creatorCommonMarkerFragment;
     }
 }

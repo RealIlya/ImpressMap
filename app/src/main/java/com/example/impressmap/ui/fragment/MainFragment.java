@@ -18,7 +18,10 @@ import com.example.impressmap.R;
 import com.example.impressmap.adapter.PostsAdapter;
 import com.example.impressmap.adapter.map.GMapAdapter;
 import com.example.impressmap.databinding.FragmentMainBinding;
+import com.example.impressmap.model.data.GCircleMeta;
 import com.example.impressmap.model.data.GMarkerMetadata;
+import com.example.impressmap.model.data.gcircle.GCircle;
+import com.example.impressmap.model.data.gmarker.GMarker;
 import com.example.impressmap.ui.NavigationDrawer;
 import com.example.impressmap.ui.PostsBottomSheetBehavior;
 import com.example.impressmap.ui.fragment.bottom.MapInfoFragment;
@@ -28,6 +31,7 @@ import com.example.impressmap.util.mode.Mode;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.card.MaterialCardView;
 
@@ -94,6 +98,7 @@ public class MainFragment extends Fragment
                 public void onMapReady(@NonNull GoogleMap googleMap)
                 {
                     GMapAdapter gMapAdapter = new GMapAdapter(getContext(), googleMap);
+
                     gMapAdapter.removeListeners();
 
                     MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
@@ -105,6 +110,8 @@ public class MainFragment extends Fragment
             });
         }
 
+        postsSheetBehavior = new PostsBottomSheetBehavior<>(
+                BottomSheetBehavior.from(binding.framePosts));
     }
 
     private void switchMode(GMapAdapter gMapAdapter,
@@ -125,13 +132,27 @@ public class MainFragment extends Fragment
         modeClass.switchOn(gMapAdapter);
     }
 
-    public class CommonMode implements Mode
+    private class CommonMode implements Mode
     {
         @Override
         public void switchOn(GMapAdapter gMapAdapter)
         {
-            /*viewModel.getGMarkerMetadataByAddress()
-                     .observe(getViewLifecycleOwner(, gMapAdapter::setItems);*/
+            MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
+                    MainViewModel.class);
+            mainViewModel.getSelectedAddresses().observe(getViewLifecycleOwner(), addressList ->
+            {
+                if (!addressList.isEmpty())
+                {
+                    viewModel.getGMarkerMetadataByAddress(addressList.get(0))
+                             .observe(getViewLifecycleOwner(), gMapAdapter::setItems);
+                }
+                else
+                {
+                    gMapAdapter.clearMap();
+                }
+            });
+
+            gMapAdapter.zoomTo(new LatLng(54.849540, 83.106605));
 
             gMapAdapter.setOnMapLongClickListener(latLng ->
             {
@@ -140,7 +161,7 @@ public class MainFragment extends Fragment
 
                 MapInfoFragment mapInfoFragment = MapInfoFragment.newInstance(latLng);
                 String name = MapInfoFragment.class.getSimpleName();
-                mapInfoFragment.show(getChildFragmentManager(), name);
+                mapInfoFragment.show(getParentFragmentManager(), name);
                 mapInfoFragment.setOnDismissListener(
                         dialogInterface -> gMapAdapter.removePointer());
             });
@@ -152,11 +173,16 @@ public class MainFragment extends Fragment
                 postsSheetBehavior.showHalf();
                 binding.postsToolbar.setTitle(marker.getTitle());
 
-                GMarkerMetadata gMarkerMetadata = (GMarkerMetadata) marker.getTag();
+                GMarkerMetadata gMarkerMetadata = ((GMarker) marker.getTag()).getGMarkerMetadata();
                 viewModel.getPostByGMarker(gMarkerMetadata)
                          .observe(getViewLifecycleOwner(), postsAdapter::addPost);
 
                 return true;
+            });
+            gMapAdapter.setOnCircleClickListener(circle ->
+            {
+                GCircleMeta gCircleMeta = ((GCircle) circle.getTag()).getGCircleMeta();
+                mainViewModel.setSelectedAddressId(gCircleMeta.getAddressId());
             });
 
             navigationDrawer = new NavigationDrawer(getContext(), binding.navigationView,
@@ -165,9 +191,6 @@ public class MainFragment extends Fragment
             binding.toolbar.setNavigationIcon(R.drawable.ic_menu_drawer);
             binding.toolbar.setNavigationOnClickListener(v -> navigationDrawer.open());
 
-            postsSheetBehavior = new PostsBottomSheetBehavior<>(
-                    BottomSheetBehavior.from(binding.framePosts));
-
             postsAdapter = new PostsAdapter();
             RecyclerView recyclerView = binding.postsRecyclerView;
             recyclerView.setAdapter(postsAdapter);
@@ -175,11 +198,14 @@ public class MainFragment extends Fragment
         }
     }
 
-    public class AddingMode implements Mode
+    private class AddingMode implements Mode
     {
         @Override
         public void switchOn(GMapAdapter gMapAdapter)
         {
+            MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
+                    MainViewModel.class);
+
             gMapAdapter.setOnMapClickListener(latLng ->
             {
                 gMapAdapter.setPointer(latLng);
@@ -195,12 +221,7 @@ public class MainFragment extends Fragment
             });
 
             binding.toolbar.setNavigationIcon(R.drawable.ic_arrow);
-            binding.toolbar.setNavigationOnClickListener(v ->
-            {
-                MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
-                        MainViewModel.class);
-                mainViewModel.setMode(COMMON_MODE);
-            });
+            binding.toolbar.setNavigationOnClickListener(v -> mainViewModel.setMode(COMMON_MODE));
         }
     }
 }
