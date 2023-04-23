@@ -38,6 +38,7 @@ public abstract class GMarker implements GObject
         marker.setIcon(BitmapDescriptorFactory.fromBitmap(
                 Converter.drawableIdToBitmap(context, deselectedStateResId)));
         selected = false;
+        clickable = false;
     }
 
     public boolean isSelected()
@@ -47,7 +48,7 @@ public abstract class GMarker implements GObject
 
     public void setSelected(boolean selected)
     {
-        if (this.selected == selected)
+        if (!clickable || this.selected == selected)
         {
             return;
         }
@@ -61,5 +62,15 @@ public abstract class GMarker implements GObject
     public GMarkerMetadata getGMarkerMetadata()
     {
         return gMarkerMetadata;
+    }
+
+    public boolean isClickable()
+    {
+        return clickable;
+    }
+
+    public void setClickable(boolean clickable)
+    {
+        this.clickable = clickable;
     }
 }

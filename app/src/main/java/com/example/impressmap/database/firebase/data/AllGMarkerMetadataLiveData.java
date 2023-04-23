@@ -75,7 +75,7 @@ public class AllGMarkerMetadataLiveData extends LiveData<List<GMarkerMetadata>>
     @Override
     protected void onActive()
     {
-        userGMarkerRef.addValueEventListener(listener);
+        userGMarkerRef.addListenerForSingleValueEvent(listener);
     }
 
     @Override

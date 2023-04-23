@@ -15,7 +15,7 @@ public class MainViewModel extends ViewModel
 
     private final MutableLiveData<Integer> mode = new MutableLiveData<>();
     private final MutableLiveData<List<Address>> selectedAddresses = new MutableLiveData<>();
-    private final MutableLiveData<String> selectedAddressId = new MutableLiveData<>();
+    private final MutableLiveData<String> selectedAddressId = new MutableLiveData<>("");
 
     public MainViewModel()
     {

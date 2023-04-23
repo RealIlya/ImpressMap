@@ -1,9 +1,14 @@
 package com.example.impressmap.model.data;
 
+import com.example.impressmap.model.data.gmarker.GMarker;
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GCircleMeta
 {
+    private final List<GMarker> gMarkers = new ArrayList<>();
     private String addressId = "";
     private LatLng center = new LatLng(0, 0);
 
@@ -25,5 +30,15 @@ public class GCircleMeta
     public void setCenter(LatLng center)
     {
         this.center = center;
+    }
+
+    public List<GMarker> getGMarkers()
+    {
+        return gMarkers;
+    }
+
+    public void setGMarkers(List<GMarker> gMarkers)
+    {
+        this.gMarkers.addAll(gMarkers);
     }
 }

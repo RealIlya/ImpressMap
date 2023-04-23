@@ -9,15 +9,11 @@ import com.example.impressmap.model.data.GObject;
 import com.example.impressmap.model.data.gmarker.GMarker;
 import com.google.android.gms.maps.model.Circle;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class GCircle implements GObject
 {
     private final Context context;
     private final Circle circle;
     private final GCircleMeta gCircleMeta;
-    private final List<GMarker> gMarkers;
     private final double radius;
     private final float strokeWidth;
     private final int strokeColor;
@@ -49,13 +45,34 @@ public abstract class GCircle implements GObject
         circle.setFillColor(deselectedStateColor);
         circle.setStrokeColor(strokeColor);
         circle.setClickable(true);
-        gMarkers = new ArrayList<>();
         selected = false;
     }
 
     public GCircleMeta getGCircleMeta()
     {
         return gCircleMeta;
+    }
+
+    public void enableGMarkersClickable()
+    {
+        setGMarkersClickable(true);
+    }
+
+    public void disableGMarkersClickable()
+    {
+        setGMarkersClickable(false);
+    }
+
+    private void setGMarkersClickable(boolean clickable)
+    {
+        for (GMarker gMarker : gCircleMeta.getGMarkers())
+        {
+            if (!clickable)
+            {
+                gMarker.setSelected(false);
+            }
+            gMarker.setClickable(clickable);
+        }
     }
 
     public boolean isSelected()
@@ -70,7 +87,16 @@ public abstract class GCircle implements GObject
             return;
         }
 
-        circle.setFillColor(selected ? selectedStateColor : deselectedStateColor);
+        if (selected)
+        {
+            circle.setFillColor(selectedStateColor);
+            enableGMarkersClickable();
+        }
+        else
+        {
+            circle.setFillColor(deselectedStateColor);
+            disableGMarkersClickable();
+        }
 
         this.selected = selected;
     }

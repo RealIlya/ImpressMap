@@ -64,6 +64,7 @@ public class MapInfoFragment extends BottomSheetDialogFragment
 
         binding.createSubAddressMarkerButton.setOnClickListener(v ->
         {
+            //TODO fix lagging because of dismissing this fragment
             dismiss();
 
             String name = CreatorCommonMarkerFragment.class.getSimpleName();

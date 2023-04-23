@@ -41,7 +41,7 @@ public abstract class MapAdapter
         removeListeners();
     }
 
-    public Marker addMarker(GMarkerMetadata gMarkerMetadata)
+    public Marker addMarker(@NonNull GMarkerMetadata gMarkerMetadata)
     {
         Marker marker = googleMap.addMarker(new MarkerOptions().title(gMarkerMetadata.getTitle())
                                                                .position(
@@ -50,7 +50,7 @@ public abstract class MapAdapter
         return marker;
     }
 
-    public Circle addCircle(GCircleMeta GCircleMeta)
+    public Circle addCircle(@NonNull GCircleMeta GCircleMeta)
     {
         Circle circle = googleMap.addCircle(new CircleOptions().center(GCircleMeta.getCenter()));
         circles.add(circle);

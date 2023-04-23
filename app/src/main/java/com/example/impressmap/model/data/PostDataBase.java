@@ -1,11 +1,9 @@
 package com.example.impressmap.model.data;
 
-import java.util.Date;
-
 public class PostDataBase
 {
     private String id = "";
-    private String ownerUserId = "";
+    private String ownerId = "";
     private long date = 0;
     private String text = "";
 
@@ -19,14 +17,14 @@ public class PostDataBase
         this.id = id;
     }
 
-    public String getOwnerUserId()
+    public String getOwnerId()
     {
-        return ownerUserId;
+        return ownerId;
     }
 
-    public void setOwnerUserId(String ownerUserId)
+    public void setOwnerId(String ownerId)
     {
-        this.ownerUserId = ownerUserId;
+        this.ownerId = ownerId;
     }
 
     public long getDate()

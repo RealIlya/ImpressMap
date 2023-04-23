@@ -74,6 +74,7 @@ public class AddressesFragment extends Fragment
                     }
                 }
             }
+
             addressesAdapter.setAddressList(addressList);
         });
     }

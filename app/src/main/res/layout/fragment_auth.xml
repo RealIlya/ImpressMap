@@ -4,7 +4,8 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:background="?backgroundSecondaryWindow">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -30,7 +31,7 @@
 
                 <EditText
                     android:id="@+id/name_view"
-                    style="@style/authTextStyle"
+                    style="@style/textStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/horizontal_margin"
@@ -40,7 +41,7 @@
 
                 <EditText
                     android:id="@+id/surname_view"
-                    style="@style/authTextStyle"
+                    style="@style/textStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/horizontal_margin"
@@ -63,7 +64,7 @@
 
                 <EditText
                     android:id="@+id/email_view"
-                    style="@style/authTextStyle"
+                    style="@style/textStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/horizontal_margin"
@@ -85,7 +86,7 @@
 
                 <EditText
                     android:id="@+id/password_view"
-                    style="@style/authTextStyle"
+                    style="@style/textStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/horizontal_margin"

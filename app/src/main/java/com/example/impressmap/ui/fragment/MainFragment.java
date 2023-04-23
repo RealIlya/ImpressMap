@@ -2,6 +2,7 @@ package com.example.impressmap.ui.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,6 +19,7 @@ import com.example.impressmap.R;
 import com.example.impressmap.adapter.PostsAdapter;
 import com.example.impressmap.adapter.map.GMapAdapter;
 import com.example.impressmap.databinding.FragmentMainBinding;
+import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GCircleMeta;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.gcircle.GCircle;
@@ -34,6 +36,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.card.MaterialCardView;
+
+import java.util.List;
 
 public class MainFragment extends Fragment
 {
@@ -139,16 +143,41 @@ public class MainFragment extends Fragment
         {
             MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
                     MainViewModel.class);
+
             mainViewModel.getSelectedAddresses().observe(getViewLifecycleOwner(), addressList ->
             {
+                // not optimized
+                gMapAdapter.clearMap();
                 if (!addressList.isEmpty())
                 {
-                    viewModel.getGMarkerMetadataByAddress(addressList.get(0))
-                             .observe(getViewLifecycleOwner(), gMapAdapter::setItems);
+                    for (Address address : addressList)
+                    {
+                        viewModel.getGMarkerMetadataByAddress(address)
+                                 .observe(getViewLifecycleOwner(), gMapAdapter::addZone);
+                    }
+                }
+            });
+
+            mainViewModel.getSelectedAddressId().observe(getViewLifecycleOwner(), addressId ->
+            {
+                if (addressId.isEmpty())
+                {
+                    MenuItem menuItem = binding.toolbar.getMenu()
+                                                       .findItem(R.id.deselect_circle_menu);
+                    if (menuItem != null)
+                    {
+                        menuItem.setVisible(false);
+                    }
+                    gMapAdapter.deselectLastCircle();
                 }
                 else
                 {
-                    gMapAdapter.clearMap();
+                    MenuItem menuItem = binding.toolbar.getMenu()
+                                                       .findItem(R.id.deselect_circle_menu);
+                    if (menuItem != null)
+                    {
+                        menuItem.setVisible(true);
+                    }
                 }
             });
 
@@ -156,14 +185,17 @@ public class MainFragment extends Fragment
 
             gMapAdapter.setOnMapLongClickListener(latLng ->
             {
-                gMapAdapter.setPointer(latLng);
-                gMapAdapter.zoomTo(latLng);
+                if (!mainViewModel.getSelectedAddressId().getValue().isEmpty())
+                {
+                    gMapAdapter.setPointer(latLng);
+                    gMapAdapter.zoomTo(latLng);
 
-                MapInfoFragment mapInfoFragment = MapInfoFragment.newInstance(latLng);
-                String name = MapInfoFragment.class.getSimpleName();
-                mapInfoFragment.show(getParentFragmentManager(), name);
-                mapInfoFragment.setOnDismissListener(
-                        dialogInterface -> gMapAdapter.removePointer());
+                    MapInfoFragment mapInfoFragment = MapInfoFragment.newInstance(latLng);
+                    String name = MapInfoFragment.class.getSimpleName();
+                    mapInfoFragment.show(requireActivity().getSupportFragmentManager(), name);
+                    mapInfoFragment.setOnDismissListener(
+                            dialogInterface -> gMapAdapter.removePointer());
+                }
             });
             gMapAdapter.setOnMapClickListener(latLng -> postsSheetBehavior.hide());
             gMapAdapter.setOnMarkerClickListener(marker ->
@@ -174,8 +206,23 @@ public class MainFragment extends Fragment
                 binding.postsToolbar.setTitle(marker.getTitle());
 
                 GMarkerMetadata gMarkerMetadata = ((GMarker) marker.getTag()).getGMarkerMetadata();
-                viewModel.getPostByGMarker(gMarkerMetadata)
-                         .observe(getViewLifecycleOwner(), postsAdapter::addPost);
+                if (gMarkerMetadata.getType() == GMarkerMetadata.COMMON_MARKER)
+                {
+                    viewModel.getPostByGMarker(gMarkerMetadata)
+                             .observe(getViewLifecycleOwner(), postsAdapter::addPost);
+                }
+                else if (gMarkerMetadata.getType() == GMarkerMetadata.ADDRESS_MARKER)
+                {
+                    List<GMarker> gMarkers = gMapAdapter.getLastSelectedCircleGMarkers();
+                    if (gMarkers != null)
+                    {
+                        for (GMarker gMarker : gMarkers)
+                        {
+                            viewModel.getPostByGMarker(gMarker.getGMarkerMetadata())
+                                     .observe(getViewLifecycleOwner(), postsAdapter::addPost);
+                        }
+                    }
+                }
 
                 return true;
             });
@@ -190,6 +237,15 @@ public class MainFragment extends Fragment
 
             binding.toolbar.setNavigationIcon(R.drawable.ic_menu_drawer);
             binding.toolbar.setNavigationOnClickListener(v -> navigationDrawer.open());
+            binding.toolbar.inflateMenu(R.menu.menu_map);
+            binding.toolbar.getMenu()
+                           .findItem(R.id.deselect_circle_menu)
+                           .setOnMenuItemClickListener(menuItem ->
+                           {
+                               mainViewModel.setSelectedAddressId("");
+                               return true;
+                           });
+            binding.toolbar.getMenu().findItem(R.id.deselect_circle_menu).setVisible(false);
 
             postsAdapter = new PostsAdapter();
             RecyclerView recyclerView = binding.postsRecyclerView;
@@ -222,6 +278,7 @@ public class MainFragment extends Fragment
 
             binding.toolbar.setNavigationIcon(R.drawable.ic_arrow);
             binding.toolbar.setNavigationOnClickListener(v -> mainViewModel.setMode(COMMON_MODE));
+            binding.toolbar.getMenu().clear();
         }
     }
 }

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.databinding.FragmentCreatorCommonMarkerBinding;
@@ -56,8 +57,7 @@ public class CreatorCommonMarkerFragment extends Fragment
         double[] rawLatLng = requireArguments().getDoubleArray(LAT_LNG_KEY);
         LatLng latLng = new LatLng(rawLatLng[0], rawLatLng[1]);
 
-        binding.toolbar.setNavigationOnClickListener(
-                v -> requireActivity().getSupportFragmentManager().popBackStack());
+        binding.toolbar.setNavigationOnClickListener(v -> toMainFragment());
         binding.confirmMarkerButton.setOnClickListener(v ->
         {
             String title = binding.markerTitleView.getText().toString();
@@ -80,10 +80,16 @@ public class CreatorCommonMarkerFragment extends Fragment
                 MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
                         MainViewModel.class);
                 viewModel.insertCommonMarker(mainViewModel.getSelectedAddressId().getValue(),
-                        gMarkerMetadata, post, () ->
-                        {
-                        });
+                        gMarkerMetadata, post, this::toMainFragment);
             }
         });
+    }
+
+    private void toMainFragment()
+    {
+        FragmentManager supportFragmentManager = requireActivity().getSupportFragmentManager();
+        supportFragmentManager.popBackStack(
+                supportFragmentManager.getBackStackEntryAt(0).getId(),
+                FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 }

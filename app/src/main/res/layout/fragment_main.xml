@@ -6,40 +6,42 @@
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawerLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true">
+            android:layout_height="match_parent">
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appbarLayout"
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="wrap_content">
 
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:navigationIcon="@drawable/ic_menu_drawer"
-                    app:title="Search" />
+                    android:layout_height="match_parent" />
 
+                <com.google.android.material.appbar.AppBarLayout
+                    android:id="@+id/appbarLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/horizontal_medium_margin"
+                    android:layout_marginTop="@dimen/vertical_small_margin"
+                    android:background="@drawable/background_toolbar_main"
+                    app:elevation="0dp">
 
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        style="@style/toolbarTextStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        app:navigationIcon="@drawable/ic_menu_drawer"
+                        app:title="Search" />
+                </com.google.android.material.appbar.AppBarLayout>
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-            </com.google.android.material.appbar.AppBarLayout>
-
-            <fragment
-                android:id="@+id/map"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -47,11 +49,11 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/frame_posts"
+                style="@style/CustomCardViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:behavior_hideable="true"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="10dp"
+                app:cardPreventCornerOverlap="false"
                 app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
                 <LinearLayout
@@ -67,10 +69,12 @@
                         <com.google.android.material.appbar.AppBarLayout
                             android:id="@+id/posts_app_bar"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:background="?backgroundToolbar">
 
                             <androidx.appcompat.widget.Toolbar
                                 android:id="@+id/posts_toolbar"
+                                style="@style/toolbarTextStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="?android:attr/actionBarSize"
                                 app:popupTheme="@style/Theme.ImpressMap.PopupOverlay"
@@ -82,6 +86,7 @@
                         android:id="@+id/posts_recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="?backgroundPrimaryWindow"
                         tools:itemCount="2"
                         tools:listitem="@layout/item_post" />
                 </LinearLayout>
@@ -89,9 +94,13 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navigationView"
+            android:id="@+id/navigation_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="start" />
+            android:layout_gravity="start"
+            app:itemIconTint="?colorNavigationItemIcon"
+            app:itemTextAppearance="@style/subtitleTextStyle"
+            app:itemTextColor="?colorNavigationItemText"
+            app:subheaderTextAppearance="@style/navItemHeaderStyle" />
     </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

@@ -39,4 +39,10 @@
     <string name="email_sub">Your email</string>
 
     <string name="phone_number_not_set"><i>Phone number not set</i></string>
+
+    <!--  menu item reactions  -->
+    <string name="menu_reaction_count" translatable="false">200</string>
+    <string name="menu_reaction_like" translatable="false">👍</string>
+    <string name="menu_reaction_dislike" translatable="false">👎</string>
+    <string name="menu_reaction_love" translatable="false">❤</string>
 </resources>

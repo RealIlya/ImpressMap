@@ -34,7 +34,7 @@ public class PostLiveData extends LiveData<Post>
                 return;
             }
 
-            usersRef.child(value.getOwnerUserId())
+            usersRef.child(value.getOwnerId())
                     .addListenerForSingleValueEvent(new ValueEventListener()
                     {
                         @Override

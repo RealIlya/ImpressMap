@@ -22,8 +22,6 @@ import com.google.android.material.snackbar.Snackbar;
 public class AuthFragment extends Fragment
 {
     private static final int SIGN_IN_TYPE = 0, SIGN_UP_TYPE = 1;
-
-    private FragmentAuthBinding binding;
     private final SuccessCallback successCallback = () ->
     {
         MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
@@ -33,9 +31,11 @@ public class AuthFragment extends Fragment
         MainFragment fragment = MainFragment.newInstance();
         requireActivity().getSupportFragmentManager()
                          .beginTransaction()
+                         .setPrimaryNavigationFragment(fragment)
                          .replace(R.id.container, fragment)
                          .commit();
     };
+    private FragmentAuthBinding binding;
 
     @Nullable
     @Override
@@ -60,7 +60,8 @@ public class AuthFragment extends Fragment
             String passwordText = binding.passwordView.getText().toString().trim();
             if (!nameText.isEmpty() && !surnameText.isEmpty() && !emailText.isEmpty() && !passwordText.isEmpty())
             {
-                authorizationCase.signUp(nameText, surnameText, emailText, passwordText, successCallback);
+                authorizationCase.signUp(nameText, surnameText, emailText, passwordText,
+                        successCallback);
             }
             else
             {
@@ -69,7 +70,8 @@ public class AuthFragment extends Fragment
             }
         });
 
-        binding.nextButton.setOnClickListener(v -> {
+        binding.nextButton.setOnClickListener(v ->
+        {
             String emailText = binding.emailView.getText().toString().trim();
             String passwordText = binding.passwordView.getText().toString().trim();
             if (!emailText.isEmpty() && !passwordText.isEmpty())

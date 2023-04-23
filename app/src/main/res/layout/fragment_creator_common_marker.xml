@@ -1,35 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:clickable="true"
-    android:focusable="true">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="?backgroundPrimaryWindow"
         android:fitsSystemWindows="true">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?backgroundSecondaryWindow"
             android:fitsSystemWindows="true">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraint_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white">
+                android:background="?backgroundSecondaryWindow">
 
                 <com.google.android.material.appbar.AppBarLayout
-                    android:id="@+id/appBarLayout2"
+                    android:id="@+id/app_bar_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="?backgroundToolbar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.appbar.MaterialToolbar
                         android:id="@+id/toolbar"
+                        style="@style/toolbarTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
                         app:navigationIcon="@drawable/ic_arrow"
@@ -44,7 +46,7 @@
                     android:paddingVertical="@dimen/vertical_medium_margin"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/appBarLayout2">
+                    app:layout_constraintTop_toBottomOf="@id/app_bar_layout">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -54,7 +56,7 @@
 
                         <EditText
                             android:id="@+id/marker_title_view"
-                            style="@style/authTextStyle"
+                            style="@style/textStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/marker_title_hint"
@@ -63,7 +65,7 @@
 
                         <EditText
                             android:id="@+id/marker_text_view"
-                            style="@style/authTextStyle"
+                            style="@style/textStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="top|start"
@@ -80,14 +82,13 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/confirm_marker_button"
+            style="@style/fabStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/horizontal_margin"
-            android:scaleType="centerCrop"
-            app:elevation="2dp"
+            app:backgroundTint="?backgroundSecondaryFab"
             app:layout_anchor="@id/constraint_layout"
             app:layout_anchorGravity="bottom|center"
             app:srcCompat="@drawable/ic_check"
-            app:tint="@color/white" />
+            app:tint="?colorSecondaryFabIcon" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

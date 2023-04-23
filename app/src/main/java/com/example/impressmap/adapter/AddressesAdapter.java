@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.impressmap.R;
 import com.example.impressmap.databinding.ItemAddressBinding;
 import com.example.impressmap.model.data.Address;
+import com.example.impressmap.util.Converter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,16 +43,14 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
                                  int position)
     {
         Address address = addressList.get(position);
-        holder.binding.addressPrimaryView.setText(address.getCountry());
-        holder.binding.addressSecondaryView.setText(address.getCity());
+        holder.binding.addressPrimaryView.setText(String.format("%s %s", address.getCountry(), address.getCity()));
+        holder.binding.addressSecondaryView.setText(address.getState());
 
         if (address.isSelected())
         {
-            holder.binding.getRoot().setBackgroundColor(context.getColor(R.color.light_gray));
-        }
-        else
-        {
-            holder.binding.getRoot().setBackground(context.getDrawable(R.drawable.ripple_effect));
+            holder.binding.getRoot()
+                          .setBackgroundColor(Converter.getAttributeColor(context,
+                                  R.attr.backgroundSelectedItem));
         }
 
         holder.binding.getRoot().setOnClickListener(v ->
@@ -63,8 +62,12 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
 
     public void setAddressList(List<Address> addressList)
     {
-        this.addressList = addressList;
-        notifyDataSetChanged();
+        for (int i = 0; i < addressList.size(); i++)
+        {
+            Address address = addressList.get(i);
+            this.addressList.add(address);
+            notifyItemInserted(i);
+        }
     }
 
     private void onAddressClicked(Address address)
