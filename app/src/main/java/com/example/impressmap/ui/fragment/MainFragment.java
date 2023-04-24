@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -144,48 +145,54 @@ public class MainFragment extends Fragment
             MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
                     MainViewModel.class);
 
-            mainViewModel.getSelectedAddresses().observe(getViewLifecycleOwner(), addressList ->
+            LiveData<List<Address>> addressesLiveData = mainViewModel.getSelectedAddresses();
+            if (!addressesLiveData.hasObservers())
             {
-                // not optimized
-                gMapAdapter.clearMap();
-                if (!addressList.isEmpty())
+                addressesLiveData.observe(MainFragment.this, addressList ->
                 {
-                    for (Address address : addressList)
+                    // not optimized
+                    gMapAdapter.clearMap();
+                    if (!addressList.isEmpty())
                     {
-                        viewModel.getGMarkerMetadataByAddress(address)
-                                 .observe(getViewLifecycleOwner(), gMapAdapter::addZone);
+                        for (Address address : addressList)
+                        {
+                            viewModel.getGMarkerMetadataByAddress(address)
+                                     .observe(MainFragment.this, gMapAdapter::addZone);
+                        }
                     }
-                }
-            });
+                });
+            }
 
-            mainViewModel.getSelectedAddressId().observe(getViewLifecycleOwner(), addressId ->
+            LiveData<String> addressIdLiveData = mainViewModel.getSelectedAddressId();
+            if (!addressIdLiveData.hasObservers())
             {
-                if (addressId.isEmpty())
+                addressIdLiveData.observe(getViewLifecycleOwner(), addressId ->
                 {
                     MenuItem menuItem = binding.toolbar.getMenu()
                                                        .findItem(R.id.deselect_circle_menu);
-                    if (menuItem != null)
+                    if (addressId.isEmpty())
                     {
-                        menuItem.setVisible(false);
+                        if (menuItem != null)
+                        {
+                            menuItem.setVisible(false);
+                        }
+                        gMapAdapter.deselectLastCircle();
                     }
-                    gMapAdapter.deselectLastCircle();
-                }
-                else
-                {
-                    MenuItem menuItem = binding.toolbar.getMenu()
-                                                       .findItem(R.id.deselect_circle_menu);
-                    if (menuItem != null)
+                    else
                     {
-                        menuItem.setVisible(true);
+                        if (menuItem != null)
+                        {
+                            menuItem.setVisible(true);
+                        }
                     }
-                }
-            });
+                });
+            }
 
             gMapAdapter.zoomTo(new LatLng(54.849540, 83.106605));
 
             gMapAdapter.setOnMapLongClickListener(latLng ->
             {
-                if (!mainViewModel.getSelectedAddressId().getValue().isEmpty())
+                if (!addressIdLiveData.getValue().isEmpty())
                 {
                     gMapAdapter.setPointer(latLng);
                     gMapAdapter.zoomTo(latLng);

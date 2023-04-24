@@ -8,10 +8,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.R;
 import com.example.impressmap.databinding.FragmentProfileBinding;
+import com.example.impressmap.model.data.User;
 import com.example.impressmap.ui.viewModels.ProfileFragmentViewModel;
 
 public class ProfileFragment extends Fragment
@@ -33,8 +35,7 @@ public class ProfileFragment extends Fragment
                               @Nullable Bundle savedInstanceState)
     {
         binding.toolbar.setNavigationOnClickListener(
-                v -> requireActivity().getSupportFragmentManager()
-                                      .popBackStack());
+                v -> requireActivity().getSupportFragmentManager().popBackStack());
 
         binding.settingsAddressesView.setOnClickListener(v ->
         {
@@ -46,12 +47,18 @@ public class ProfileFragment extends Fragment
                              .commit();
         });
 
-        ProfileFragmentViewModel viewModel = new ViewModelProvider(this).get(ProfileFragmentViewModel.class);
-        viewModel.getUser()
-                 .observe(getViewLifecycleOwner(), user ->
-                 {
-                     binding.collapsingToolbar.setTitle(user.getFullName());
-                     binding.phoneNumberView.setText(user.getPhoneNumber() != null ? user.getPhoneNumber() : getText(R.string.phone_number_not_set));
-                 });
+        ProfileFragmentViewModel viewModel = new ViewModelProvider(requireActivity()).get(
+                ProfileFragmentViewModel.class);
+        LiveData<User> userLiveData = viewModel.getUser();
+        if (!userLiveData.hasObservers())
+        {
+            userLiveData.observe(requireActivity(), user ->
+            {
+                binding.collapsingToolbar.setTitle(user.getFullName());
+                binding.phoneNumberView.setText(user.getPhoneNumber() != null ? user.getPhoneNumber()
+                                                                              : getText(
+                                                                                      R.string.phone_number_not_set));
+            });
+        }
     }
 }

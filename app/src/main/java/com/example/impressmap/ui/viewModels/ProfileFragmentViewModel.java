@@ -11,6 +11,8 @@ public class ProfileFragmentViewModel extends ViewModel
 {
     private final UserCase userCase;
 
+    private LiveData<User> user;
+
     public ProfileFragmentViewModel()
     {
         userCase = new UserCase();
