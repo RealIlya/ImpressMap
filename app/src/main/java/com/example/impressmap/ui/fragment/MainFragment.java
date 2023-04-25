@@ -28,8 +28,8 @@ import com.example.impressmap.model.data.gmarker.GMarker;
 import com.example.impressmap.ui.NavigationDrawer;
 import com.example.impressmap.ui.PostsBottomSheetBehavior;
 import com.example.impressmap.ui.fragment.bottom.MapInfoFragment;
-import com.example.impressmap.ui.viewModels.MainFragmentViewModel;
-import com.example.impressmap.ui.viewModels.MainViewModel;
+import com.example.impressmap.ui.viewmodel.MainFragmentViewModel;
+import com.example.impressmap.ui.viewmodel.MainViewModel;
 import com.example.impressmap.util.mode.Mode;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -157,7 +157,7 @@ public class MainFragment extends Fragment
                         for (Address address : addressList)
                         {
                             viewModel.getGMarkerMetadataByAddress(address)
-                                     .observe(MainFragment.this, gMapAdapter::addZone);
+                                     .observe(getViewLifecycleOwner(), gMapAdapter::addZone);
                         }
                     }
                 });

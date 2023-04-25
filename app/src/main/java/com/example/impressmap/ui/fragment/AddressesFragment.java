@@ -18,8 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.impressmap.adapter.AddressesAdapter;
 import com.example.impressmap.databinding.FragmentAddressesBinding;
 import com.example.impressmap.model.data.Address;
-import com.example.impressmap.ui.viewModels.AddressesFragmentViewModel;
-import com.example.impressmap.ui.viewModels.MainViewModel;
+import com.example.impressmap.ui.viewmodel.AddressesFragmentViewModel;
+import com.example.impressmap.ui.viewmodel.MainViewModel;
 
 public class AddressesFragment extends Fragment
 {

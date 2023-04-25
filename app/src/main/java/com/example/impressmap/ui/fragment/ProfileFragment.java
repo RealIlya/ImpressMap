@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.impressmap.R;
 import com.example.impressmap.databinding.FragmentProfileBinding;
 import com.example.impressmap.model.data.User;
-import com.example.impressmap.ui.viewModels.ProfileFragmentViewModel;
+import com.example.impressmap.ui.viewmodel.ProfileFragmentViewModel;
 
 public class ProfileFragment extends Fragment
 {

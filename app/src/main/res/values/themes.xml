@@ -59,4 +59,9 @@
         <item name="cornerSizeTopRight">16dp</item>
         <item name="cornerSizeTopLeft">16dp</item>
     </style>
+
+    <style name="ShapeAppearanceOverlay_avatar" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerRadius">24dp</item>
+    </style>
 </resources>

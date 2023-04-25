@@ -18,8 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.impressmap.databinding.FragmentCreatorAddressBinding;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GMarkerMetadata;
-import com.example.impressmap.ui.viewModels.CreatorAddressFragmentViewModel;
-import com.example.impressmap.ui.viewModels.MainViewModel;
+import com.example.impressmap.ui.viewmodel.CreatorAddressFragmentViewModel;
+import com.example.impressmap.ui.viewmodel.MainViewModel;
 import com.example.impressmap.util.Locations;
 import com.google.android.gms.maps.model.LatLng;
 

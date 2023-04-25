@@ -19,8 +19,8 @@ import com.example.impressmap.databinding.FragmentCreatorCommonMarkerBinding;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.OwnerUser;
 import com.example.impressmap.model.data.Post;
-import com.example.impressmap.ui.viewModels.MainFragmentViewModel;
-import com.example.impressmap.ui.viewModels.MainViewModel;
+import com.example.impressmap.ui.viewmodel.MainFragmentViewModel;
+import com.example.impressmap.ui.viewmodel.MainViewModel;
 import com.google.android.gms.maps.model.LatLng;
 
 public class CreatorCommonMarkerFragment extends Fragment

@@ -2,6 +2,8 @@ package com.example.impressmap.ui.fragment;
 
 import static com.example.impressmap.ui.fragment.MainFragment.COMMON_MODE;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +17,15 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.impressmap.R;
 import com.example.impressmap.database.firebase.cases.AuthorizationCase;
 import com.example.impressmap.databinding.FragmentAuthBinding;
-import com.example.impressmap.ui.viewModels.MainViewModel;
+import com.example.impressmap.ui.viewmodel.MainViewModel;
 import com.example.impressmap.util.SuccessCallback;
 import com.google.android.material.snackbar.Snackbar;
 
 public class AuthFragment extends Fragment
 {
-    private static final int SIGN_IN_TYPE = 0, SIGN_UP_TYPE = 1;
+    public static final String EMAIL_KEY = "EMAIL_KEY";
+    public static final String PASSWORD_KEY = "PASSWORD";
+
     private final SuccessCallback successCallback = () ->
     {
         MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
@@ -29,18 +33,14 @@ public class AuthFragment extends Fragment
         mainViewModel.setMode(COMMON_MODE);
 
         MainFragment fragment = MainFragment.newInstance();
-        requireActivity().getSupportFragmentManager()
-                         .beginTransaction()
-                         .setPrimaryNavigationFragment(fragment)
-                         .replace(R.id.container, fragment)
-                         .commit();
+        requireActivity().getSupportFragmentManager().beginTransaction()
+                .setPrimaryNavigationFragment(fragment).replace(R.id.container, fragment).commit();
     };
     private FragmentAuthBinding binding;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState)
     {
         binding = FragmentAuthBinding.inflate(inflater, container, false);
@@ -48,8 +48,7 @@ public class AuthFragment extends Fragment
     }
 
     @Override
-    public void onViewCreated(@NonNull View view,
-                              @Nullable Bundle savedInstanceState)
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         AuthorizationCase authorizationCase = new AuthorizationCase();
         binding.signUpButton.setOnClickListener(v ->
@@ -98,6 +97,21 @@ public class AuthFragment extends Fragment
                 binding.registerView.setVisibility(View.GONE);
                 binding.nextButton.setVisibility(View.VISIBLE);
                 binding.signUpButton.setVisibility(View.GONE);
+            }
+        });
+
+        binding.rememberMeCheckBox.setOnCheckedChangeListener((compoundButton, checked) ->
+        {
+            if (checked)
+            {
+                SharedPreferences preferences = requireActivity().getPreferences(
+                        Context.MODE_PRIVATE);
+
+                String emailText = binding.emailView.getText().toString().trim();
+                String passwordText = binding.passwordView.getText().toString().trim();
+                preferences.edit().putString(EMAIL_KEY, emailText)
+                        .putString(PASSWORD_KEY, passwordText).apply();
+
             }
         });
     }

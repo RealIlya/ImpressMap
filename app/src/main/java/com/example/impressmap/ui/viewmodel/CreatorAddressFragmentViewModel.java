@@ -1,4 +1,4 @@
-package com.example.impressmap.ui.viewModels;
+package com.example.impressmap.ui.viewmodel;
 
 import androidx.lifecycle.ViewModel;
 
