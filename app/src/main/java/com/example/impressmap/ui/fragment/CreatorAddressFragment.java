@@ -1,6 +1,6 @@
 package com.example.impressmap.ui.fragment;
 
-import static com.example.impressmap.ui.fragment.MainFragment.COMMON_MODE;
+import static com.example.impressmap.ui.fragment.main.MainFragment.COMMON_MODE;
 import static com.example.impressmap.util.Constants.LAT_LNG_KEY;
 
 import android.os.Bundle;

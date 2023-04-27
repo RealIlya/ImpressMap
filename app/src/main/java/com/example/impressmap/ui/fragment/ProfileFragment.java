@@ -8,12 +8,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.R;
 import com.example.impressmap.databinding.FragmentProfileBinding;
-import com.example.impressmap.model.data.User;
+import com.example.impressmap.ui.viewmodel.MainViewModel;
 import com.example.impressmap.ui.viewmodel.ProfileFragmentViewModel;
 
 public class ProfileFragment extends Fragment
@@ -42,23 +41,23 @@ public class ProfileFragment extends Fragment
             String name = AddressesFragment.class.getSimpleName();
             requireActivity().getSupportFragmentManager()
                              .beginTransaction()
-                             .replace(R.id.container, new AddressesFragment())
+                             .replace(R.id.container, AddressesFragment.newInstance())
                              .addToBackStack(name)
                              .commit();
         });
 
-        ProfileFragmentViewModel viewModel = new ViewModelProvider(requireActivity()).get(
+        ProfileFragmentViewModel viewModel = new ViewModelProvider(this).get(
                 ProfileFragmentViewModel.class);
-        LiveData<User> userLiveData = viewModel.getUser();
-        if (!userLiveData.hasObservers())
+        MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
+                MainViewModel.class);
+        viewModel.getUser().observe(getViewLifecycleOwner(), mainViewModel::setUser);
+
+        mainViewModel.getUser().observe(getViewLifecycleOwner(), user ->
         {
-            userLiveData.observe(requireActivity(), user ->
-            {
-                binding.collapsingToolbar.setTitle(user.getFullName());
-                binding.phoneNumberView.setText(user.getPhoneNumber() != null ? user.getPhoneNumber()
-                                                                              : getText(
-                                                                                      R.string.phone_number_not_set));
-            });
-        }
+            binding.collapsingToolbar.setTitle(user.getFullName());
+            binding.phoneNumberView.setText(user.getPhoneNumber() != null ? user.getPhoneNumber()
+                                                                          : getText(
+                                                                                  R.string.phone_number_not_set));
+        });
     }
 }

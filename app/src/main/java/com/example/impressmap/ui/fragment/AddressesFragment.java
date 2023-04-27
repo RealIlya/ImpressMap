@@ -1,6 +1,6 @@
 package com.example.impressmap.ui.fragment;
 
-import static com.example.impressmap.ui.fragment.MainFragment.ADDING_MODE;
+import static com.example.impressmap.ui.fragment.main.MainFragment.ADDING_MODE;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,16 +15,23 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.impressmap.R;
 import com.example.impressmap.adapter.AddressesAdapter;
 import com.example.impressmap.databinding.FragmentAddressesBinding;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.ui.viewmodel.AddressesFragmentViewModel;
 import com.example.impressmap.ui.viewmodel.MainViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 public class AddressesFragment extends Fragment
 {
     private FragmentAddressesBinding binding;
     private AddressesFragmentViewModel viewModel;
+
+    public static AddressesFragment newInstance()
+    {
+        return new AddressesFragment();
+    }
 
     @Nullable
     @Override
@@ -61,9 +68,18 @@ public class AddressesFragment extends Fragment
         AddressesAdapter addressesAdapter = new AddressesAdapter(getContext());
         recyclerView.setAdapter(addressesAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        addressesAdapter.setOnAddressClickListener(mainViewModel::switchSelectionAddress);
-        viewModel.getByUser().observe(getViewLifecycleOwner(), addressList ->
+        addressesAdapter.setOnAddressClickListener(address ->
         {
+            mainViewModel.switchSelectionAddress(address,
+                    () -> Snackbar.make(requireView(), R.string.max_addresses_count,
+                            Snackbar.LENGTH_LONG).show());
+        });
+
+        viewModel.getByUser().observe(getViewLifecycleOwner(), mainViewModel::setAddresses);
+
+        mainViewModel.getAddresses().observe(getViewLifecycleOwner(), addressList ->
+        {
+            int count = 0;
             for (Address address : mainViewModel.getSelectedAddresses().getValue())
             {
                 for (Address addressSub : addressList)
@@ -71,11 +87,19 @@ public class AddressesFragment extends Fragment
                     if (address.getId().equals(addressSub.getId()))
                     {
                         addressSub.setSelected(true);
+                        count++;
                     }
                 }
             }
 
             addressesAdapter.setAddressList(addressList);
+            binding.toolbar.setTitle("Addresses " + addressList.size());
+            binding.toolbar.setSubtitle(count + " selected");
+        });
+
+        mainViewModel.getSelectedAddresses().observe(getViewLifecycleOwner(), addressList ->
+        {
+            binding.toolbar.setSubtitle(addressList.size() + " selected");
         });
     }
 }

@@ -110,6 +110,11 @@ public abstract class MapAdapter
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
+    public void zoomTo(CameraPosition cameraPosition)
+    {
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+
     public void showMarkers()
     {
         toggleMarkersVisibility(true);

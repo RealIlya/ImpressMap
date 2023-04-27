@@ -52,6 +52,7 @@
                 style="@style/CustomCardViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:visibility="invisible"
                 app:behavior_hideable="true"
                 app:cardPreventCornerOverlap="false"
                 app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
@@ -77,6 +78,7 @@
                                 style="@style/toolbarTextStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="?android:attr/actionBarSize"
+                                app:menu="@menu/menu_map_bottom"
                                 app:popupTheme="@style/Theme.ImpressMap.PopupOverlay"
                                 app:title="Post" />
                         </com.google.android.material.appbar.AppBarLayout>

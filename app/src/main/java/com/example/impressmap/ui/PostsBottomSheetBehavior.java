@@ -9,6 +9,20 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 public class PostsBottomSheetBehavior<T extends View>
 {
     private final BottomSheetBehavior<T> bottomSheetBehavior;
+    private Animation animation = new Animation()
+    {
+        @Override
+        public void onStateChanged(int newState)
+        {
+
+        }
+
+        @Override
+        public void onSlide(float slideOffset)
+        {
+
+        }
+    };
 
     public PostsBottomSheetBehavior(BottomSheetBehavior<T> bottomSheetBehavior)
     {
@@ -16,8 +30,8 @@ public class PostsBottomSheetBehavior<T extends View>
 
         bottomSheetBehavior.setHalfExpandedRatio(0.4f);
         bottomSheetBehavior.setPeekHeight(200);
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         bottomSheetBehavior.addBottomSheetCallback(new PostsBottomSheetCallback());
+        hide();
     }
 
     private void setState(int state)
@@ -43,6 +57,18 @@ public class PostsBottomSheetBehavior<T extends View>
     public void showFull()
     {
         setState(BottomSheetBehavior.STATE_EXPANDED);
+    }
+
+    public void setAnimation(Animation animation)
+    {
+        this.animation = animation;
+    }
+
+    public interface Animation
+    {
+        void onStateChanged(int newState);
+
+        void onSlide(float slideOffset);
     }
 
     private class PostsBottomSheetCallback extends BottomSheetBehavior.BottomSheetCallback
@@ -77,6 +103,8 @@ public class PostsBottomSheetBehavior<T extends View>
                     isSettling = true;
                     break;
             }
+
+            animation.onStateChanged(newState);
         }
 
         @Override
@@ -98,12 +126,7 @@ public class PostsBottomSheetBehavior<T extends View>
                 showLittle();
             }
 
-               /* AppBarLayout postsAppBar = binding.postsAppBar;
-                postsAppBar.animate()
-                           .translationY(((float) -Math.pow(postsAppBar.getHeight(),
-                                   1 - slideOffset / 1.5)))
-                           .setDuration(0)
-                           .start();*/
+            animation.onSlide(slideOffset);
         }
     }
 }

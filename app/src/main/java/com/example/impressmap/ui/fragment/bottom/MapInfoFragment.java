@@ -66,7 +66,6 @@ public class MapInfoFragment extends BottomSheetDialogFragment
         {
             //TODO fix lagging because of dismissing this fragment
             dismiss();
-
             String name = CreatorCommonMarkerFragment.class.getSimpleName();
             requireActivity().getSupportFragmentManager()
                              .beginTransaction()

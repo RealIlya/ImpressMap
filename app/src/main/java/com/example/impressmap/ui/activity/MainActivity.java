@@ -2,7 +2,7 @@ package com.example.impressmap.ui.activity;
 
 import static com.example.impressmap.ui.fragment.AuthFragment.EMAIL_KEY;
 import static com.example.impressmap.ui.fragment.AuthFragment.PASSWORD_KEY;
-import static com.example.impressmap.ui.fragment.MainFragment.COMMON_MODE;
+import static com.example.impressmap.ui.fragment.main.MainFragment.COMMON_MODE;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.impressmap.database.firebase.cases.AuthorizationCase;
 import com.example.impressmap.databinding.ActivityMainBinding;
 import com.example.impressmap.ui.fragment.AuthFragment;
-import com.example.impressmap.ui.fragment.MainFragment;
+import com.example.impressmap.ui.fragment.main.MainFragment;
 import com.example.impressmap.ui.viewmodel.MainViewModel;
 
 
@@ -53,7 +53,5 @@ public class MainActivity extends FragmentActivity
         {
             transaction.replace(binding.container.getId(), new AuthFragment()).commit();
         }
-
-
     }
 }

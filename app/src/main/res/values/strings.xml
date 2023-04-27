@@ -45,4 +45,7 @@
     <string name="menu_reaction_like" translatable="false">👍</string>
     <string name="menu_reaction_dislike" translatable="false">👎</string>
     <string name="menu_reaction_love" translatable="false">❤</string>
+
+
+    <string name="max_addresses_count">Max addresses count!</string>
 </resources>

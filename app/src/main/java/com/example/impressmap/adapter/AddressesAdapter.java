@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.R;
@@ -18,9 +20,8 @@ import java.util.List;
 public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.AddressViewHolder>
 {
     private final Context context;
+    private final List<Address> addressList;
     private OnAddressClickListener onAddressClickListener;
-
-    private List<Address> addressList;
 
     public AddressesAdapter(Context context)
     {
@@ -43,7 +44,8 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
                                  int position)
     {
         Address address = addressList.get(position);
-        holder.binding.addressPrimaryView.setText(String.format("%s %s", address.getCountry(), address.getCity()));
+        holder.binding.addressPrimaryView.setText(
+                String.format("%s %s", address.getCountry(), address.getCity()));
         holder.binding.addressSecondaryView.setText(address.getState());
 
         if (address.isSelected())

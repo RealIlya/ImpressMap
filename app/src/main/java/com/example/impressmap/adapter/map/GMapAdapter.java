@@ -4,7 +4,10 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
+import com.example.impressmap.adapter.AddressesAdapterViewModel;
 import com.example.impressmap.model.data.GCircleMeta;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.gcircle.CommonGCircle;
@@ -24,12 +27,17 @@ import java.util.List;
 public class GMapAdapter extends MapAdapter
 {
     private final Context context;
+    private ViewModelStoreOwner viewModelStoreOwner;
+
 
     public GMapAdapter(Context context,
                        GoogleMap googleMap)
     {
         super(googleMap);
         this.context = context;
+
+        AddressesAdapterViewModel addressesAdapterViewModel = new ViewModelProvider(
+                viewModelStoreOwner).get(AddressesAdapterViewModel.class);
 
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener()
         {
@@ -180,5 +188,11 @@ public class GMapAdapter extends MapAdapter
 
         GCircle gCircle = (GCircle) lastSelectedCircle.getTag();
         return gCircle.getGCircleMeta().getGMarkers();
+    }
+
+
+    public void setViewModelStoreOwner(ViewModelStoreOwner viewModelStoreOwner)
+    {
+        this.viewModelStoreOwner = viewModelStoreOwner;
     }
 }
