@@ -18,15 +18,22 @@ import com.example.impressmap.databinding.FragmentMainBinding;
 import com.example.impressmap.ui.fragment.main.mode.AddingMode;
 import com.example.impressmap.ui.fragment.main.mode.CommonMode;
 import com.example.impressmap.ui.fragment.main.mode.Mode;
+import com.example.impressmap.ui.viewmodel.MainFragmentViewModel;
 import com.example.impressmap.ui.viewmodel.MainViewModel;
+import com.example.impressmap.util.SwitchableMode;
 import com.google.android.gms.maps.SupportMapFragment;
 
-public class MainFragment extends Fragment
+public class MainFragment extends Fragment implements SwitchableMode
 {
     public static final int COMMON_MODE = 0, ADDING_MODE = 1;
 
     private FragmentMainBinding binding;
     private GMapAdapter gMapAdapter;
+    private MainFragmentViewModel viewModel;
+
+    protected MainFragment()
+    {
+    }
 
     @NonNull
     public static MainFragment newInstance()
@@ -48,6 +55,8 @@ public class MainFragment extends Fragment
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState)
     {
+        viewModel = new ViewModelProvider(this).get(MainFragmentViewModel.class);
+
         requireActivity().getOnBackPressedDispatcher()
                          .addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true)
                          {
@@ -80,7 +89,7 @@ public class MainFragment extends Fragment
         {
             supportMapFragment.getMapAsync(googleMap ->
             {
-                gMapAdapter = new GMapAdapter(getContext(), googleMap);
+                gMapAdapter = new GMapAdapter(getContext(), googleMap, requireActivity());
                 gMapAdapter.removeListeners();
 
                 MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
@@ -90,20 +99,27 @@ public class MainFragment extends Fragment
         }
     }
 
-    private void switchMode(int mode)
+    public void switchMode(int mode)
     {
         Mode modeClass;
 
         switch (mode)
         {
             case ADDING_MODE:
-                modeClass = new AddingMode(this, binding);
+                modeClass = new AddingMode(this, viewModel, binding);
                 break;
             default:
-                modeClass = new CommonMode(this, binding);
+                modeClass = new CommonMode(this, viewModel, binding);
                 break;
         }
 
         modeClass.switchOn(gMapAdapter);
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        getViewModelStore().clear();
     }
 }

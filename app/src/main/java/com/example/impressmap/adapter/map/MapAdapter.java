@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 
 import com.example.impressmap.model.data.GCircleMeta;
 import com.example.impressmap.model.data.GMarkerMetadata;
-import com.example.impressmap.model.data.GObject;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -26,8 +25,6 @@ public abstract class MapAdapter
     protected final List<Marker> markers = new ArrayList<>();
     protected final List<Circle> circles = new ArrayList<>();
     private final GoogleMap googleMap;
-    protected Marker lastSelectedMarker;
-    protected Circle lastSelectedCircle;
     protected Marker pointer = null;
     private GoogleMap.OnMapClickListener onMapClickListener;
     private GoogleMap.OnMapLongClickListener onMapLongClickListener;
@@ -76,27 +73,6 @@ public abstract class MapAdapter
         googleMap.clear();
         markers.clear();
         circles.clear();
-    }
-
-    public void deselectLastMarker()
-    {
-        if (lastSelectedMarker != null)
-        {
-            deselectObject((GObject) lastSelectedMarker.getTag());
-        }
-    }
-
-    public void deselectLastCircle()
-    {
-        if (lastSelectedCircle != null)
-        {
-            deselectObject((GObject) lastSelectedCircle.getTag());
-        }
-    }
-
-    private void deselectObject(GObject gObject)
-    {
-        gObject.setSelected(false);
     }
 
     public void zoomTo(LatLng latLng)
@@ -158,11 +134,6 @@ public abstract class MapAdapter
     public CameraPosition getCameraPosition()
     {
         return googleMap.getCameraPosition();
-    }
-
-    public void setOnCameraIdleListener(@Nullable GoogleMap.OnCameraIdleListener listener)
-    {
-        googleMap.setOnCameraIdleListener(listener);
     }
 
     public void setOnMapClickListener(@Nullable GoogleMap.OnMapClickListener listener)

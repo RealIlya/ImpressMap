@@ -65,7 +65,7 @@ public class NavigationDrawer implements NavigationView.OnNavigationItemSelected
                 {
                     String name = ProfileFragment.class.getSimpleName();
                     fragmentManager.beginTransaction()
-                                   .replace(R.id.container, new ProfileFragment())
+                                   .replace(R.id.container, ProfileFragment.newInstance())
                                    .addToBackStack(name)
                                    .commit();
                 }), R.drawable.ic_menu_profile);

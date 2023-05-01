@@ -47,6 +47,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:layout_collapseMode="pin"
+                    app:menu="@menu/menu_profile"
                     app:navigationIcon="@drawable/ic_arrow"
                     app:popupTheme="@style/Theme.ImpressMap.PopupOverlay"
                     tools:title="@tools:sample/full_names" />

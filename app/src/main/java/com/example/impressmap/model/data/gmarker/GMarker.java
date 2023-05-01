@@ -3,6 +3,7 @@ package com.example.impressmap.model.data.gmarker;
 import android.content.Context;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.GObject;
@@ -24,7 +25,7 @@ public abstract class GMarker implements GObject
     private boolean clickable;
 
     public GMarker(Context context,
-                   Marker marker,
+                   @NonNull Marker marker,
                    GMarkerMetadata gMarkerMetadata,
                    @DrawableRes int selectedStateResId,
                    @DrawableRes int deselectedStateResId)
@@ -53,8 +54,18 @@ public abstract class GMarker implements GObject
             return;
         }
 
-        marker.setIcon(BitmapDescriptorFactory.fromBitmap(Converter.drawableIdToBitmap(context,
-                selected ? selectedStateResId : deselectedStateResId)));
+        if (marker != null)
+        {
+            try
+            {
+                marker.setIcon(BitmapDescriptorFactory.fromBitmap(
+                        Converter.drawableIdToBitmap(context,
+                                selected ? selectedStateResId : deselectedStateResId)));
+            }
+            catch (IllegalArgumentException ignored)
+            {
+            }
+        }
 
         this.selected = selected;
     }

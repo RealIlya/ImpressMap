@@ -1,5 +1,6 @@
 package com.example.impressmap.ui.fragment.main.mode;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.adapter.map.GMapAdapter;
@@ -13,12 +14,13 @@ public abstract class Mode
     protected MainFragmentViewModel viewModel;
     protected FragmentMainBinding binding;
 
-    public Mode(MainFragment fragment,
+    public Mode(@NonNull MainFragment fragment,
+                @NonNull MainFragmentViewModel viewModel,
                 FragmentMainBinding binding)
     {
         this.fragment = fragment;
+        this.viewModel = viewModel;
         this.binding = binding;
-        this.viewModel = new ViewModelProvider(fragment).get(MainFragmentViewModel.class);
     }
 
     public abstract void switchOn(GMapAdapter gMapAdapter);

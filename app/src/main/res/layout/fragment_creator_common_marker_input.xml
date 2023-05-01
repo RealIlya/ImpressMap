@@ -5,8 +5,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?backgroundPrimaryWindow"
-        android:fitsSystemWindows="true">
+        android:background="?backgroundPrimaryWindow">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -20,33 +19,15 @@
                 android:layout_height="match_parent"
                 android:background="?backgroundSecondaryWindow">
 
-                <com.google.android.material.appbar.AppBarLayout
-                    android:id="@+id/app_bar_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?backgroundToolbar"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <com.google.android.material.appbar.MaterialToolbar
-                        android:id="@+id/toolbar"
-                        style="@style/toolbarTextStyle"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        app:navigationIcon="@drawable/ic_arrow"
-                        app:popupTheme="@style/Theme.ImpressMap.PopupOverlay" />
-                </com.google.android.material.appbar.AppBarLayout>
-
                 <LinearLayout
                     android:id="@+id/linear_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="?backgroundSecondaryWindow"
                     android:orientation="vertical"
                     android:paddingVertical="@dimen/vertical_medium_margin"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/app_bar_layout">
+                    app:layout_constraintStart_toStartOf="parent">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -79,16 +60,5 @@
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/confirm_marker_button"
-            style="@style/fabStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:backgroundTint="?backgroundSecondaryFab"
-            app:layout_anchor="@id/constraint_layout"
-            app:layout_anchorGravity="bottom|center"
-            app:srcCompat="@drawable/ic_check"
-            app:tint="?colorSecondaryFabIcon" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

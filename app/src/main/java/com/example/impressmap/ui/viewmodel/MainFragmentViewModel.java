@@ -23,14 +23,6 @@ public class MainFragmentViewModel extends ViewModel
         postGMarkerCase = new PostGMarkerCase();
     }
 
-    public void insertCommonMarker(String addressId,
-                                   GMarkerMetadata gMarkerMetadata,
-                                   Post post,
-                                   SuccessCallback successCallback)
-    {
-        gMarkerCommonCase.insert(addressId, gMarkerMetadata, post, successCallback);
-    }
-
     public LiveData<List<GMarkerMetadata>> getGMarkerMetadataByAddress(Address address)
     {
         return gMarkerCommonCase.getByAddress(address);

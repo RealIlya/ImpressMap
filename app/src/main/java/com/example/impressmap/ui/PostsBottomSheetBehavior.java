@@ -73,16 +73,16 @@ public class PostsBottomSheetBehavior<T extends View>
 
     private class PostsBottomSheetCallback extends BottomSheetBehavior.BottomSheetCallback
     {
-        private boolean isCollapsing = false;
-        private boolean isExpanding = false;
-        private boolean isSettling = false;
+        private boolean collapsing = false;
+        private boolean expanding = false;
+        private boolean dragging = false;
         private float oldOffset = 0f;
 
         private void setDefaultState()
         {
-            isCollapsing = false;
-            isExpanding = false;
-            isSettling = false;
+            collapsing = false;
+            expanding = false;
+            dragging = false;
         }
 
         @Override
@@ -91,16 +91,12 @@ public class PostsBottomSheetBehavior<T extends View>
         {
             switch (newState)
             {
-                case BottomSheetBehavior.STATE_COLLAPSED:
-                    break;
+                case BottomSheetBehavior.STATE_EXPANDED:
                 case BottomSheetBehavior.STATE_HIDDEN:
                     setDefaultState();
                     break;
-                case BottomSheetBehavior.STATE_HALF_EXPANDED:
-                case BottomSheetBehavior.STATE_EXPANDED:
                 case BottomSheetBehavior.STATE_DRAGGING:
-                case BottomSheetBehavior.STATE_SETTLING:
-                    isSettling = true;
+                    dragging = true;
                     break;
             }
 
@@ -111,9 +107,9 @@ public class PostsBottomSheetBehavior<T extends View>
         public void onSlide(@NonNull View bottomSheet,
                             float slideOffset)
         {
-            isExpanding = oldOffset < slideOffset;
-            isCollapsing = oldOffset > slideOffset;
-            if (slideOffset < 1 && slideOffset >= 0.5 && isCollapsing || slideOffset < 0.4 && slideOffset >= 0 && isExpanding)
+            expanding = oldOffset < slideOffset;
+            collapsing = oldOffset > slideOffset;
+            if ((slideOffset < 1 && slideOffset >= 0.4 && collapsing || slideOffset < 0.4 && slideOffset >= 0 && expanding) && dragging)
             {
                 showHalf();
             }

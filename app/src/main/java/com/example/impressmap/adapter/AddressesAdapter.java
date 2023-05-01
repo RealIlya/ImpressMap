@@ -5,8 +5,6 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.R;
@@ -62,8 +60,10 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
         });
     }
 
-    public void setAddressList(List<Address> addressList)
+    public void setAddressList(@NonNull List<Address> addressList)
     {
+        clear();
+
         for (int i = 0; i < addressList.size(); i++)
         {
             Address address = addressList.get(i);
@@ -75,6 +75,13 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
     private void onAddressClicked(Address address)
     {
         onAddressClickListener.onAddressClick(address);
+    }
+
+    public void clear()
+    {
+        int size = addressList.size();
+        addressList.clear();
+        notifyItemRangeRemoved(0, size);
     }
 
     @Override

@@ -15,9 +15,22 @@ import com.example.impressmap.databinding.FragmentProfileBinding;
 import com.example.impressmap.ui.viewmodel.MainViewModel;
 import com.example.impressmap.ui.viewmodel.ProfileFragmentViewModel;
 
+import org.jetbrains.annotations.Contract;
+
 public class ProfileFragment extends Fragment
 {
     private FragmentProfileBinding binding;
+    private ProfileFragmentViewModel viewModel;
+
+    protected ProfileFragment()
+    {
+    }
+
+    @NonNull
+    public static ProfileFragment newInstance()
+    {
+        return new ProfileFragment();
+    }
 
     @Nullable
     @Override
@@ -33,8 +46,25 @@ public class ProfileFragment extends Fragment
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState)
     {
+        viewModel = new ViewModelProvider(this).get(ProfileFragmentViewModel.class);
+
         binding.toolbar.setNavigationOnClickListener(
                 v -> requireActivity().getSupportFragmentManager().popBackStack());
+
+        MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
+                MainViewModel.class);
+        binding.toolbar.getMenu().findItem(R.id.logout_item).setOnMenuItemClickListener(menuItem ->
+        {
+            viewModel.signOut(() ->
+            {
+                mainViewModel.clearCache();
+                requireActivity().getSupportFragmentManager()
+                                 .beginTransaction()
+                                 .replace(R.id.container, AuthFragment.newInstance())
+                                 .commit();
+            });
+            return true;
+        });
 
         binding.settingsAddressesView.setOnClickListener(v ->
         {
@@ -46,10 +76,6 @@ public class ProfileFragment extends Fragment
                              .commit();
         });
 
-        ProfileFragmentViewModel viewModel = new ViewModelProvider(this).get(
-                ProfileFragmentViewModel.class);
-        MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
-                MainViewModel.class);
         viewModel.getUser().observe(getViewLifecycleOwner(), mainViewModel::setUser);
 
         mainViewModel.getUser().observe(getViewLifecycleOwner(), user ->

@@ -29,6 +29,12 @@ public class AllAddressesLiveData extends LiveData<List<Address>>
 
             List<Address> addressList = new ArrayList<>();
             Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
+
+            if (!iterator.hasNext())
+            {
+                setValue(addressList);
+            }
+
             while (iterator.hasNext())
             {
                 DataSnapshot dataSnapshot = iterator.next();

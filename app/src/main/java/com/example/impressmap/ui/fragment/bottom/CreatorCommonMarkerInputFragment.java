@@ -1,41 +1,46 @@
-package com.example.impressmap.ui.fragment;
+package com.example.impressmap.ui.fragment.bottom;
 
+import static com.example.impressmap.ui.fragment.bottom.MapInfoFragment.NAVIGATING_MODE;
 import static com.example.impressmap.util.Constants.AUTH;
-import static com.example.impressmap.util.Constants.LAT_LNG_KEY;
 import static com.example.impressmap.util.Constants.UID;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuHost;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.impressmap.databinding.FragmentCreatorCommonMarkerBinding;
+import com.example.impressmap.R;
+import com.example.impressmap.databinding.FragmentCreatorCommonMarkerInputBinding;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.OwnerUser;
 import com.example.impressmap.model.data.Post;
-import com.example.impressmap.ui.viewmodel.MainFragmentViewModel;
 import com.example.impressmap.ui.viewmodel.MainViewModel;
-import com.google.android.gms.maps.model.LatLng;
+import com.example.impressmap.util.SwitchableMode;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class CreatorCommonMarkerFragment extends Fragment
+public class CreatorCommonMarkerInputFragment extends Fragment implements MenuProvider
 {
-    private FragmentCreatorCommonMarkerBinding binding;
-    private MainFragmentViewModel viewModel;
+    private FragmentCreatorCommonMarkerInputBinding binding;
+    private MapInfoFragmentViewModel viewModel;
 
-    public static CreatorCommonMarkerFragment newInstance(LatLng latLng)
+    protected CreatorCommonMarkerInputFragment()
     {
-        Bundle arguments = new Bundle();
-        arguments.putDoubleArray(LAT_LNG_KEY, new double[]{latLng.latitude, latLng.longitude});
+    }
 
-        CreatorCommonMarkerFragment creatorCommonMarkerFragment = new CreatorCommonMarkerFragment();
-        creatorCommonMarkerFragment.setArguments(arguments);
-        return creatorCommonMarkerFragment;
+    @NonNull
+    public static CreatorCommonMarkerInputFragment newInstance()
+    {
+        return new CreatorCommonMarkerInputFragment();
     }
 
     @Nullable
@@ -44,7 +49,7 @@ public class CreatorCommonMarkerFragment extends Fragment
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState)
     {
-        binding = FragmentCreatorCommonMarkerBinding.inflate(inflater, container, false);
+        binding = FragmentCreatorCommonMarkerInputBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -52,13 +57,24 @@ public class CreatorCommonMarkerFragment extends Fragment
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState)
     {
-        viewModel = new ViewModelProvider(this).get(MainFragmentViewModel.class);
+        viewModel = new ViewModelProvider(requireParentFragment()).get(
+                MapInfoFragmentViewModel.class);
 
-        double[] rawLatLng = requireArguments().getDoubleArray(LAT_LNG_KEY);
-        LatLng latLng = new LatLng(rawLatLng[0], rawLatLng[1]);
+        ((SwitchableMode) requireParentFragment()).switchMode(NAVIGATING_MODE);
+        ((MenuHost) requireParentFragment()).addMenuProvider(this, getViewLifecycleOwner());
+    }
 
-        binding.toolbar.setNavigationOnClickListener(v -> toMainFragment());
-        binding.confirmMarkerButton.setOnClickListener(v ->
+    @Override
+    public void onCreateMenu(@NonNull Menu menu,
+                             @NonNull MenuInflater menuInflater)
+    {
+        menuInflater.inflate(R.menu.menu_creator_common_marker, menu);
+    }
+
+    @Override
+    public boolean onMenuItemSelected(@NonNull MenuItem menuItem)
+    {
+        if (menuItem.getItemId() == R.id.menu_create)
         {
             String title = binding.markerTitleView.getText().toString();
             String text = binding.markerTextView.getText().toString();
@@ -66,7 +82,7 @@ public class CreatorCommonMarkerFragment extends Fragment
             {
                 GMarkerMetadata gMarkerMetadata = new GMarkerMetadata();
                 gMarkerMetadata.setTitle(title);
-                gMarkerMetadata.setPositionLatLng(latLng);
+                gMarkerMetadata.setPositionLatLng(viewModel.getLatLng());
                 gMarkerMetadata.setType(GMarkerMetadata.COMMON_MARKER);
 
                 OwnerUser ownerUser = new OwnerUser();
@@ -80,16 +96,13 @@ public class CreatorCommonMarkerFragment extends Fragment
                 MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
                         MainViewModel.class);
                 viewModel.insertCommonMarker(mainViewModel.getSelectedAddressId().getValue(),
-                        gMarkerMetadata, post, this::toMainFragment);
+                        gMarkerMetadata, post,
+                        () -> ((BottomSheetDialogFragment) requireParentFragment()).dismiss());
             }
-        });
-    }
 
-    private void toMainFragment()
-    {
-        FragmentManager supportFragmentManager = requireActivity().getSupportFragmentManager();
-        supportFragmentManager.popBackStack(
-                supportFragmentManager.getBackStackEntryAt(0).getId(),
-                FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            return true;
+        }
+
+        return false;
     }
 }

@@ -28,6 +28,11 @@ public class AddressesFragment extends Fragment
     private FragmentAddressesBinding binding;
     private AddressesFragmentViewModel viewModel;
 
+    protected AddressesFragment()
+    {
+    }
+
+    @NonNull
     public static AddressesFragment newInstance()
     {
         return new AddressesFragment();
@@ -75,26 +80,29 @@ public class AddressesFragment extends Fragment
                             Snackbar.LENGTH_LONG).show());
         });
 
-        viewModel.getByUser().observe(getViewLifecycleOwner(), mainViewModel::setAddresses);
-
-        mainViewModel.getAddresses().observe(getViewLifecycleOwner(), addressList ->
+        viewModel.getByUser().observe(getViewLifecycleOwner(), addresses ->
         {
-            int count = 0;
-            for (Address address : mainViewModel.getSelectedAddresses().getValue())
+            mainViewModel.setAddresses(addresses);
+
+            mainViewModel.getAddresses().observe(getViewLifecycleOwner(), addressList ->
             {
-                for (Address addressSub : addressList)
+                int count = 0;
+                for (Address address : mainViewModel.getSelectedAddresses().getValue())
                 {
-                    if (address.getId().equals(addressSub.getId()))
+                    for (Address addressSub : addressList)
                     {
-                        addressSub.setSelected(true);
-                        count++;
+                        if (address.getId().equals(addressSub.getId()))
+                        {
+                            addressSub.setSelected(true);
+                            count++;
+                        }
                     }
                 }
-            }
 
-            addressesAdapter.setAddressList(addressList);
-            binding.toolbar.setTitle("Addresses " + addressList.size());
-            binding.toolbar.setSubtitle(count + " selected");
+                addressesAdapter.setAddressList(addressList);
+                binding.toolbar.setTitle("Addresses " + addressList.size());
+                binding.toolbar.setSubtitle(count + " selected");
+            });
         });
 
         mainViewModel.getSelectedAddresses().observe(getViewLifecycleOwner(), addressList ->

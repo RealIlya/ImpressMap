@@ -52,8 +52,9 @@ public class AuthorizationCase
     }
 
 
-    public void signOut()
+    public void signOut(SuccessCallback successCallback)
     {
         AUTH.signOut();
+        successCallback.onSuccess();
     }
 }

@@ -7,8 +7,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.User;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.Marker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,17 +14,15 @@ import java.util.List;
 public class MainViewModel extends ViewModel
 {
     public static final int MAX_ADDRESSES_COUNT = 5;
-    private final MutableLiveData<Integer> mode = new MutableLiveData<>(-1);
-    private final MutableLiveData<List<Address>> addresses = new MutableLiveData<>();
-    private final MutableLiveData<List<Address>> selectedAddresses = new MutableLiveData<>();
-    private final MutableLiveData<String> selectedAddressId = new MutableLiveData<>("");
-    private final MutableLiveData<User> user = new MutableLiveData<>();
-    private Circle lastSelectedCircle = null;
-    private Marker lastSelectedMarker = null;
+    private MutableLiveData<Integer> mode;
+    private MutableLiveData<List<Address>> addresses;
+    private MutableLiveData<List<Address>> selectedAddresses;
+    private MutableLiveData<String> selectedAddressId;
+    private MutableLiveData<User> user;
 
     public MainViewModel()
     {
-        selectedAddresses.setValue(new ArrayList<>());
+        clearCache();
     }
 
     public LiveData<Integer> getMode()
@@ -109,24 +105,13 @@ public class MainViewModel extends ViewModel
         }
     }
 
-    public Circle getLastSelectedCircle()
+    public void clearCache()
     {
-        return lastSelectedCircle;
-    }
-
-    public void setLastSelectedCircle(Circle lastSelectedCircle)
-    {
-        this.lastSelectedCircle = lastSelectedCircle;
-    }
-
-    public Marker getLastSelectedMarker()
-    {
-        return lastSelectedMarker;
-    }
-
-    public void setLastSelectedMarker(Marker lastSelectedMarker)
-    {
-        this.lastSelectedMarker = lastSelectedMarker;
+        mode = new MutableLiveData<>(-1);
+        addresses = new MutableLiveData<>();
+        selectedAddresses = new MutableLiveData<>(new ArrayList<>());
+        selectedAddressId = new MutableLiveData<>("");
+        user = new MutableLiveData<>();
     }
 
     public interface OnMaxAddressesCallback

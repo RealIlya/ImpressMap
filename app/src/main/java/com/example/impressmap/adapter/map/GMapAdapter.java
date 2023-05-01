@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
-import com.example.impressmap.adapter.AddressesAdapterViewModel;
 import com.example.impressmap.model.data.GCircleMeta;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.gcircle.CommonGCircle;
@@ -27,24 +26,23 @@ import java.util.List;
 public class GMapAdapter extends MapAdapter
 {
     private final Context context;
-    private ViewModelStoreOwner viewModelStoreOwner;
-
+    private final GMapAdapterViewModel viewModel;
 
     public GMapAdapter(Context context,
-                       GoogleMap googleMap)
+                       GoogleMap googleMap,
+                       ViewModelStoreOwner viewModelStoreOwner)
     {
         super(googleMap);
         this.context = context;
 
-        AddressesAdapterViewModel addressesAdapterViewModel = new ViewModelProvider(
-                viewModelStoreOwner).get(AddressesAdapterViewModel.class);
+        viewModel = new ViewModelProvider(viewModelStoreOwner).get(GMapAdapterViewModel.class);
 
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener()
         {
             @Override
             public void onMapClick(@NonNull LatLng latLng)
             {
-                deselectLastMarker();
+                viewModel.deselectLastGMarker();
 
                 onMapClicked(latLng);
             }
@@ -90,14 +88,12 @@ public class GMapAdapter extends MapAdapter
 
                 if (gMarker.isClickable())
                 {
-                    deselectLastMarker();
-
-                    lastSelectedMarker = marker;
+                    viewModel.deselectLastGMarker();
+                    gMarker.setSelected(true);
+                    viewModel.setLastSelectedGMarker(gMarker);
 
                     googleMap.animateCamera(
                             CameraUpdateFactory.newLatLngZoom(marker.getPosition(), ZOOM));
-
-                    gMarker.setSelected(true);
 
                     return onMarkerClicked(marker);
                 }
@@ -118,18 +114,16 @@ public class GMapAdapter extends MapAdapter
                 }
 
                 GCircle gCircle = (GCircle) circleTag;
-                deselectLastCircle();
-
-                lastSelectedCircle = circle;
-
+                viewModel.deselectLastGCircle();
                 gCircle.setSelected(true);
+                viewModel.setLastSelectedGCircle(gCircle);
 
                 onCircleClicked(circle);
             }
         });
     }
 
-    public void addZone(List<GMarkerMetadata> gMarkerMetadataList)
+    public void addZone(@NonNull List<GMarkerMetadata> gMarkerMetadataList)
     {
         List<GMarker> gMarkers = new ArrayList<>();
         GCircleMeta gCircleMeta = new GCircleMeta();
@@ -174,25 +168,34 @@ public class GMapAdapter extends MapAdapter
 
         GCircle gCircle = new CommonGCircle(context, circle, gCircleMeta);
 
+        if (viewModel.isGCircleEqualsLastSelectedGCircle(gCircle))
+        {
+            gCircle.setSelected(true);
+            viewModel.setLastSelectedGCircle(gCircle);
+        }
+
         circle.setTag(gCircle);
         return circle;
     }
 
-    @Nullable
-    public List<GMarker> getLastSelectedCircleGMarkers()
+    public boolean inSelectedGCircle(LatLng latLng)
     {
-        if (lastSelectedCircle == null)
-        {
-            return null;
-        }
-
-        GCircle gCircle = (GCircle) lastSelectedCircle.getTag();
-        return gCircle.getGCircleMeta().getGMarkers();
+        return viewModel.inLastSelectedGCircle(latLng);
     }
 
-
-    public void setViewModelStoreOwner(ViewModelStoreOwner viewModelStoreOwner)
+    public void deselectGMarker()
     {
-        this.viewModelStoreOwner = viewModelStoreOwner;
+        viewModel.deselectLastGMarker();
+    }
+
+    public void deselectGCircle()
+    {
+        viewModel.deselectLastGCircle();
+    }
+
+    @Nullable
+    public List<GMarker> getSelectedGCircleGMarkers()
+    {
+        return viewModel.getLastSelectedGCircleGMarkers();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.impressmap.database.firebase.cases;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import com.example.impressmap.database.firebase.repos.GMarkerMetadataRepo;
@@ -23,7 +24,7 @@ public class GMarkerCommonCase
 
     public void insert(String addressId,
                        GMarkerMetadata gMarkerMetadata,
-                       Post post,
+                       @NonNull Post post,
                        SuccessCallback successCallback)
     {
         gMarkerMetadataRepo = new GMarkerMetadataRepo(addressId);
@@ -34,7 +35,7 @@ public class GMarkerCommonCase
         });
     }
 
-    public LiveData<List<GMarkerMetadata>> getByAddress(Address address)
+    public LiveData<List<GMarkerMetadata>> getByAddress(@NonNull Address address)
     {
         gMarkerMetadataRepo = new GMarkerMetadataRepo(address.getId());
 

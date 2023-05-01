@@ -23,31 +23,37 @@ import com.example.impressmap.ui.NavigationDrawer;
 import com.example.impressmap.ui.PostsBottomSheetBehavior;
 import com.example.impressmap.ui.fragment.bottom.MapInfoFragment;
 import com.example.impressmap.ui.fragment.main.MainFragment;
+import com.example.impressmap.ui.viewmodel.MainFragmentViewModel;
 import com.example.impressmap.ui.viewmodel.MainViewModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.card.MaterialCardView;
 
+import java.io.Closeable;
 import java.util.List;
 
 public class CommonMode extends Mode
 {
     private final FragmentActivity activity;
+    private final MainViewModel mainViewModel;
     private PostsAdapter postsAdapter;
     private NavigationDrawer navigationDrawer;
     private PostsBottomSheetBehavior<MaterialCardView> postsSheetBehavior;
-    private MainViewModel mainViewModel;
+    private GMapAdapter gMapAdapter;
 
     public CommonMode(MainFragment fragment,
+                      MainFragmentViewModel viewModel,
                       FragmentMainBinding binding)
     {
-        super(fragment, binding);
+        super(fragment, viewModel, binding);
         activity = fragment.requireActivity();
+        mainViewModel = new ViewModelProvider(activity).get(MainViewModel.class);
     }
 
     @Override
     public void switchOn(GMapAdapter gMapAdapter)
     {
+        this.gMapAdapter = gMapAdapter;
         postsAdapter = new PostsAdapter();
 
         navigationDrawer = new NavigationDrawer(activity, binding.navigationView,
@@ -56,19 +62,14 @@ public class CommonMode extends Mode
         postsSheetBehavior = new PostsBottomSheetBehavior<>(
                 BottomSheetBehavior.from(binding.framePosts));
 
-        mainViewModel = new ViewModelProvider(activity).get(MainViewModel.class);
-
         Toolbar toolbar = binding.toolbar;
-        MenuItem toolbarDeselectionItem = toolbar.getMenu().findItem(R.id.deselect_circle_menu);
-
         Toolbar postsToolbar = binding.postsToolbar;
-        MenuItem postsToolbarDeselectionItem = postsToolbar.getMenu()
-                                                           .findItem(R.id.deselect_circle_menu);
 
         LiveData<List<Address>> addressesLiveData = mainViewModel.getSelectedAddresses();
-        if (!addressesLiveData.hasObservers())
+
+        if (!addressesLiveData.hasActiveObservers())
         {
-            addressesLiveData.observe(fragment, addressList ->
+            addressesLiveData.observe(fragment.getViewLifecycleOwner(), addressList ->
             {
                 // not optimized
                 gMapAdapter.clearMap();
@@ -76,31 +77,45 @@ public class CommonMode extends Mode
                 {
                     for (Address address : addressList)
                     {
-                        viewModel.getGMarkerMetadataByAddress(address)
-                                 .observe(fragment.getViewLifecycleOwner(), gMapAdapter::addZone);
+                        LiveData<List<GMarkerMetadata>> gMarkerLiveData = viewModel.getGMarkerMetadataByAddress(
+                                address);
+                        if (!gMarkerLiveData.hasActiveObservers())
+                        {
+                            //TODO only add. Must fix
+                            gMarkerLiveData.observe(fragment.getViewLifecycleOwner(),
+                                    gMapAdapter::addZone);
+                            viewModel.addCloseable(new Closeable()
+                            {
+                                @Override
+                                public void close()
+                                {
+                                    gMarkerLiveData.removeObservers(
+                                            fragment.getViewLifecycleOwner());
+                                }
+                            });
+                        }
                     }
                 }
             });
         }
 
         LiveData<String> addressIdLiveData = mainViewModel.getSelectedAddressId();
-        if (!addressIdLiveData.hasObservers())
+        if (!addressIdLiveData.hasActiveObservers())
         {
             addressIdLiveData.observe(fragment.getViewLifecycleOwner(), addressId ->
             {
-                if (addressId.isEmpty())
+                MenuItem item = toolbar.getMenu().findItem(R.id.deselect_circle_item);
+
+                if (item != null)
                 {
-                    if (toolbarDeselectionItem != null)
+                    if (addressId.isEmpty())
                     {
-                        toolbarDeselectionItem.setVisible(false);
+                        item.setVisible(false);
+                        gMapAdapter.deselectGCircle();
                     }
-                    gMapAdapter.deselectLastCircle();
-                }
-                else
-                {
-                    if (toolbarDeselectionItem != null)
+                    else
                     {
-                        toolbarDeselectionItem.setVisible(true);
+                        item.setVisible(true);
                     }
                 }
             });
@@ -111,7 +126,7 @@ public class CommonMode extends Mode
 
         gMapAdapter.setOnMapLongClickListener(latLng ->
         {
-            if (!addressIdLiveData.getValue().isEmpty())
+            if (gMapAdapter.inSelectedGCircle(latLng))
             {
                 gMapAdapter.setPointer(latLng);
                 gMapAdapter.zoomTo(latLng);
@@ -131,24 +146,18 @@ public class CommonMode extends Mode
             postsSheetBehavior.showHalf();
             postsToolbar.setTitle(marker.getTitle());
 
-            mainViewModel.setLastSelectedMarker(marker);
-
             GMarkerMetadata gMarkerMetadata = ((GMarker) marker.getTag()).getGMarkerMetadata();
+            MenuItem item = postsToolbar.getMenu().findItem(R.id.deselect_circle_item);
             if (gMarkerMetadata.getType() == GMarkerMetadata.COMMON_MARKER)
             {
                 viewModel.getPostByGMarker(gMarkerMetadata)
                          .observe(fragment.getViewLifecycleOwner(), postsAdapter::addPost);
 
-                postsToolbarDeselectionItem.setOnMenuItemClickListener(menuItem ->
-                {
-                    gMapAdapter.deselectLastMarker();
-                    postsSheetBehavior.hide();
-                    return true;
-                });
+                item.setOnMenuItemClickListener(this::onDeselectMarker);
             }
             else if (gMarkerMetadata.getType() == GMarkerMetadata.ADDRESS_MARKER)
             {
-                List<GMarker> gMarkers = gMapAdapter.getLastSelectedCircleGMarkers();
+                List<GMarker> gMarkers = gMapAdapter.getSelectedGCircleGMarkers();
                 if (gMarkers != null)
                 {
                     for (GMarker gMarker : gMarkers)
@@ -157,7 +166,7 @@ public class CommonMode extends Mode
                                  .observe(fragment.getViewLifecycleOwner(), postsAdapter::addPost);
                     }
 
-                    postsToolbarDeselectionItem.setOnMenuItemClickListener(this::onDeselectCircle);
+                    item.setOnMenuItemClickListener(this::onDeselectCircle);
                 }
             }
 
@@ -169,17 +178,19 @@ public class CommonMode extends Mode
             mainViewModel.setSelectedAddressId(gCircleMeta.getAddressId());
             postsSheetBehavior.hide();
 
-            mainViewModel.setLastSelectedCircle(circle);
-
-            postsToolbarDeselectionItem.setOnMenuItemClickListener(this::onDeselectCircle);
+            postsToolbar.getMenu()
+                        .findItem(R.id.deselect_circle_item)
+                        .setOnMenuItemClickListener(this::onDeselectCircle);
         });
 
         toolbar.setNavigationIcon(R.drawable.ic_menu_drawer);
         toolbar.setNavigationOnClickListener(v -> navigationDrawer.open());
         toolbar.inflateMenu(R.menu.menu_map);
 
-        toolbarDeselectionItem.setOnMenuItemClickListener(this::onDeselectCircle);
-        toolbarDeselectionItem.setVisible(false);
+        toolbar.getMenu()
+               .findItem(R.id.deselect_circle_item)
+               .setOnMenuItemClickListener(this::onDeselectCircle);
+        toolbar.getMenu().findItem(R.id.deselect_circle_item).setVisible(false);
 
         postsSheetBehavior.setAnimation(new PostsBottomSheetBehavior.Animation()
         {
@@ -195,7 +206,9 @@ public class CommonMode extends Mode
             @Override
             public void onSlide(float slideOffset)
             {
-                View actionView = toolbarDeselectionItem.getActionView();
+                View actionView = toolbar.getMenu()
+                                         .findItem(R.id.deselect_circle_item)
+                                         .getActionView();
                 if (actionView != null)
                 {
                     actionView.animate().alpha(slideOffset).start();
@@ -206,6 +219,14 @@ public class CommonMode extends Mode
         RecyclerView recyclerView = binding.postsRecyclerView;
         recyclerView.setAdapter(postsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+    }
+
+
+    private boolean onDeselectMarker(MenuItem menuItem)
+    {
+        gMapAdapter.deselectGMarker();
+        postsSheetBehavior.hide();
+        return true;
     }
 
     private boolean onDeselectCircle(MenuItem menuItem)

@@ -11,21 +11,35 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuHost;
+import androidx.core.view.MenuProvider;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.R;
 import com.example.impressmap.databinding.FragmentMapInfoBinding;
-import com.example.impressmap.ui.fragment.CreatorCommonMarkerFragment;
 import com.example.impressmap.util.Locations;
+import com.example.impressmap.util.SwitchableMode;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class MapInfoFragment extends BottomSheetDialogFragment
+public class MapInfoFragment extends BottomSheetDialogFragment implements SwitchableMode, MenuHost
 {
+    public static final int MAIN_MODE = 0;
+    public static final int NAVIGATING_MODE = 1;
+
     private FragmentMapInfoBinding binding;
+    private MapInfoFragmentViewModel viewModel;
 
     private DialogInterface.OnDismissListener onDismissListener;
 
-    public static MapInfoFragment newInstance(LatLng latLng)
+    protected MapInfoFragment()
+    {
+    }
+
+    @NonNull
+    public static MapInfoFragment newInstance(@NonNull LatLng latLng)
     {
         Bundle arguments = new Bundle();
         arguments.putDoubleArray(LAT_LNG_KEY, new double[]{latLng.latitude, latLng.longitude});
@@ -49,35 +63,96 @@ public class MapInfoFragment extends BottomSheetDialogFragment
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState)
     {
-        requireDialog().setOnDismissListener(onDismissListener);
+        viewModel = new ViewModelProvider(this).get(MapInfoFragmentViewModel.class);
 
         double[] rawLatLng = requireArguments().getDoubleArray(LAT_LNG_KEY);
         LatLng latLng = new LatLng(rawLatLng[0], rawLatLng[1]);
+        viewModel.setLatLng(latLng);
+
+        switchMode(MAIN_MODE);
 
         Address address = Locations.getFromLocation(getContext(), latLng);
 
-        if (address != null)
-        {
-            binding.toolbar.setTitle(address.getAddressLine(0));
-        }
+        binding.toolbar.setTitle(
+                address != null ? address.getAddressLine(0) : getString(R.string.not_stated));
         binding.toolbar.setSubtitle(latLng.latitude + " : " + latLng.longitude);
 
-        binding.createSubAddressMarkerButton.setOnClickListener(v ->
-        {
-            //TODO fix lagging because of dismissing this fragment
-            dismiss();
-            String name = CreatorCommonMarkerFragment.class.getSimpleName();
-            requireActivity().getSupportFragmentManager()
-                             .beginTransaction()
-                             .replace(R.id.container,
-                                     CreatorCommonMarkerFragment.newInstance(latLng))
-                             .addToBackStack(name)
-                             .commit();
-        });
+        setCancelable(false);
+
+        getChildFragmentManager().beginTransaction()
+                                 .replace(R.id.info_container,
+                                         CreatorCommonMarkerPreFragment.newInstance())
+                                 .commit();
+
+    }
+
+    private void setMainMode()
+    {
+        binding.toolbar.setNavigationIcon(R.drawable.ic_hide);
+        binding.toolbar.setNavigationOnClickListener(v -> dismiss());
+    }
+
+    private void setNavigatingMode()
+    {
+        binding.toolbar.setNavigationIcon(R.drawable.ic_arrow);
+        binding.toolbar.setNavigationOnClickListener(v -> getChildFragmentManager().popBackStack());
     }
 
     public void setOnDismissListener(DialogInterface.OnDismissListener listener)
     {
         onDismissListener = listener;
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog)
+    {
+        onDismissListener.onDismiss(dialog);
+    }
+
+    @Override
+    public void switchMode(int mode)
+    {
+        switch (mode)
+        {
+            case MAIN_MODE:
+                setMainMode();
+                break;
+            case NAVIGATING_MODE:
+                setNavigatingMode();
+                break;
+        }
+    }
+
+    @Override
+    public void addMenuProvider(@NonNull MenuProvider provider)
+    {
+        binding.toolbar.addMenuProvider(provider);
+    }
+
+    @Override
+    public void addMenuProvider(@NonNull MenuProvider provider,
+                                @NonNull LifecycleOwner owner)
+    {
+        binding.toolbar.addMenuProvider(provider, owner);
+    }
+
+    @Override
+    public void addMenuProvider(@NonNull MenuProvider provider,
+                                @NonNull LifecycleOwner owner,
+                                @NonNull Lifecycle.State state)
+    {
+        binding.toolbar.addMenuProvider(provider, owner, state);
+    }
+
+    @Override
+    public void removeMenuProvider(@NonNull MenuProvider provider)
+    {
+        binding.toolbar.removeMenuProvider(provider);
+    }
+
+    @Override
+    public void invalidateMenu()
+    {
+        ((MenuHost) binding.toolbar).invalidateMenu();
     }
 }

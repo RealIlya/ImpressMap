@@ -28,6 +28,10 @@ public class CreatorAddressFragment extends Fragment
     private FragmentCreatorAddressBinding binding;
     private CreatorAddressFragmentViewModel viewModel;
 
+    protected CreatorAddressFragment()
+    {
+    }
+
     @NonNull
     public static CreatorAddressFragment newInstance(@NonNull LatLng latLng)
     {

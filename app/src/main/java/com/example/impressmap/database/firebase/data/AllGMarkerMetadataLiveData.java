@@ -29,6 +29,12 @@ public class AllGMarkerMetadataLiveData extends LiveData<List<GMarkerMetadata>>
 
             List<GMarkerMetadata> gMarkerMetadataList = new ArrayList<>();
             Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
+
+            if (!iterator.hasNext())
+            {
+                setValue(gMarkerMetadataList);
+            }
+
             while (iterator.hasNext())
             {
                 DataSnapshot dataSnapshot = iterator.next();
@@ -75,7 +81,7 @@ public class AllGMarkerMetadataLiveData extends LiveData<List<GMarkerMetadata>>
     @Override
     protected void onActive()
     {
-        userGMarkerRef.addListenerForSingleValueEvent(listener);
+        userGMarkerRef.addValueEventListener(listener);
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.example.impressmap.ui.fragment.main.mode;
 
 import static com.example.impressmap.ui.fragment.main.MainFragment.COMMON_MODE;
 
+import android.view.View;
+
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -10,7 +12,7 @@ import com.example.impressmap.adapter.map.GMapAdapter;
 import com.example.impressmap.databinding.FragmentMainBinding;
 import com.example.impressmap.ui.fragment.CreatorAddressFragment;
 import com.example.impressmap.ui.fragment.main.MainFragment;
-import com.example.impressmap.ui.fragment.main.mode.Mode;
+import com.example.impressmap.ui.viewmodel.MainFragmentViewModel;
 import com.example.impressmap.ui.viewmodel.MainViewModel;
 
 public class AddingMode extends Mode
@@ -19,9 +21,10 @@ public class AddingMode extends Mode
     private MainViewModel mainViewModel;
 
     public AddingMode(MainFragment fragment,
+                      MainFragmentViewModel viewModel,
                       FragmentMainBinding binding)
     {
-        super(fragment, binding);
+        super(fragment, viewModel, binding);
         activity = fragment.requireActivity();
     }
 
@@ -32,7 +35,7 @@ public class AddingMode extends Mode
 
         gMapAdapter.setOnMapClickListener(latLng ->
         {
-            gMapAdapter.setPointer(latLng);
+//            gMapAdapter.setPointer(latLng);
             gMapAdapter.zoomTo(latLng);
 
             CreatorAddressFragment fragment = CreatorAddressFragment.newInstance(latLng);
@@ -47,5 +50,7 @@ public class AddingMode extends Mode
         binding.toolbar.setNavigationIcon(R.drawable.ic_arrow);
         binding.toolbar.setNavigationOnClickListener(v -> mainViewModel.setMode(COMMON_MODE));
         binding.toolbar.getMenu().clear();
+
+        binding.framePosts.setVisibility(View.INVISIBLE);
     }
 }
