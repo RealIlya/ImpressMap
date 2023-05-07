@@ -17,6 +17,7 @@ import com.example.impressmap.databinding.FragmentAuthBinding;
 import com.example.impressmap.ui.fragment.main.MainFragment;
 import com.example.impressmap.ui.viewmodel.AuthViewModel;
 import com.example.impressmap.ui.viewmodel.MainViewModel;
+import com.example.impressmap.util.FailCallback;
 import com.example.impressmap.util.SuccessCallback;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -24,6 +25,8 @@ public class AuthFragment extends Fragment
 {
     private final SuccessCallback successCallback;
     private FragmentAuthBinding binding;
+    private final FailCallback failCallback;
+    private AuthViewModel viewModel;
 
     protected AuthFragment()
     {
@@ -40,6 +43,9 @@ public class AuthFragment extends Fragment
                              .replace(R.id.container, fragment)
                              .commit();
         };
+
+        failCallback = () -> Snackbar.make(requireView(), R.string.field_is_necessary,
+                Snackbar.LENGTH_LONG).show();
     }
 
     @NonNull
@@ -62,7 +68,7 @@ public class AuthFragment extends Fragment
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState)
     {
-        AuthViewModel authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+        viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
         binding.signUpButton.setOnClickListener(v ->
         {
@@ -70,32 +76,18 @@ public class AuthFragment extends Fragment
             String surnameText = binding.surnameView.getText().toString().trim();
             String emailText = binding.emailView.getText().toString().trim();
             String passwordText = binding.passwordView.getText().toString().trim();
-            if (!nameText.isEmpty() && !surnameText.isEmpty() && !emailText.isEmpty() && !passwordText.isEmpty())
-            {
-                authViewModel.signUp(nameText, surnameText, emailText, passwordText,
-                        binding.rememberMeCheckBox.isChecked(), successCallback);
-            }
-            else
-            {
-                Snackbar.make(requireView(), R.string.field_is_necessary, Snackbar.LENGTH_LONG)
-                        .show();
-            }
+
+            viewModel.signUp(nameText, surnameText, emailText, passwordText,
+                    binding.dontLogoutCheckBox.isChecked(), successCallback, failCallback);
         });
 
         binding.nextButton.setOnClickListener(v ->
         {
             String emailText = binding.emailView.getText().toString().trim();
             String passwordText = binding.passwordView.getText().toString().trim();
-            if (!emailText.isEmpty() && !passwordText.isEmpty())
-            {
-                authViewModel.signIn(emailText, passwordText,
-                        binding.rememberMeCheckBox.isChecked(), successCallback);
-            }
-            else
-            {
-                Snackbar.make(requireView(), R.string.field_is_necessary, Snackbar.LENGTH_LONG)
-                        .show();
-            }
+
+            viewModel.signIn(emailText, passwordText, binding.dontLogoutCheckBox.isChecked(),
+                    successCallback, failCallback);
         });
 
         binding.signUpCheckBox.setOnCheckedChangeListener((compoundButton, checked) ->

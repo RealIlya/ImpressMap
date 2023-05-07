@@ -1,4 +1,4 @@
-package com.example.impressmap.adapter.map;
+package com.example.impressmap.adapter.gmap;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,16 +14,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class MapAdapter
 {
-    public static final int ZOOM = 18;
-    public static final int MIN_ZOOM = 10;
+    public static final int MIN_ZOOM = 18;
 
-    protected final List<Marker> markers = new ArrayList<>();
-    protected final List<Circle> circles = new ArrayList<>();
     private final GoogleMap googleMap;
     protected Marker pointer = null;
     private GoogleMap.OnMapClickListener onMapClickListener;
@@ -40,18 +34,13 @@ public abstract class MapAdapter
 
     public Marker addMarker(@NonNull GMarkerMetadata gMarkerMetadata)
     {
-        Marker marker = googleMap.addMarker(new MarkerOptions().title(gMarkerMetadata.getTitle())
-                                                               .position(
-                                                                       gMarkerMetadata.getPosition()));
-        markers.add(marker);
-        return marker;
+        return googleMap.addMarker(new MarkerOptions().title(gMarkerMetadata.getTitle())
+                                                      .position(gMarkerMetadata.getPosition()));
     }
 
     public Circle addCircle(@NonNull GCircleMeta GCircleMeta)
     {
-        Circle circle = googleMap.addCircle(new CircleOptions().center(GCircleMeta.getCenter()));
-        circles.add(circle);
-        return circle;
+        return googleMap.addCircle(new CircleOptions().center(GCircleMeta.getCenter()));
     }
 
     public void setPointer(LatLng latLng)
@@ -71,42 +60,31 @@ public abstract class MapAdapter
     public void clearMap()
     {
         googleMap.clear();
-        markers.clear();
-        circles.clear();
     }
 
-    public void zoomTo(LatLng latLng)
+    public void animateZoomTo(LatLng latLng)
     {
-        zoomTo(latLng, ZOOM);
+        animateZoomTo(latLng, () ->
+        {
+
+        });
     }
 
-    public void zoomTo(LatLng latLng,
-                       int zoom)
+    public void animateZoomTo(LatLng latLng,
+                              OnFinishCallback callback)
     {
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,
+                Math.max(googleMap.getCameraPosition().zoom, MIN_ZOOM)), callback);
     }
 
-    public void zoomTo(CameraPosition cameraPosition)
+    public void animateZoomTo(CameraPosition cameraPosition)
     {
         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
-    public void showMarkers()
+    public void zoomTo(CameraPosition cameraPosition)
     {
-        toggleMarkersVisibility(true);
-    }
-
-    public void hideMarkers()
-    {
-        toggleMarkersVisibility(false);
-    }
-
-    private void toggleMarkersVisibility(boolean visible)
-    {
-        for (Marker marker : markers)
-        {
-            marker.setVisible(visible);
-        }
+        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     protected void onMapLongClicked(LatLng latLng)
@@ -175,24 +153,29 @@ public abstract class MapAdapter
             @Override
             public void onMarkerDrag(@NonNull Marker marker)
             {
-
             }
 
             @Override
             public void onMarkerDragEnd(@NonNull Marker marker)
             {
-
             }
 
             @Override
             public void onMarkerDragStart(@NonNull Marker marker)
             {
-
             }
         };
 
         onCircleClickListener = circle ->
         {
         };
+    }
+
+    public interface OnFinishCallback extends GoogleMap.CancelableCallback
+    {
+        @Override
+        default void onCancel()
+        {
+        }
     }
 }

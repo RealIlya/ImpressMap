@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.impressmap.databinding.ItemPostBinding;
 import com.example.impressmap.model.data.Post;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +39,19 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
 
         holder.binding.textView.setText(post.getText());
         holder.binding.fullNameView.setText(post.getOwnerUser().getFullName());
+        String dateString = DateFormat.getDateInstance(DateFormat.DATE_FIELD)
+                                      .format(post.getDate());
+        holder.binding.dateView.setText(dateString);
+
+        holder.binding.showReactionsButton.setOnClickListener(v ->
+        {
+
+        });
+
+        holder.binding.showCommentsButton.setOnClickListener(v ->
+        {
+
+        });
     }
 
     @Override

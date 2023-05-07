@@ -97,17 +97,27 @@ public class Address implements TransferableToDatabase
 
     public String getCountry()
     {
-        return fullAddress.split(" ")[0];
+        return fullAddress.split("\\|")[0];
     }
 
     public String getCity()
     {
-        return fullAddress.split(" ")[1];
+        return fullAddress.split("\\|")[1];
     }
 
     public String getState()
     {
-        return fullAddress.split(" ")[2];
+        return fullAddress.split("\\|")[2];
+    }
+
+    public String getStreet()
+    {
+        return fullAddress.split("\\|")[3];
+    }
+
+    public String getHouse()
+    {
+        return fullAddress.split("\\|")[4];
     }
 
     public boolean isSelected()

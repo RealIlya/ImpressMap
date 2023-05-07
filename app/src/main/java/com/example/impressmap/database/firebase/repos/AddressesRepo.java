@@ -9,7 +9,7 @@ import static com.example.impressmap.util.Constants.UID;
 import androidx.lifecycle.LiveData;
 
 import com.example.impressmap.database.DatabaseRepo;
-import com.example.impressmap.database.firebase.data.AllAddressesLiveData;
+import com.example.impressmap.database.firebase.data.AllUserAddressesLiveData;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.util.SuccessCallback;
 import com.google.firebase.database.DatabaseReference;
@@ -32,7 +32,7 @@ public class AddressesRepo implements DatabaseRepo<Address>
     @Override
     public LiveData<List<Address>> getAll()
     {
-        return new AllAddressesLiveData(userAddressesRef);
+        return new AllUserAddressesLiveData(userAddressesRef);
     }
 
     @Override

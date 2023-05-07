@@ -71,21 +71,24 @@ public class CreatorAddressFragment extends Fragment
             String desc = binding.descView.getText().toString();
             if (!title.isEmpty() && !desc.isEmpty())
             {
-                String[] addressLine = Locations.getAddressLine(getContext(), latLng);
-                if (addressLine == null)
+                android.location.Address location = Locations.getFromLatLng(getContext(), latLng);
+                if (location == null)
                 {
                     Toast.makeText(getContext(), "Address does not exist", Toast.LENGTH_LONG)
                          .show();
                     return;
                 }
 
-                String country = addressLine[0];
-                String city = addressLine[1];
-                String state = addressLine[2];
+                //TODO решить проблему с добавлением адреса
+                String country = location.getCountryName();
+                String city = location.getLocality();
+                String state = location.getAdminArea();
+                String street = location.getThoroughfare();
+                String house = location.getSubThoroughfare();
 
                 Address address = new Address();
                 address.setDesc(desc);
-                address.setFullAddress(String.format("%s %s %s", country, city, state));
+                address.setFullAddress(String.format("%s|%s|%s|%s|%s", country, city, state, street, house));
 
                 GMarkerMetadata gMarkerMetadata = new GMarkerMetadata();
                 gMarkerMetadata.setTitle(title);

@@ -3,10 +3,9 @@ package com.example.impressmap.database.firebase.cases;
 import static com.example.impressmap.util.Constants.AUTH;
 import static com.example.impressmap.util.Constants.UID;
 
-import android.util.Log;
-
 import com.example.impressmap.database.firebase.repos.UsersRepo;
 import com.example.impressmap.model.data.User;
+import com.example.impressmap.util.FailCallback;
 import com.example.impressmap.util.SuccessCallback;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -23,7 +22,8 @@ public class AuthorizationCase
                        String surname,
                        String email,
                        String password,
-                       SuccessCallback successCallback)
+                       SuccessCallback successCallback,
+                       FailCallback failCallback)
     {
         AUTH.createUserWithEmailAndPassword(email, password).addOnSuccessListener(authResult ->
         {
@@ -36,19 +36,20 @@ public class AuthorizationCase
             usersRepo.insert(user, successCallback);
 
             UID = firebaseUser.getUid();
-        }).addOnFailureListener(e -> Log.e("signUp", e.getMessage()));
+        }).addOnFailureListener(e -> failCallback.onFail());
     }
 
     public void signIn(String email,
                        String password,
-                       SuccessCallback successCallback)
+                       SuccessCallback successCallback,
+                       FailCallback failCallback)
     {
         AUTH.signInWithEmailAndPassword(email, password).addOnSuccessListener(authResult ->
         {
             UID = authResult.getUser().getUid();
 
             successCallback.onSuccess();
-        }).addOnFailureListener(e -> Log.e("signIn", e.getMessage()));
+        }).addOnFailureListener(e -> failCallback.onFail());
     }
 
 

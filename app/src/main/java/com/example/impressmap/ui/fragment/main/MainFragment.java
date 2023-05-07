@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.R;
-import com.example.impressmap.adapter.map.GMapAdapter;
+import com.example.impressmap.adapter.gmap.GMapAdapter;
 import com.example.impressmap.databinding.FragmentMainBinding;
 import com.example.impressmap.ui.fragment.main.mode.AddingMode;
 import com.example.impressmap.ui.fragment.main.mode.CommonMode;
@@ -56,6 +56,9 @@ public class MainFragment extends Fragment implements SwitchableMode
                               @Nullable Bundle savedInstanceState)
     {
         viewModel = new ViewModelProvider(this).get(MainFragmentViewModel.class);
+
+        binding.map.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
         requireActivity().getOnBackPressedDispatcher()
                          .addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true)

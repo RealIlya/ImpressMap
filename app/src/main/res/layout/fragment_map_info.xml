@@ -13,7 +13,7 @@
             android:background="?backgroundSecondaryWindow">
 
             <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appBarLayout2"
+                android:id="@+id/app_bar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?backgroundToolbar"
@@ -36,7 +36,7 @@
                 android:id="@+id/info_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_constraintTop_toBottomOf="@+id/appBarLayout2" />
+                app:layout_constraintTop_toBottomOf="@+id/app_bar_layout" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

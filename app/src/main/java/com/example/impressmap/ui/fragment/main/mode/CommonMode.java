@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.R;
 import com.example.impressmap.adapter.PostsAdapter;
-import com.example.impressmap.adapter.map.GMapAdapter;
+import com.example.impressmap.adapter.gmap.GMapAdapter;
 import com.example.impressmap.databinding.FragmentMainBinding;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GCircleMeta;
@@ -25,11 +25,9 @@ import com.example.impressmap.ui.fragment.bottom.MapInfoFragment;
 import com.example.impressmap.ui.fragment.main.MainFragment;
 import com.example.impressmap.ui.viewmodel.MainFragmentViewModel;
 import com.example.impressmap.ui.viewmodel.MainViewModel;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.card.MaterialCardView;
 
-import java.io.Closeable;
 import java.util.List;
 
 public class CommonMode extends Mode
@@ -69,7 +67,7 @@ public class CommonMode extends Mode
 
         if (!addressesLiveData.hasActiveObservers())
         {
-            addressesLiveData.observe(fragment.getViewLifecycleOwner(), addressList ->
+            addressesLiveData.observe(activity, addressList ->
             {
                 // not optimized
                 gMapAdapter.clearMap();
@@ -77,23 +75,9 @@ public class CommonMode extends Mode
                 {
                     for (Address address : addressList)
                     {
-                        LiveData<List<GMarkerMetadata>> gMarkerLiveData = viewModel.getGMarkerMetadataByAddress(
-                                address);
-                        if (!gMarkerLiveData.hasActiveObservers())
-                        {
-                            //TODO only add. Must fix
-                            gMarkerLiveData.observe(fragment.getViewLifecycleOwner(),
-                                    gMapAdapter::addZone);
-                            viewModel.addCloseable(new Closeable()
-                            {
-                                @Override
-                                public void close()
-                                {
-                                    gMarkerLiveData.removeObservers(
-                                            fragment.getViewLifecycleOwner());
-                                }
-                            });
-                        }
+                        //TODO only add. Must fix
+                        viewModel.getGMarkerMetadataByAddress(address)
+                                 .observeForever(gMapAdapter::addZone);
                     }
                 }
             });
@@ -122,21 +106,18 @@ public class CommonMode extends Mode
         }
 
         // temporary
-        gMapAdapter.zoomTo(new LatLng(54.849540, 83.106605));
+//        gMapAdapter.zoomTo(new LatLng(54.994314, 82.897630));
 
         gMapAdapter.setOnMapLongClickListener(latLng ->
         {
-            if (gMapAdapter.inSelectedGCircle(latLng))
-            {
-                gMapAdapter.setPointer(latLng);
-                gMapAdapter.zoomTo(latLng);
+            gMapAdapter.setPointer(latLng);
 
-                MapInfoFragment mapInfoFragment = MapInfoFragment.newInstance(latLng);
-                String name = MapInfoFragment.class.getSimpleName();
-                mapInfoFragment.show(activity.getSupportFragmentManager(), name);
-                mapInfoFragment.setOnDismissListener(
-                        dialogInterface -> gMapAdapter.removePointer());
-            }
+            boolean inZone = gMapAdapter.inSelectedGCircle(latLng);
+            MapInfoFragment mapInfoFragment = MapInfoFragment.newInstance(latLng, inZone);
+            String name = MapInfoFragment.class.getSimpleName();
+            mapInfoFragment.setOnDismissListener(dialogInterface -> gMapAdapter.removePointer());
+            gMapAdapter.animateZoomTo(latLng,
+                    () -> mapInfoFragment.show(activity.getSupportFragmentManager(), name));
         });
         gMapAdapter.setOnMapClickListener(latLng -> postsSheetBehavior.hide());
         gMapAdapter.setOnMarkerClickListener(marker ->
@@ -144,14 +125,14 @@ public class CommonMode extends Mode
             postsAdapter.clear();
 
             postsSheetBehavior.showHalf();
-            postsToolbar.setTitle(marker.getTitle());
-
             GMarkerMetadata gMarkerMetadata = ((GMarker) marker.getTag()).getGMarkerMetadata();
+
+            postsToolbar.setTitle(gMarkerMetadata.getTitle());
+
             MenuItem item = postsToolbar.getMenu().findItem(R.id.deselect_circle_item);
             if (gMarkerMetadata.getType() == GMarkerMetadata.COMMON_MARKER)
             {
-                viewModel.getPostByGMarker(gMarkerMetadata)
-                         .observe(fragment.getViewLifecycleOwner(), postsAdapter::addPost);
+                viewModel.getPostByGMarker(gMarkerMetadata).observeForever(postsAdapter::addPost);
 
                 item.setOnMenuItemClickListener(this::onDeselectMarker);
             }
@@ -163,7 +144,7 @@ public class CommonMode extends Mode
                     for (GMarker gMarker : gMarkers)
                     {
                         viewModel.getPostByGMarker(gMarker.getGMarkerMetadata())
-                                 .observe(fragment.getViewLifecycleOwner(), postsAdapter::addPost);
+                                 .observeForever(postsAdapter::addPost);
                     }
 
                     item.setOnMenuItemClickListener(this::onDeselectCircle);

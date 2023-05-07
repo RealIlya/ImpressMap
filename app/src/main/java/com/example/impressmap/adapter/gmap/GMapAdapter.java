@@ -1,4 +1,4 @@
-package com.example.impressmap.adapter.map;
+package com.example.impressmap.adapter.gmap;
 
 import android.content.Context;
 
@@ -14,8 +14,8 @@ import com.example.impressmap.model.data.gcircle.GCircle;
 import com.example.impressmap.model.data.gmarker.AddressGMarker;
 import com.example.impressmap.model.data.gmarker.CommonGMarker;
 import com.example.impressmap.model.data.gmarker.GMarker;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -36,6 +36,12 @@ public class GMapAdapter extends MapAdapter
         this.context = context;
 
         viewModel = new ViewModelProvider(viewModelStoreOwner).get(GMapAdapterViewModel.class);
+
+        CameraPosition lastCameraPosition = viewModel.getLastCameraPosition();
+        if (lastCameraPosition != null)
+        {
+            zoomTo(lastCameraPosition);
+        }
 
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener()
         {
@@ -92,8 +98,7 @@ public class GMapAdapter extends MapAdapter
                     gMarker.setSelected(true);
                     viewModel.setLastSelectedGMarker(gMarker);
 
-                    googleMap.animateCamera(
-                            CameraUpdateFactory.newLatLngZoom(marker.getPosition(), ZOOM));
+                    animateZoomTo(marker.getPosition());
 
                     return onMarkerClicked(marker);
                 }
@@ -121,27 +126,62 @@ public class GMapAdapter extends MapAdapter
                 onCircleClicked(circle);
             }
         });
+
+        googleMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener()
+        {
+            @Override
+            public void onCameraIdle()
+            {
+                viewModel.setLastCameraPosition(googleMap.getCameraPosition());
+            }
+        });
     }
 
     public void addZone(@NonNull List<GMarkerMetadata> gMarkerMetadataList)
     {
         List<GMarker> gMarkers = new ArrayList<>();
         GCircleMeta gCircleMeta = new GCircleMeta();
+
+        GCircle gCircle = null;
+
         for (GMarkerMetadata gMarkerMetadata : gMarkerMetadataList)
         {
-            gMarkers.add((GMarker) addMarker(gMarkerMetadata).getTag());
             if (gMarkerMetadata.getType() == GMarkerMetadata.ADDRESS_MARKER)
             {
-                gCircleMeta.setAddressId(gMarkerMetadata.getId());
-                gCircleMeta.setCenter(gMarkerMetadata.getPosition());
+                gCircle = viewModel.findGCircleByGMarkerMetadata(gMarkerMetadata);
+
+                if (gCircle == null)
+                {
+                    gCircleMeta.setAddressId(gMarkerMetadata.getId());
+                    gCircleMeta.setCenter(gMarkerMetadata.getPosition());
+                }
             }
+
+            if (viewModel.inGMarkersCache(gMarkerMetadata))
+            {
+                continue;
+            }
+
+            GMarker gMarker = (GMarker) addMarker(gMarkerMetadata).getTag();
+            if (gCircle != null)
+            {
+                gMarker.setClickable(true);
+            }
+            gMarkers.add(gMarker);
         }
 
-        gCircleMeta.setGMarkers(gMarkers);
-
-        addCircle(gCircleMeta);
+        if (gCircle == null)
+        {
+            gCircleMeta.addGMarkers(gMarkers);
+            addCircle(gCircleMeta);
+        }
+        else
+        {
+            gCircle.getGCircleMeta().addGMarkers(gMarkers);
+        }
     }
 
+    @Override
     public Marker addMarker(@NonNull GMarkerMetadata gMarkerMetadata)
     {
         Marker marker = super.addMarker(gMarkerMetadata);
@@ -157,6 +197,7 @@ public class GMapAdapter extends MapAdapter
                 break;
         }
 
+        viewModel.addGMarkerInCache(gMarker);
         marker.setTag(gMarker);
         return marker;
     }
@@ -174,6 +215,7 @@ public class GMapAdapter extends MapAdapter
             viewModel.setLastSelectedGCircle(gCircle);
         }
 
+        viewModel.addGCircleInCache(gCircle);
         circle.setTag(gCircle);
         return circle;
     }
@@ -197,5 +239,12 @@ public class GMapAdapter extends MapAdapter
     public List<GMarker> getSelectedGCircleGMarkers()
     {
         return viewModel.getLastSelectedGCircleGMarkers();
+    }
+
+    @Override
+    public void clearMap()
+    {
+        super.clearMap();
+        viewModel.clearCache();
     }
 }

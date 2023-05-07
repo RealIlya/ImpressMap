@@ -19,6 +19,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.R;
 import com.example.impressmap.databinding.FragmentMapInfoBinding;
+import com.example.impressmap.ui.fragment.bottom.mode.CommonMode;
+import com.example.impressmap.ui.fragment.bottom.mode.Mode;
+import com.example.impressmap.ui.fragment.bottom.mode.NavigatingMode;
 import com.example.impressmap.util.Locations;
 import com.example.impressmap.util.SwitchableMode;
 import com.google.android.gms.maps.model.LatLng;
@@ -26,9 +29,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class MapInfoFragment extends BottomSheetDialogFragment implements SwitchableMode, MenuHost
 {
-    public static final int MAIN_MODE = 0;
+    public static final int COMMON_MODE = 0;
     public static final int NAVIGATING_MODE = 1;
-
+    private static final String IN_ZONE_KEY = "IN_ZONE_KEY";
     private FragmentMapInfoBinding binding;
     private MapInfoFragmentViewModel viewModel;
 
@@ -39,10 +42,12 @@ public class MapInfoFragment extends BottomSheetDialogFragment implements Switch
     }
 
     @NonNull
-    public static MapInfoFragment newInstance(@NonNull LatLng latLng)
+    public static MapInfoFragment newInstance(@NonNull LatLng latLng,
+                                              boolean inZone)
     {
         Bundle arguments = new Bundle();
         arguments.putDoubleArray(LAT_LNG_KEY, new double[]{latLng.latitude, latLng.longitude});
+        arguments.putBoolean(IN_ZONE_KEY, inZone);
 
         MapInfoFragment mapInfoFragment = new MapInfoFragment();
         mapInfoFragment.setArguments(arguments);
@@ -67,35 +72,26 @@ public class MapInfoFragment extends BottomSheetDialogFragment implements Switch
 
         double[] rawLatLng = requireArguments().getDoubleArray(LAT_LNG_KEY);
         LatLng latLng = new LatLng(rawLatLng[0], rawLatLng[1]);
+        boolean inZone = requireArguments().getBoolean(IN_ZONE_KEY);
         viewModel.setLatLng(latLng);
 
-        switchMode(MAIN_MODE);
+        switchMode(COMMON_MODE);
 
-        Address address = Locations.getFromLocation(getContext(), latLng);
+        Address location = Locations.getFromLatLng(getContext(), latLng);
 
         binding.toolbar.setTitle(
-                address != null ? address.getAddressLine(0) : getString(R.string.not_stated));
+                location != null ? location.getAddressLine(0) : getString(R.string.not_stated));
         binding.toolbar.setSubtitle(latLng.latitude + " : " + latLng.longitude);
 
+        if (inZone)
+        {
+            getChildFragmentManager().beginTransaction()
+                                     .replace(R.id.info_container,
+                                             CreatorCommonMarkerPreFragment.newInstance())
+                                     .commit();
+        }
+
         setCancelable(false);
-
-        getChildFragmentManager().beginTransaction()
-                                 .replace(R.id.info_container,
-                                         CreatorCommonMarkerPreFragment.newInstance())
-                                 .commit();
-
-    }
-
-    private void setMainMode()
-    {
-        binding.toolbar.setNavigationIcon(R.drawable.ic_hide);
-        binding.toolbar.setNavigationOnClickListener(v -> dismiss());
-    }
-
-    private void setNavigatingMode()
-    {
-        binding.toolbar.setNavigationIcon(R.drawable.ic_arrow);
-        binding.toolbar.setNavigationOnClickListener(v -> getChildFragmentManager().popBackStack());
     }
 
     public void setOnDismissListener(DialogInterface.OnDismissListener listener)
@@ -112,15 +108,19 @@ public class MapInfoFragment extends BottomSheetDialogFragment implements Switch
     @Override
     public void switchMode(int mode)
     {
+        Mode modeClass;
+
         switch (mode)
         {
-            case MAIN_MODE:
-                setMainMode();
+            case COMMON_MODE:
+                modeClass = new CommonMode(this);
                 break;
-            case NAVIGATING_MODE:
-                setNavigatingMode();
+            default:
+                modeClass = new NavigatingMode(this);
                 break;
         }
+
+        modeClass.switchOn(binding.toolbar);
     }
 
     @Override

@@ -1,10 +1,12 @@
-package com.example.impressmap.adapter;
+package com.example.impressmap.adapter.address;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.R;
@@ -44,7 +46,8 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
         Address address = addressList.get(position);
         holder.binding.addressPrimaryView.setText(
                 String.format("%s %s", address.getCountry(), address.getCity()));
-        holder.binding.addressSecondaryView.setText(address.getState());
+        holder.binding.addressSecondaryView.setText(
+                String.format("%s %s", address.getStreet(), address.getHouse()));
 
         if (address.isSelected())
         {

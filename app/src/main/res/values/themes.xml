@@ -5,6 +5,8 @@
         <item name="android:statusBarColor">@color/blue_100_alpha_5</item>
         <item name="android:navigationBarColor">?backgroundPrimaryWindow</item>
 
+        <item name="android:colorEdgeEffect">?colorAccent</item>
+
         <item name="colorAccent">@color/blue_300</item>
         <item name="backgroundToolbar">@color/blue_500</item>
 
@@ -28,9 +30,9 @@
         <item name="backgroundSecondaryFab">@color/blue_300</item>
         <item name="colorSecondaryFabIcon">@color/white</item>
 
-        <item name="backgroundClickedFab">@color/light_gray</item>
+        <item name="backgroundClickedButton">@color/light_gray</item>
 
-        <item name="colorPrimaryText">@color/dim_gray</item>
+        <item name="colorPrimaryText">@color/black_blue</item>
         <item name="colorSecondaryText">@color/gray</item>
         <item name="colorTertiaryText">@color/icon_gray</item>
         <item name="colorWrongText">@color/gray_500</item>
@@ -49,19 +51,8 @@
         <item name="android:listDivider">@color/white</item>
     </style>
 
-    <style name="CustomCardViewStyle" parent="@style/Base.CardView">
-        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay_card_custom_corners</item>
-    </style>
-
-
-    <style name="ShapeAppearanceOverlay_card_custom_corners" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopRight">16dp</item>
-        <item name="cornerSizeTopLeft">16dp</item>
-    </style>
-
-    <style name="ShapeAppearanceOverlay_avatar" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerRadius">24dp</item>
+    <style name="Theme.ImpressMap.SplashScreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/blue_100</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 </resources>

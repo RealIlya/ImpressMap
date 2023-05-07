@@ -2,7 +2,6 @@ package com.example.impressmap.model.data;
 
 import androidx.annotation.Nullable;
 
-import com.example.impressmap.model.data.gcircle.GCircle;
 import com.example.impressmap.model.data.gmarker.GMarker;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -40,7 +39,7 @@ public class GCircleMeta
         return gMarkers;
     }
 
-    public void setGMarkers(List<GMarker> gMarkers)
+    public void addGMarkers(List<GMarker> gMarkers)
     {
         this.gMarkers.addAll(gMarkers);
     }

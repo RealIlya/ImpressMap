@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.impressmap.ui.viewmodel.AddressesFragmentViewModel" />
+    </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -11,8 +18,7 @@
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?backgroundSecondaryWindow"
+            android:layout_height="match_parent"
             android:fitsSystemWindows="true">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,6 +31,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?backgroundToolbar"
+                    app:elevation="2dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -35,23 +42,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
                         app:navigationIcon="@drawable/ic_arrow"
-                        app:popupTheme="@style/Theme.ImpressMap.PopupOverlay" />
+                        app:popupTheme="@style/Theme.ImpressMap.PopupOverlay"
+                        app:subtitle="@{viewModel.selectedAddressesCount + @string/selected_addresses_count}"
+                        app:title="@{@string/addresses_count + ' ' + viewModel.addressesCount}" />
                 </com.google.android.material.appbar.AppBarLayout>
 
-                <androidx.coordinatorlayout.widget.CoordinatorLayout
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/addresses_recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/app_bar_layout">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/addresses_recycler_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        tools:listitem="@layout/item_address" />
-                </androidx.coordinatorlayout.widget.CoordinatorLayout>
+                    app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
+                    tools:listitem="@layout/item_address" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

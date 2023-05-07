@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.R;
-import com.example.impressmap.adapter.AddressesAdapter;
+import com.example.impressmap.adapter.address.AddressesAdapter;
 import com.example.impressmap.databinding.FragmentAddressesBinding;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.ui.viewmodel.AddressesFragmentViewModel;
@@ -53,6 +53,8 @@ public class AddressesFragment extends Fragment
                               @Nullable Bundle savedInstanceState)
     {
         viewModel = new ViewModelProvider(this).get(AddressesFragmentViewModel.class);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
 
         binding.toolbar.setNavigationOnClickListener(
                 v -> requireActivity().getSupportFragmentManager().popBackStack());
@@ -87,27 +89,27 @@ public class AddressesFragment extends Fragment
             mainViewModel.getAddresses().observe(getViewLifecycleOwner(), addressList ->
             {
                 int count = 0;
-                for (Address address : mainViewModel.getSelectedAddresses().getValue())
+                for (Address selectedAddress : mainViewModel.getSelectedAddresses().getValue())
                 {
-                    for (Address addressSub : addressList)
+                    for (Address address : addressList)
                     {
-                        if (address.getId().equals(addressSub.getId()))
+                        if (selectedAddress.getId().equals(address.getId()))
                         {
-                            addressSub.setSelected(true);
+                            address.setSelected(true);
                             count++;
                         }
                     }
                 }
 
                 addressesAdapter.setAddressList(addressList);
-                binding.toolbar.setTitle("Addresses " + addressList.size());
-                binding.toolbar.setSubtitle(count + " selected");
+                viewModel.setAddressesCount(addressList.size());
+                viewModel.setSelectedAddressesCount(count);
             });
         });
 
         mainViewModel.getSelectedAddresses().observe(getViewLifecycleOwner(), addressList ->
         {
-            binding.toolbar.setSubtitle(addressList.size() + " selected");
+            viewModel.setSelectedAddressesCount(addressList.size());
         });
     }
 }

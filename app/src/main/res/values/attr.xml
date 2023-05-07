@@ -15,7 +15,7 @@
     <attr name="colorPrimaryFabIcon" format="color" />
     <attr name="backgroundSecondaryFab" format="color" />
     <attr name="colorSecondaryFabIcon" format="color" />
-    <attr name="backgroundClickedFab" format="color" />
+    <attr name="backgroundClickedButton" format="color" />
     <attr name="colorPrimaryText" format="color" />
     <attr name="colorSecondaryText" format="color" />
     <attr name="colorTertiaryText" format="color" />

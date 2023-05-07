@@ -1,6 +1,6 @@
 package com.example.impressmap.ui.fragment.bottom;
 
-import static com.example.impressmap.ui.fragment.bottom.MapInfoFragment.MAIN_MODE;
+import static com.example.impressmap.ui.fragment.bottom.MapInfoFragment.COMMON_MODE;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -43,7 +43,7 @@ public class CreatorCommonMarkerPreFragment extends Fragment
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState)
     {
-        ((SwitchableMode) requireParentFragment()).switchMode(MAIN_MODE);
+        ((SwitchableMode) requireParentFragment()).switchMode(COMMON_MODE);
 
         binding.createCommonMarkerButton.setOnClickListener(v ->
         {

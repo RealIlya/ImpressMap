@@ -5,6 +5,7 @@ import static com.example.impressmap.util.Constants.Keys.POSITION_NODE;
 import static com.example.impressmap.util.Constants.Keys.TITLE_NODE;
 import static com.example.impressmap.util.Constants.Keys.TYPE_NODE;
 
+import androidx.annotation.Nullable;
 import androidx.room.Entity;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -79,5 +80,24 @@ public class GMarkerMetadata implements TransferableToDatabase
     public void setType(int type)
     {
         this.type = type;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (obj == this)
+        {
+            return true;
+        }
+        if (!(obj instanceof GMarkerMetadata))
+        {
+            return false;
+        }
+        GMarkerMetadata o = (GMarkerMetadata) obj;
+        return o.id.equals(id);
     }
 }

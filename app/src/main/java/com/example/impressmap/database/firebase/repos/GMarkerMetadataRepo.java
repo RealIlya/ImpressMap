@@ -9,7 +9,7 @@ import static com.example.impressmap.util.Constants.UID;
 import androidx.lifecycle.LiveData;
 
 import com.example.impressmap.database.DatabaseRepo;
-import com.example.impressmap.database.firebase.data.AllGMarkerMetadataLiveData;
+import com.example.impressmap.database.firebase.data.AllUserGMarkerMetadataLiveData;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.util.SuccessCallback;
 import com.google.firebase.database.DatabaseReference;
@@ -37,7 +37,7 @@ public class GMarkerMetadataRepo implements DatabaseRepo<GMarkerMetadata>
     @Override
     public LiveData<List<GMarkerMetadata>> getAll()
     {
-        return new AllGMarkerMetadataLiveData(userGMarkersRef);
+        return new AllUserGMarkerMetadataLiveData(userGMarkersRef);
     }
 
     @Override

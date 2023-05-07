@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class AllGMarkerMetadataLiveData extends LiveData<List<GMarkerMetadata>>
+public class AllUserGMarkerMetadataLiveData extends LiveData<List<GMarkerMetadata>>
 {
     private final DatabaseReference userGMarkerRef;
 
@@ -73,7 +73,7 @@ public class AllGMarkerMetadataLiveData extends LiveData<List<GMarkerMetadata>>
         }
     };
 
-    public AllGMarkerMetadataLiveData(DatabaseReference userGMarkerRef)
+    public AllUserGMarkerMetadataLiveData(DatabaseReference userGMarkerRef)
     {
         this.userGMarkerRef = userGMarkerRef;
     }

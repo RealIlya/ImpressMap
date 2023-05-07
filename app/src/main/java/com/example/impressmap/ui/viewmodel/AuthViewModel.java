@@ -29,33 +29,47 @@ public class AuthViewModel extends AndroidViewModel
                        String email,
                        String password,
                        boolean rememberMe,
-                       SuccessCallback successCallback)
+                       SuccessCallback successCallback,
+                       FailCallback failCallback)
     {
+        if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || password.isEmpty())
+        {
+            failCallback.onFail();
+            return;
+        }
+
         authorizationCase.signUp(name, surname, email, password, () ->
         {
             if (rememberMe)
             {
-                sessionPreferences.putUser(email, password);
+                sessionPreferences.setUser(email, password);
             }
 
             successCallback.onSuccess();
-        });
+        }, failCallback);
     }
 
     public void signIn(String email,
                        String password,
                        boolean rememberMe,
-                       SuccessCallback successCallback)
+                       SuccessCallback successCallback,
+                       FailCallback failCallback)
     {
+        if (email.isEmpty() || password.isEmpty())
+        {
+            failCallback.onFail();
+            return;
+        }
+
         authorizationCase.signIn(email, password, () ->
         {
             if (rememberMe)
             {
-                sessionPreferences.putUser(email, password);
+                sessionPreferences.setUser(email, password);
             }
 
             successCallback.onSuccess();
-        });
+        }, failCallback);
     }
 
     public void tryToSignIn(SuccessCallback successCallback,
@@ -65,7 +79,7 @@ public class AuthViewModel extends AndroidViewModel
 
         if (userInfo != null)
         {
-            authorizationCase.signIn(userInfo[0], userInfo[1], successCallback);
+            authorizationCase.signIn(userInfo[0], userInfo[1], successCallback, failCallback);
         }
         else
         {

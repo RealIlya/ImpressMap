@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 public class Locations
 {
@@ -29,36 +30,29 @@ public class Locations
     }
 
     @Nullable
-    public static Address getFromLocation(Context context,
-                                          @NonNull LatLng latLng)
+    public static Address getFromLatLng(Context context,
+                                        @NonNull LatLng latLng)
     {
         try
         {
-            List<Address> location = new Geocoder(context).getFromLocation(latLng.latitude,
-                    latLng.longitude, 1);
-            return location.size() > 0 ? location.get(0) : null;
-        }
-        catch (IOException e)
-        {
+            List<Address> locations = new Geocoder(context, Locale.ENGLISH).getFromLocation(
+                    latLng.latitude, latLng.longitude, 3);
+
+            for (Address location : locations)
+            {
+                String house1 = location.getFeatureName();
+                String house2 = location.getSubThoroughfare();
+                String subLocality = location.getSubLocality();
+                String thoroughfare = location.getThoroughfare();
+                if ((house1 != null || house2 != null) && (subLocality != null || thoroughfare != null))
+                {
+                    return location;
+                }
+            }
+
             return null;
         }
-    }
-
-    /**
-     * @return The address line. 0 - country, 1 - city, 2 - state
-     */
-    @Nullable
-    public static String[] getAddressLine(Context context,
-                                          LatLng latLng)
-    {
-        Address location = getFromLocation(context, latLng);
-
-        if (location != null)
-        {
-            return new String[]{location.getCountryName(), location.getLocality(),
-                    location.getAdminArea()};
-        }
-        else
+        catch (IOException e)
         {
             return null;
         }

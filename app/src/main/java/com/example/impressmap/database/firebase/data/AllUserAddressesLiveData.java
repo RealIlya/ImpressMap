@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class AllAddressesLiveData extends LiveData<List<Address>>
+public class AllUserAddressesLiveData extends LiveData<List<Address>>
 {
     private final DatabaseReference userAddressesRef;
 
@@ -72,7 +72,7 @@ public class AllAddressesLiveData extends LiveData<List<Address>>
         }
     };
 
-    public AllAddressesLiveData(DatabaseReference userAddressesRef)
+    public AllUserAddressesLiveData(DatabaseReference userAddressesRef)
     {
         this.userAddressesRef = userAddressesRef;
     }

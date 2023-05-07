@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class SessionPreferences
 {
@@ -17,31 +18,34 @@ public class SessionPreferences
         preferences = context.getSharedPreferences(SESSION_PREFS, Context.MODE_PRIVATE);
     }
 
-    public void putUser(String email,
+    public void setUser(String email,
                         String password)
     {
-        SharedPreferences.Editor edit = preferences.edit();
-        edit.putString(EMAIL_KEY, email);
-        edit.putString(PASSWORD_KEY, password);
-        edit.apply();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(EMAIL_KEY, email);
+        editor.putString(PASSWORD_KEY, password);
+        editor.apply();
     }
 
-    public void deleteUser()
+    public void removeUser()
     {
-        SharedPreferences.Editor edit = preferences.edit();
-        edit.putString(EMAIL_KEY, null);
-        edit.putString(PASSWORD_KEY, null);
-        edit.apply();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove(EMAIL_KEY);
+        editor.remove(PASSWORD_KEY);
+        editor.apply();
     }
 
+    @Nullable
     public String[] getUserInfo()
     {
-        String email = preferences.getString(EMAIL_KEY, "");
-        String password = preferences.getString(PASSWORD_KEY, "");
+        boolean userExists = preferences.contains(EMAIL_KEY) && preferences.contains(PASSWORD_KEY);
 
-        boolean emailExists = !email.isEmpty() && preferences.contains(EMAIL_KEY);
-        boolean passwordExists = !password.isEmpty() && preferences.contains(PASSWORD_KEY);
-
-        return emailExists && passwordExists ? new String[]{email, password} : null;
+        if (userExists)
+        {
+            String email = preferences.getString(EMAIL_KEY, "");
+            String password = preferences.getString(PASSWORD_KEY, "");
+            return new String[]{email, password};
+        }
+        return null;
     }
 }

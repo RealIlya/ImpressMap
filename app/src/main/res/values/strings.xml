@@ -19,7 +19,7 @@
     <string name="email_hint">Enter your email</string>
     <string name="sign_in_button">Next -&gt;</string>
     <string name="sign_up_button">Sign up!</string>
-    <string name="remember_me_check_box">Remember me</string>
+    <string name="dont_logout_check_box">Don\'t logout</string>
     <string name="sign_up_check_box">Sign up</string>
 
     <!--  bottom sheet fragment  -->
@@ -49,4 +49,6 @@
 
     <string name="max_addresses_count">Max addresses count!</string>
     <string name="not_stated">Not stated</string>
+    <string name="addresses_count">"Addresses"</string>
+    <string name="selected_addresses_count">" selected"</string>
 </resources>

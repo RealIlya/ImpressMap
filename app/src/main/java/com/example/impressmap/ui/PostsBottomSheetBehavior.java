@@ -109,7 +109,7 @@ public class PostsBottomSheetBehavior<T extends View>
         {
             expanding = oldOffset < slideOffset;
             collapsing = oldOffset > slideOffset;
-            if ((slideOffset < 1 && slideOffset >= 0.4 && collapsing || slideOffset < 0.4 && slideOffset >= 0 && expanding) && dragging)
+            if ((slideOffset < 0.8 && slideOffset >= 0.45 && collapsing || slideOffset < 0.3 && slideOffset >= 0 && expanding) && dragging)
             {
                 showHalf();
             }

@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.R;
-import com.example.impressmap.adapter.map.GMapAdapter;
+import com.example.impressmap.adapter.gmap.GMapAdapter;
 import com.example.impressmap.databinding.FragmentMainBinding;
 import com.example.impressmap.ui.fragment.CreatorAddressFragment;
 import com.example.impressmap.ui.fragment.main.MainFragment;
@@ -36,7 +36,7 @@ public class AddingMode extends Mode
         gMapAdapter.setOnMapClickListener(latLng ->
         {
 //            gMapAdapter.setPointer(latLng);
-            gMapAdapter.zoomTo(latLng);
+            gMapAdapter.animateZoomTo(latLng);
 
             CreatorAddressFragment fragment = CreatorAddressFragment.newInstance(latLng);
             String name = CreatorAddressFragment.class.getSimpleName();
