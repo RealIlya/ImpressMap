@@ -51,48 +51,48 @@
                 android:id="@+id/frame_posts"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
                 android:visibility="invisible"
                 app:behavior_hideable="true"
                 app:cardPreventCornerOverlap="false"
                 app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
                 app:shapeAppearanceOverlay="@style/cardCornersOverlay">
 
-                <LinearLayout
+                <androidx.coordinatorlayout.widget.CoordinatorLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="?backgroundPrimaryWindow"
-                    android:orientation="vertical">
+                    android:background="?backgroundPrimaryWindow">
 
-                    <androidx.coordinatorlayout.widget.CoordinatorLayout
-                        android:id="@+id/posts_app_bar_container"
+                    <com.google.android.material.appbar.AppBarLayout
+                        android:id="@+id/posts_app_bar"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:background="?backgroundToolbar"
+                        app:elevation="2dp">
 
-                        <com.google.android.material.appbar.AppBarLayout
-                            android:id="@+id/posts_app_bar"
+                        <androidx.appcompat.widget.Toolbar
+                            android:id="@+id/posts_toolbar"
+                            style="@style/toolbarTextStyle"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="?backgroundToolbar"
-                            app:elevation="2dp">
+                            android:layout_height="?android:attr/actionBarSize"
+                            app:layout_scrollFlags="scroll|enterAlways"
+                            app:menu="@menu/menu_map_bottom"
+                            app:popupTheme="@style/Theme.ImpressMap.PopupOverlay" />
+                    </com.google.android.material.appbar.AppBarLayout>
 
-                            <androidx.appcompat.widget.Toolbar
-                                android:id="@+id/posts_toolbar"
-                                style="@style/toolbarTextStyle"
-                                android:layout_width="match_parent"
-                                android:layout_height="?android:attr/actionBarSize"
-                                android:layout_marginTop="@dimen/toolbar_rest_margin_top"
-                                app:menu="@menu/menu_map_bottom"
-                                app:popupTheme="@style/Theme.ImpressMap.PopupOverlay" />
-                        </com.google.android.material.appbar.AppBarLayout>
-                    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/posts_recycler_view"
+                    <androidx.core.widget.NestedScrollView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        tools:itemCount="2"
-                        tools:listitem="@layout/item_post" />
-                </LinearLayout>
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/posts_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            tools:itemCount="2"
+                            tools:listitem="@layout/item_post" />
+                    </androidx.core.widget.NestedScrollView>
+                </androidx.coordinatorlayout.widget.CoordinatorLayout>
             </com.google.android.material.card.MaterialCardView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

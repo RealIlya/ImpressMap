@@ -15,13 +15,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.impressmap.R;
 import com.example.impressmap.adapter.address.AddressesAdapter;
 import com.example.impressmap.databinding.FragmentAddressesBinding;
-import com.example.impressmap.model.data.Address;
 import com.example.impressmap.ui.viewmodel.AddressesFragmentViewModel;
 import com.example.impressmap.ui.viewmodel.MainViewModel;
-import com.google.android.material.snackbar.Snackbar;
 
 public class AddressesFragment extends Fragment
 {
@@ -72,44 +69,25 @@ public class AddressesFragment extends Fragment
         });
 
         RecyclerView recyclerView = binding.addressesRecyclerView;
-        AddressesAdapter addressesAdapter = new AddressesAdapter(getContext());
+        AddressesAdapter addressesAdapter = new AddressesAdapter(getContext(), requireActivity());
         recyclerView.setAdapter(addressesAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         addressesAdapter.setOnAddressClickListener(address ->
         {
-            mainViewModel.switchSelectionAddress(address,
-                    () -> Snackbar.make(requireView(), R.string.max_addresses_count,
-                            Snackbar.LENGTH_LONG).show());
+            viewModel.setSelectedAddressesCount(addressesAdapter.getSelectedAddressCount());
+
+            mainViewModel.setSelectedAddresses(addressesAdapter.getSelectedAddresses());
         });
 
-        viewModel.getByUser().observe(getViewLifecycleOwner(), addresses ->
+        viewModel.setAddressesCount(addressesAdapter.getItemCount());
+        viewModel.setSelectedAddressesCount(addressesAdapter.getSelectedAddressCount());
+
+        viewModel.getByUser().observe(getViewLifecycleOwner(), addressList ->
         {
-            mainViewModel.setAddresses(addresses);
-
-            mainViewModel.getAddresses().observe(getViewLifecycleOwner(), addressList ->
-            {
-                int count = 0;
-                for (Address selectedAddress : mainViewModel.getSelectedAddresses().getValue())
-                {
-                    for (Address address : addressList)
-                    {
-                        if (selectedAddress.getId().equals(address.getId()))
-                        {
-                            address.setSelected(true);
-                            count++;
-                        }
-                    }
-                }
-
-                addressesAdapter.setAddressList(addressList);
-                viewModel.setAddressesCount(addressList.size());
-                viewModel.setSelectedAddressesCount(count);
-            });
-        });
-
-        mainViewModel.getSelectedAddresses().observe(getViewLifecycleOwner(), addressList ->
-        {
-            viewModel.setSelectedAddressesCount(addressList.size());
+            addressesAdapter.setAddressList(addressList);
+            viewModel.setAddressesCount(addressList.size());
+            viewModel.setSelectedAddressesCount(addressesAdapter.getSelectedAddressCount());
         });
     }
 }

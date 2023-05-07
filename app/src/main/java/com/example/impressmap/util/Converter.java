@@ -12,6 +12,7 @@ import android.util.TypedValue;
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
 public class Converter
@@ -45,8 +46,8 @@ public class Converter
         return bitmap;
     }
 
-    public static int getAttribute(Context context,
-                                   @AttrRes int resId)
+    private static int getAttribute(@NonNull Context context,
+                                    @AttrRes int resId)
     {
         TypedValue typedValue = new TypedValue();
         boolean successful = context.getTheme().resolveAttribute(resId, typedValue, true);
@@ -54,11 +55,17 @@ public class Converter
     }
 
     @ColorInt
-    public static int getAttributeColor(Context context,
+    public static int getAttributeColor(@NonNull Context context,
                                         @AttrRes int resId)
     {
         return ResourcesCompat.getColor(context.getResources(), getAttribute(context, resId),
                 context.getTheme());
+    }
+
+    public static Drawable getDrawable(@NonNull Context context,
+                                       @DrawableRes int resId)
+    {
+        return ResourcesCompat.getDrawable(context.getResources(), resId, context.getTheme());
     }
 
     public int getAttributeColorWithAlpha(Context context,

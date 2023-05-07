@@ -29,6 +29,7 @@ public class Constants
         public static final String ADDRESSES_NODE = "addresses";
         public static final String GMARKERS_NODE = "gmarkers";
         public static final String POSTS_NODE = "posts";
+        public static final String COMMENTS_NODE = "comments";
         public static final String USERS_NODE = "users";
 
         public static final String CHILD_ID_NODE = "id";
@@ -46,5 +47,7 @@ public class Constants
         public static final String DESC_NODE = "desc";
         public static final String GMARKER_ID = "gmarkerId";
         public static final String TYPE_NODE = "type";
+        public static final String COMMENT_IDS_NODE = "commentIds";
+
     }
 }

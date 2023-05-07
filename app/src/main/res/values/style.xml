@@ -9,6 +9,10 @@
         <item name="android:textCursorDrawable">@drawable/background_cursor</item>
     </style>
 
+    <style name="preMessageTextStyle" parent="textStyle">
+        <item name="android:backgroundTint">@android:color/transparent</item>
+    </style>
+
     <style name="settingsItemStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -69,5 +73,10 @@
 
     <style name="subtitleTextStyle">
         <item name="android:textSize">@dimen/pre_medium_text_size</item>
+    </style>
+
+    <style name="preMessagesToolbarTextStyle" parent="toolbarTextStyle">
+        <item name="titleTextColor">?colorAlternativeToolbarTitle</item>
+        <item name="subtitleTextColor">?colorAlternativeToolbarSubtitle</item>
     </style>
 </resources>

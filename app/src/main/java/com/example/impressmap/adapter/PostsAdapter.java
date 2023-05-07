@@ -1,6 +1,7 @@
 package com.example.impressmap.adapter;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,8 @@ import java.util.List;
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHolder>
 {
     private final List<Post> postList;
+
+    private OnCommentsButtonClickListener onCommentsButtonClickListener;
 
     public PostsAdapter()
     {
@@ -48,9 +51,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
 
         });
 
+        holder.binding.showCommentsButton.setText(String.valueOf(post.getCommentIds().size()));
         holder.binding.showCommentsButton.setOnClickListener(v ->
         {
-
+            holder.binding.getRoot().setTransitionName(post.getId());
+            onCommentsButtonClickListener.onClick(holder.binding.getRoot(), post);
         });
     }
 
@@ -71,6 +76,17 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
         int size = postList.size();
         postList.clear();
         notifyItemRangeRemoved(0, size);
+    }
+
+    public void setOnCommentsButtonClickListener(OnCommentsButtonClickListener listener)
+    {
+        this.onCommentsButtonClickListener = listener;
+    }
+
+    public interface OnCommentsButtonClickListener
+    {
+        void onClick(View view,
+                     Post post);
     }
 
     protected static class PostViewHolder extends RecyclerView.ViewHolder

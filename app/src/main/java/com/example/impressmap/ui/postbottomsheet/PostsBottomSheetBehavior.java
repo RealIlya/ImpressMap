@@ -1,14 +1,17 @@
-package com.example.impressmap.ui;
+package com.example.impressmap.ui.postbottomsheet;
 
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 public class PostsBottomSheetBehavior<T extends View>
 {
     private final BottomSheetBehavior<T> bottomSheetBehavior;
+    private final PostBottomSheetViewModel viewModel;
     private Animation animation = new Animation()
     {
         @Override
@@ -24,14 +27,16 @@ public class PostsBottomSheetBehavior<T extends View>
         }
     };
 
-    public PostsBottomSheetBehavior(BottomSheetBehavior<T> bottomSheetBehavior)
+    public PostsBottomSheetBehavior(@NonNull BottomSheetBehavior<T> bottomSheetBehavior,
+                                    ViewModelStoreOwner viewModelStoreOwner)
     {
         this.bottomSheetBehavior = bottomSheetBehavior;
+        viewModel = new ViewModelProvider(viewModelStoreOwner).get(PostBottomSheetViewModel.class);
 
         bottomSheetBehavior.setHalfExpandedRatio(0.4f);
-        bottomSheetBehavior.setPeekHeight(200);
+        bottomSheetBehavior.setPeekHeight(300);
         bottomSheetBehavior.addBottomSheetCallback(new PostsBottomSheetCallback());
-        hide();
+        bottomSheetBehavior.setState(viewModel.getLastState());
     }
 
     private void setState(int state)
@@ -89,6 +94,11 @@ public class PostsBottomSheetBehavior<T extends View>
         public void onStateChanged(@NonNull View bottomSheet,
                                    int newState)
         {
+            if ((newState != BottomSheetBehavior.STATE_DRAGGING) && (newState != BottomSheetBehavior.STATE_SETTLING))
+            {
+                viewModel.setLastState(newState);
+            }
+
             switch (newState)
             {
                 case BottomSheetBehavior.STATE_EXPANDED:

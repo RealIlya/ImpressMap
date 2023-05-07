@@ -1,25 +1,32 @@
 package com.example.impressmap.model.data;
 
 import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
+import static com.example.impressmap.util.Constants.Keys.COMMENT_IDS_NODE;
 import static com.example.impressmap.util.Constants.Keys.DATE_NODE;
 import static com.example.impressmap.util.Constants.Keys.GMARKER_ID;
 import static com.example.impressmap.util.Constants.Keys.OWNER_ID_NODE;
 import static com.example.impressmap.util.Constants.Keys.TEXT_NODE;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Entity
-public class Post implements TransferableToDatabase
+public class Post implements TransferableToDatabase, Serializable
 {
     private String id = "";
     private OwnerUser ownerUser = new OwnerUser();
     private Date date = new Date();
     private String text = "";
-    private String gMarkerId;
+    private String gMarkerId = "";
+    private List<String> commentIds = new ArrayList<>();
 
     @Override
     public Map<String, Object> prepareToTransferToDatabase()
@@ -31,6 +38,7 @@ public class Post implements TransferableToDatabase
         data.put(DATE_NODE, date.getTime());
         data.put(TEXT_NODE, text);
         data.put(GMARKER_ID, gMarkerId);
+        data.put(COMMENT_IDS_NODE, String.join(" ", commentIds));
 
         return data;
     }
@@ -65,6 +73,11 @@ public class Post implements TransferableToDatabase
         this.date = date;
     }
 
+    public void setDate(long date)
+    {
+        this.date = new Date(date);
+    }
+
     public String getText()
     {
         return text;
@@ -83,5 +96,20 @@ public class Post implements TransferableToDatabase
     public void setGMarkerId(String gMarkerId)
     {
         this.gMarkerId = gMarkerId;
+    }
+
+    public List<String> getCommentIds()
+    {
+        return commentIds;
+    }
+
+    public void setCommentIds(List<String> commentIds)
+    {
+        this.commentIds = commentIds;
+    }
+
+    public void setCommentIds(@NonNull String commentIds)
+    {
+        this.commentIds = Arrays.asList(commentIds.split(" "));
     }
 }

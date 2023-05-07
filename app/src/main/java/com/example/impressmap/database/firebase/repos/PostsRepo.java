@@ -26,7 +26,7 @@ public class PostsRepo implements DatabaseRepo<Post>
     @Override
     public LiveData<List<Post>> getAll()
     {
-        return null;
+        throw new RuntimeException("Stub!");
     }
 
     public LiveData<Post> getPost(String postId)

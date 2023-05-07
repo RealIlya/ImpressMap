@@ -20,9 +20,10 @@ import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.gcircle.GCircle;
 import com.example.impressmap.model.data.gmarker.GMarker;
 import com.example.impressmap.ui.NavigationDrawer;
-import com.example.impressmap.ui.PostsBottomSheetBehavior;
+import com.example.impressmap.ui.fragment.CommentsFragment;
 import com.example.impressmap.ui.fragment.bottom.MapInfoFragment;
 import com.example.impressmap.ui.fragment.main.MainFragment;
+import com.example.impressmap.ui.postbottomsheet.PostsBottomSheetBehavior;
 import com.example.impressmap.ui.viewmodel.MainFragmentViewModel;
 import com.example.impressmap.ui.viewmodel.MainViewModel;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -58,13 +59,12 @@ public class CommonMode extends Mode
                 binding.drawerLayout, activity.getSupportFragmentManager());
 
         postsSheetBehavior = new PostsBottomSheetBehavior<>(
-                BottomSheetBehavior.from(binding.framePosts));
+                BottomSheetBehavior.from(binding.framePosts), activity);
 
         Toolbar toolbar = binding.toolbar;
         Toolbar postsToolbar = binding.postsToolbar;
 
         LiveData<List<Address>> addressesLiveData = mainViewModel.getSelectedAddresses();
-
         if (!addressesLiveData.hasActiveObservers())
         {
             addressesLiveData.observe(activity, addressList ->
@@ -104,9 +104,6 @@ public class CommonMode extends Mode
                 }
             });
         }
-
-        // temporary
-//        gMapAdapter.zoomTo(new LatLng(54.994314, 82.897630));
 
         gMapAdapter.setOnMapLongClickListener(latLng ->
         {
@@ -164,6 +161,17 @@ public class CommonMode extends Mode
                         .setOnMenuItemClickListener(this::onDeselectCircle);
         });
 
+        postsAdapter.setOnCommentsButtonClickListener((view, post) ->
+        {
+            String name = CommentsFragment.class.getSimpleName();
+            activity.getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container, CommentsFragment.newInstance(post))
+                    .addToBackStack(name)
+                    .addSharedElement(view, "post_transition")
+                    .commit();
+        });
+
         toolbar.setNavigationIcon(R.drawable.ic_menu_drawer);
         toolbar.setNavigationOnClickListener(v -> navigationDrawer.open());
         toolbar.inflateMenu(R.menu.menu_map);
@@ -187,13 +195,6 @@ public class CommonMode extends Mode
             @Override
             public void onSlide(float slideOffset)
             {
-                View actionView = toolbar.getMenu()
-                                         .findItem(R.id.deselect_circle_item)
-                                         .getActionView();
-                if (actionView != null)
-                {
-                    actionView.animate().alpha(slideOffset).start();
-                }
             }
         });
 

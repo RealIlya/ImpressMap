@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/horizontal_very_small_margin"
+        android:layout_marginTop="@dimen/vertical_very_small_margin"
+        android:layout_marginBottom="@dimen/vertical_very_small_margin"
+        app:cardBackgroundColor="?backgroundSecondaryWindow"
+        app:cardCornerRadius="@dimen/horizontal_small_margin"
+        app:cardElevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/horizontal_small_margin"
+                android:layout_marginTop="@dimen/vertical_margin"
+                android:layout_marginBottom="@dimen/horizontal_small_margin"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/left"
+                    android:layout_width="36dp"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/avatar_view"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:src="@drawable/sample_avatar"
+                        app:shapeAppearanceOverlay="@style/avatarOverlay" />
+
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="36dp"
+                        android:layout_height="match_parent"
+                        app:drawableBottomCompat="@drawable/ic_hide"
+                        app:drawableTint="?colorPrimaryFabIcon" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="@dimen/horizontal_small_margin"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/left"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/fullName_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                        android:textColor="?colorPrimaryText"
+                        tools:text="@tools:sample/full_names" />
+
+                    <TextView
+                        android:id="@+id/text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                        android:textColor="?colorPrimaryText"
+                        tools:text="@tools:sample/lorem/random" />
+
+                    <TextView
+                        android:id="@+id/date_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="start"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                        android:textColor="?colorSecondaryText"
+                        tools:text="@tools:sample/date/ddmmyy" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/comments_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:itemCount="2" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:dividerColor="@color/light_gray"
+                app:dividerThickness="@dimen/divider_height" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/show_comments_button"
+                style="@style/commentButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingVertical="@dimen/horizontal_small_margin"
+                android:text="@string/menu_reaction_count"
+                app:drawableStartCompat="@drawable/ic_comment"
+                app:drawableTint="?colorPrimaryFabIcon" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/reactions_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="@dimen/horizontal_margin"
+                android:orientation="horizontal"
+                tools:listitem="@layout/item_reaction" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

@@ -14,19 +14,20 @@ import com.example.impressmap.databinding.ItemAddressBinding;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.util.Converter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.AddressViewHolder>
 {
     private final Context context;
-    private final List<Address> addressList;
+    private final AddressesAdapterViewModel viewModel;
     private OnAddressClickListener onAddressClickListener;
 
-    public AddressesAdapter(Context context)
+    public AddressesAdapter(Context context,
+                            ViewModelStoreOwner viewModelStoreOwner)
     {
         this.context = context;
-        addressList = new ArrayList<>();
+
+        viewModel = new ViewModelProvider(viewModelStoreOwner).get(AddressesAdapterViewModel.class);
     }
 
     @NonNull
@@ -43,7 +44,8 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
     public void onBindViewHolder(@NonNull AddressViewHolder holder,
                                  int position)
     {
-        Address address = addressList.get(position);
+        Address address = viewModel.getAddress(position);
+
         holder.binding.addressPrimaryView.setText(
                 String.format("%s %s", address.getCountry(), address.getCity()));
         holder.binding.addressSecondaryView.setText(
@@ -55,9 +57,15 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
                           .setBackgroundColor(Converter.getAttributeColor(context,
                                   R.attr.backgroundSelectedItem));
         }
+        else
+        {
+            holder.binding.getRoot()
+                          .setBackground(Converter.getDrawable(context, R.drawable.ripple_effect));
+        }
 
         holder.binding.getRoot().setOnClickListener(v ->
         {
+            address.setSelected(!address.isSelected());
             onAddressClicked(address);
             notifyItemChanged(holder.getAdapterPosition());
         });
@@ -65,13 +73,10 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
 
     public void setAddressList(@NonNull List<Address> addressList)
     {
-        clear();
-
-        for (int i = 0; i < addressList.size(); i++)
+        if (viewModel.setAddresses(addressList))
         {
-            Address address = addressList.get(i);
-            this.addressList.add(address);
-            notifyItemInserted(i);
+            notifyItemRangeRemoved(0, viewModel.getAddressesCount());
+            notifyItemRangeInserted(0, addressList.size());
         }
     }
 
@@ -80,17 +85,20 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
         onAddressClickListener.onAddressClick(address);
     }
 
-    public void clear()
-    {
-        int size = addressList.size();
-        addressList.clear();
-        notifyItemRangeRemoved(0, size);
-    }
-
     @Override
     public int getItemCount()
     {
-        return addressList.size();
+        return viewModel.getAddressesCount();
+    }
+
+    public int getSelectedAddressCount()
+    {
+        return viewModel.getSelectedAddresses().size();
+    }
+
+    public List<Address> getSelectedAddresses()
+    {
+        return viewModel.getSelectedAddresses();
     }
 
     public void setOnAddressClickListener(OnAddressClickListener listener)

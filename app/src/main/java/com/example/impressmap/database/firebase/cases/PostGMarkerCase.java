@@ -1,5 +1,6 @@
 package com.example.impressmap.database.firebase.cases;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import com.example.impressmap.database.firebase.repos.PostsRepo;
@@ -15,7 +16,7 @@ public class PostGMarkerCase
         this.postsRepo = new PostsRepo();
     }
 
-    public LiveData<Post> getByGMarker(GMarkerMetadata gMarkerMetadata)
+    public LiveData<Post> getByGMarker(@NonNull GMarkerMetadata gMarkerMetadata)
     {
         return postsRepo.getPost(gMarkerMetadata.getId());
     }

@@ -15,8 +15,6 @@ import com.example.impressmap.databinding.FragmentProfileBinding;
 import com.example.impressmap.ui.viewmodel.MainViewModel;
 import com.example.impressmap.ui.viewmodel.ProfileFragmentViewModel;
 
-import org.jetbrains.annotations.Contract;
-
 public class ProfileFragment extends Fragment
 {
     private FragmentProfileBinding binding;

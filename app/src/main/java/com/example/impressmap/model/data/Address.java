@@ -19,8 +19,8 @@ import java.util.Map;
 public class Address implements TransferableToDatabase
 {
     //    @TypeConverters(StringListConverter.class)
-    private String userIds = "";
     private String id = "";
+    private String userIds = "";
     private String desc = "";
     private String ownerId = "";
     private String fullAddress = "";

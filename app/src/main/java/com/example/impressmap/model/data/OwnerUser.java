@@ -1,11 +1,5 @@
 package com.example.impressmap.model.data;
 
-import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
-import static com.example.impressmap.util.Constants.Keys.FULL_NAME_NODE;
-
-import java.util.HashMap;
-import java.util.Map;
-
 public class OwnerUser
 {
     private String id = "";

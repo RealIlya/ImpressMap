@@ -13,8 +13,8 @@ public class AddressesFragmentViewModel extends ViewModel
 {
     private final GMarkerAddressCase gMarkerAddressCase;
 
-    private MutableLiveData<Integer> addressesCount;
-    private MutableLiveData<Integer> selectedAddressesCount;
+    private final MutableLiveData<Integer> addressesCount;
+    private final MutableLiveData<Integer> selectedAddressesCount;
 
     public AddressesFragmentViewModel()
     {
@@ -47,5 +47,15 @@ public class AddressesFragmentViewModel extends ViewModel
     public void setSelectedAddressesCount(int selectedAddressesCount)
     {
         this.selectedAddressesCount.setValue(selectedAddressesCount);
+    }
+
+    public void incrementSelectedAddressesCount()
+    {
+        selectedAddressesCount.setValue(selectedAddressesCount.getValue() + 1);
+    }
+
+    public void decrementSelectedAddressesCount()
+    {
+        selectedAddressesCount.setValue(selectedAddressesCount.getValue() - 1);
     }
 }

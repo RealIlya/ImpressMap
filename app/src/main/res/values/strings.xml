@@ -51,4 +51,5 @@
     <string name="not_stated">Not stated</string>
     <string name="addresses_count">"Addresses"</string>
     <string name="selected_addresses_count">" selected"</string>
+    <string name="write_some_words">Write some words…</string>
 </resources>

@@ -8,7 +8,6 @@ import com.example.impressmap.database.firebase.cases.PostGMarkerCase;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.Post;
-import com.example.impressmap.util.SuccessCallback;
 
 import java.util.List;
 
