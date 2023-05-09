@@ -1,29 +1,24 @@
 package com.example.impressmap.model.data;
 
 import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
-import static com.example.impressmap.util.Constants.Keys.COMMENT_IDS_NODE;
 import static com.example.impressmap.util.Constants.Keys.DATE_NODE;
 import static com.example.impressmap.util.Constants.Keys.OWNER_ID_NODE;
 import static com.example.impressmap.util.Constants.Keys.TEXT_NODE;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.Entity;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Entity
-public class Comment implements TransferableToDatabase
+public class Comment implements TransferableToDatabase, Owner
 {
     private String id = "";
     private OwnerUser ownerUser = new OwnerUser();
     private Date date = new Date();
     private String text = "";
-    private List<String> commentIds = new ArrayList<>();
 
     @Override
     public Map<String, Object> prepareToTransferToDatabase()
@@ -34,7 +29,6 @@ public class Comment implements TransferableToDatabase
         data.put(OWNER_ID_NODE, ownerUser.getId());
         data.put(DATE_NODE, date.getTime());
         data.put(TEXT_NODE, text);
-        data.put(COMMENT_IDS_NODE, String.join(" ", commentIds));
 
         return data;
     }
@@ -84,18 +78,22 @@ public class Comment implements TransferableToDatabase
         this.text = text;
     }
 
-    public List<String> getCommentIds()
+    @Override
+    public boolean equals(@Nullable Object obj)
     {
-        return commentIds;
-    }
-
-    public void setCommentIds(List<String> commentIds)
-    {
-        this.commentIds = commentIds;
-    }
-
-    public void setCommentIds(@NonNull String commentIds)
-    {
-        this.commentIds = Arrays.asList(commentIds.split(" "));
+        if (obj == null)
+        {
+            return false;
+        }
+        if (obj == this)
+        {
+            return true;
+        }
+        if (!(obj instanceof Comment))
+        {
+            return false;
+        }
+        Comment o = (Comment) obj;
+        return o.id.equals(id);
     }
 }

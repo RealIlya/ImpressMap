@@ -8,8 +8,8 @@ import androidx.lifecycle.LiveData;
 
 import com.example.impressmap.model.data.OwnerUser;
 import com.example.impressmap.model.data.Post;
-import com.example.impressmap.model.data.db.PostDatabase;
 import com.example.impressmap.model.data.User;
+import com.example.impressmap.model.data.db.PostDatabase;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,8 +47,8 @@ public class PostLiveData extends LiveData<Post>
                             ownerUser.setFullName(user.getFullName());
                             post.setOwnerUser(ownerUser);
                             post.setDate(value.getDate());
+                            post.setTitle(value.getTitle());
                             post.setText(value.getText());
-                            post.setCommentIds(value.getCommentIds());
 
                             setValue(post);
                         }

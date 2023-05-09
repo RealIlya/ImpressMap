@@ -12,7 +12,6 @@ import com.example.impressmap.databinding.ItemCommentBinding;
 import com.example.impressmap.model.data.Comment;
 
 import java.text.DateFormat;
-import java.util.List;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>
 {
@@ -56,12 +55,11 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         });
     }
 
-    public void setCommentList(@NonNull List<Comment> commentList)
+    public void addComment(Comment comment)
     {
-        if (viewModel.setComments(commentList))
+        if (viewModel.addComment(comment))
         {
-            notifyItemRangeRemoved(0, viewModel.getCommentsCount());
-            notifyItemRangeInserted(0, commentList.size());
+            notifyItemInserted(getItemCount());
         }
     }
 

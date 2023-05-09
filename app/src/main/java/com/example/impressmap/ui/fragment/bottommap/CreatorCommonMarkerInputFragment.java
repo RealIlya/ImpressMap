@@ -90,6 +90,7 @@ public class CreatorCommonMarkerInputFragment extends Fragment implements MenuPr
                 ownerUser.setFullName(AUTH.getCurrentUser().getEmail());
 
                 Post post = new Post();
+                post.setTitle(title);
                 post.setText(text);
                 post.setOwnerUser(ownerUser);
 

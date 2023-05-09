@@ -6,11 +6,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/horizontal_very_small_margin"
-        android:layout_marginTop="@dimen/vertical_very_small_margin"
-        android:layout_marginBottom="@dimen/vertical_very_small_margin"
         app:cardBackgroundColor="?backgroundSecondaryWindow"
-        app:cardCornerRadius="@dimen/horizontal_small_margin"
         app:cardElevation="0dp">
 
         <LinearLayout
@@ -47,6 +43,7 @@
                         style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="36dp"
                         android:layout_height="match_parent"
+                        android:visibility="invisible"
                         app:drawableBottomCompat="@drawable/ic_hide"
                         app:drawableTint="?colorPrimaryFabIcon" />
                 </LinearLayout>
@@ -66,6 +63,7 @@
                         android:id="@+id/fullName_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/vertical_very_small_margin"
                         android:gravity="start"
                         android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
                         android:textColor="?colorPrimaryText"
@@ -78,7 +76,7 @@
                         android:gravity="start"
                         android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
                         android:textColor="?colorPrimaryText"
-                        tools:text="@tools:sample/lorem/random" />
+                        tools:text="@tools:sample/lorem" />
 
                     <TextView
                         android:id="@+id/date_view"
@@ -105,14 +103,14 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/show_comments_button"
-                style="@style/commentButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/ripple_effect"
                 android:gravity="center"
-                android:paddingVertical="@dimen/horizontal_small_margin"
-                android:text="@string/menu_reaction_count"
-                app:drawableStartCompat="@drawable/ic_comment"
-                app:drawableTint="?colorPrimaryFabIcon" />
+                android:paddingVertical="@dimen/vertical_very_small_margin"
+                android:text="@string/show_comments_branch"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                android:textColor="?colorSecondaryText" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/reactions_recycler_view"

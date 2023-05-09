@@ -6,7 +6,6 @@ public class CommentDatabase
     private String ownerId = "";
     private long date = 0;
     private String text = "";
-    private String commentIds = "";
 
     public String getId()
     {
@@ -46,15 +45,5 @@ public class CommentDatabase
     public void setText(String text)
     {
         this.text = text;
-    }
-
-    public String getCommentIds()
-    {
-        return commentIds;
-    }
-
-    public void setCommentIds(String commentIds)
-    {
-        this.commentIds = commentIds;
     }
 }

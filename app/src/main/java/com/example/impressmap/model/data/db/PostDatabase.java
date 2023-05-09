@@ -5,8 +5,8 @@ public class PostDatabase
     private String id = "";
     private String ownerId = "";
     private long date = 0;
+    private String title = "";
     private String text = "";
-    private String commentIds = "";
 
     public String getId()
     {
@@ -38,6 +38,16 @@ public class PostDatabase
         this.date = date;
     }
 
+    public String getTitle()
+    {
+        return title;
+    }
+
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
+
     public String getText()
     {
         return text;
@@ -46,15 +56,5 @@ public class PostDatabase
     public void setText(String text)
     {
         this.text = text;
-    }
-
-    public String getCommentIds()
-    {
-        return commentIds;
-    }
-
-    public void setCommentIds(String commentIds)
-    {
-        this.commentIds = commentIds;
     }
 }

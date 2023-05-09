@@ -31,6 +31,7 @@ public class Constants
         public static final String POSTS_NODE = "posts";
         public static final String COMMENTS_NODE = "comments";
         public static final String USERS_NODE = "users";
+        public static final String OWNERS_NODE = "owners";
 
         public static final String CHILD_ID_NODE = "id";
         public static final String DATE_NODE = "date";

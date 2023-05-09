@@ -4,6 +4,7 @@ import static com.example.impressmap.util.Constants.DATABASE_REF;
 import static com.example.impressmap.util.Constants.Keys.ADDRESSES_NODE;
 import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
 import static com.example.impressmap.util.Constants.Keys.MAIN_LIST_NODE;
+import static com.example.impressmap.util.Constants.Keys.USERS_NODE;
 import static com.example.impressmap.util.Constants.UID;
 
 import androidx.lifecycle.LiveData;
@@ -26,7 +27,10 @@ public class AddressesRepo implements DatabaseRepo<Address>
     public AddressesRepo()
     {
         addressesRef = DATABASE_REF.child(ADDRESSES_NODE);
-        userAddressesRef = DATABASE_REF.child(MAIN_LIST_NODE).child(UID).child(ADDRESSES_NODE);
+        userAddressesRef = DATABASE_REF.child(MAIN_LIST_NODE)
+                                       .child(USERS_NODE)
+                                       .child(UID)
+                                       .child(ADDRESSES_NODE);
     }
 
     @Override

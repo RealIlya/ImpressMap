@@ -8,198 +8,198 @@
         android:layout_height="match_parent"
         android:background="?backgroundPrimaryWindow">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/app_bar_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?backgroundToolbar"
-                app:elevation="2dp">
-
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/toolbar"
-                    style="@style/toolbarTextStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:navigationIcon="@drawable/ic_arrow"
-                    app:popupTheme="@style/Theme.ImpressMap.PopupOverlay" />
-            </com.google.android.material.appbar.AppBarLayout>
-
-            <androidx.core.widget.NestedScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/post_view"
-                        android:transitionName="post_transition"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/horizontal_very_small_margin"
-                        android:layout_marginTop="@dimen/vertical_very_small_margin"
-                        android:layout_marginBottom="@dimen/vertical_very_small_margin"
-                        app:cardBackgroundColor="?backgroundSecondaryWindow"
-                        app:cardCornerRadius="@dimen/horizontal_small_margin"
-                        app:cardElevation="0dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="@dimen/horizontal_small_margin"
-                                android:layout_marginTop="@dimen/vertical_margin"
-                                android:layout_marginBottom="@dimen/horizontal_small_margin"
-                                android:orientation="horizontal">
-
-                                <com.google.android.material.imageview.ShapeableImageView
-                                    android:id="@+id/avatar_view"
-                                    android:layout_width="48dp"
-                                    android:layout_height="48dp"
-                                    android:src="@drawable/sample_avatar"
-                                    app:shapeAppearanceOverlay="@style/avatarOverlay" />
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:orientation="vertical"
-                                    android:paddingHorizontal="@dimen/horizontal_small_margin">
-
-                                    <TextView
-                                        android:id="@+id/fullName_view"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="start"
-                                        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                                        android:textColor="?colorPrimaryText"
-                                        tools:text="@tools:sample/full_names" />
-
-                                    <TextView
-                                        android:id="@+id/date_view"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="start"
-                                        android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
-                                        android:textColor="?colorSecondaryText"
-                                        tools:text="@tools:sample/date/ddmmyy" />
-                                </LinearLayout>
-                            </LinearLayout>
-
-                            <com.google.android.material.divider.MaterialDivider
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:dividerColor="@color/light_gray"
-                                app:dividerThickness="@dimen/divider_height" />
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/vertical_small_margin"
-                                android:layout_marginHorizontal="@dimen/horizontal_small_margin"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/text_view"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                                    android:textColor="?colorPrimaryText"
-                                    tools:text="@tools:sample/lorem" />
-                            </LinearLayout>
-
-                            <androidx.coordinatorlayout.widget.CoordinatorLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:padding="@dimen/vertical_small_margin">
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="end"
-                                    android:layout_marginTop="@dimen/vertical_very_small_margin"
-                                    android:orientation="horizontal">
-
-                                    <androidx.appcompat.widget.AppCompatImageView
-                                        android:id="@+id/show_reactions_button"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:background="@drawable/background_item_reaction_selector"
-                                        app:srcCompat="@drawable/ic_hide"
-                                        app:tint="?colorPrimaryFabIcon" />
-                                </LinearLayout>
-                            </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/reactions_recycler_view"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginHorizontal="@dimen/horizontal_margin"
-                                android:orientation="horizontal"
-                                tools:listitem="@layout/item_reaction" />
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <com.google.android.material.appbar.AppBarLayout
-                            android:id="@+id/appBarLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="?backgroundSecondaryWindow"
-                            app:elevation="0dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <com.google.android.material.appbar.MaterialToolbar
-                                android:id="@+id/comments_toolbar"
-                                style="@style/preMessageTextStyle"
-                                android:layout_width="match_parent"
-                                android:layout_height="?attr/actionBarSize"
-                                app:popupTheme="@style/Theme.ImpressMap.PopupOverlay"
-                                app:title="Comments" />
-                        </com.google.android.material.appbar.AppBarLayout>
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/comments_recycler_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-                            tools:itemCount="8" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </LinearLayout>
-            </androidx.core.widget.NestedScrollView>
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom">
+            android:background="?backgroundToolbar"
+            app:elevation="2dp">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                style="@style/toolbarTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+                app:navigationIcon="@drawable/ic_arrow"
+                app:popupTheme="@style/Theme.ImpressMap.PopupOverlay" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="?actionBarSize"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/post_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/horizontal_very_small_margin"
+                    android:layout_marginTop="@dimen/vertical_very_small_margin"
+                    android:layout_marginBottom="@dimen/vertical_very_small_margin"
+                    android:transitionName="post_transition"
+                    app:cardBackgroundColor="?backgroundSecondaryWindow"
+                    app:cardCornerRadius="@dimen/horizontal_small_margin"
+                    app:cardElevation="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/horizontal_small_margin"
+                            android:layout_marginTop="@dimen/vertical_margin"
+                            android:layout_marginBottom="@dimen/horizontal_small_margin"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/avatar_view"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/sample_avatar"
+                                app:shapeAppearanceOverlay="@style/avatarOverlay" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:paddingHorizontal="@dimen/horizontal_small_margin">
+
+                                <TextView
+                                    android:id="@+id/fullName_view"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="start"
+                                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                                    android:textColor="?colorPrimaryText"
+                                    tools:text="@tools:sample/full_names" />
+
+                                <TextView
+                                    android:id="@+id/date_view"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="start"
+                                    android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                                    android:textColor="?colorSecondaryText"
+                                    tools:text="@tools:sample/date/ddmmyy" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <com.google.android.material.divider.MaterialDivider
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:dividerColor="@color/light_gray"
+                            app:dividerThickness="@dimen/divider_height" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/vertical_small_margin"
+                            android:layout_marginHorizontal="@dimen/horizontal_small_margin"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/text_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                                android:textColor="?colorPrimaryText"
+                                tools:text="@tools:sample/lorem" />
+                        </LinearLayout>
+
+                        <androidx.coordinatorlayout.widget.CoordinatorLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/vertical_small_margin">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="end"
+                                android:layout_marginTop="@dimen/vertical_very_small_margin"
+                                android:orientation="horizontal">
+
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:id="@+id/show_reactions_button"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/background_item_reaction_selector"
+                                    app:srcCompat="@drawable/ic_hide"
+                                    app:tint="?colorPrimaryFabIcon" />
+                            </LinearLayout>
+                        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/reactions_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginHorizontal="@dimen/horizontal_margin"
+                            tools:listitem="@layout/item_reaction" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.appbar.AppBarLayout
+                        android:id="@+id/appBarLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?backgroundSecondaryWindow"
+                        app:elevation="1dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.appbar.MaterialToolbar
+                            android:id="@+id/comments_toolbar"
+                            style="@style/preMessageTextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="?attr/actionBarSize"
+                            app:popupTheme="@style/Theme.ImpressMap.PopupOverlay"
+                            app:title="Comments" />
+                    </com.google.android.material.appbar.AppBarLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/comments_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:nestedScrollingEnabled="true"
+                        android:overScrollMode="ifContentScrolls"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+                        tools:itemCount="8" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/message_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="8dp">
 
             <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?backgroundSecondaryWindow"
-                app:elevation="0dp">
+                android:background="?backgroundSecondaryWindow">
 
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/sender_toolbar"
@@ -218,9 +218,9 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/write_some_words"
                         android:importantForAutofill="no"
-                        android:inputType="text" />
+                        android:inputType="textMultiLine" />
                 </com.google.android.material.appbar.MaterialToolbar>
             </com.google.android.material.appbar.AppBarLayout>
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </androidx.cardview.widget.CardView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -3,6 +3,7 @@ package com.example.impressmap.ui.fragment;
 import static com.example.impressmap.util.Constants.AUTH;
 import static com.example.impressmap.util.Constants.UID;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
@@ -11,12 +12,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +29,7 @@ import com.example.impressmap.model.data.Comment;
 import com.example.impressmap.model.data.OwnerUser;
 import com.example.impressmap.model.data.Post;
 import com.example.impressmap.ui.viewmodel.CommentsViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DateFormat;
 
@@ -46,7 +48,7 @@ public class CommentsFragment extends Fragment
     public static CommentsFragment newInstance(Post post)
     {
         Bundle arguments = new Bundle();
-        arguments.putSerializable(POST_KEY, post);
+        arguments.putParcelable(POST_KEY, post);
 
         CommentsFragment commentsFragment = new CommentsFragment();
         commentsFragment.setArguments(arguments);
@@ -69,8 +71,9 @@ public class CommentsFragment extends Fragment
     {
         viewModel = new ViewModelProvider(this).get(CommentsViewModel.class);
 
-        Post post = (Post) requireArguments().getSerializable(POST_KEY);
+        Post post = requireArguments().getParcelable(POST_KEY);
 
+        binding.toolbar.setTitle(post.getTitle());
         binding.toolbar.setNavigationOnClickListener(
                 v -> requireActivity().getSupportFragmentManager().popBackStack());
 
@@ -79,22 +82,21 @@ public class CommentsFragment extends Fragment
         binding.dateView.setText(
                 DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(post.getDate()));
 
-        RecyclerView recyclerView = binding.commentsRecyclerView;
+        RecyclerView commentsRecyclerView = binding.commentsRecyclerView;
         CommentsAdapter commentsAdapter = new CommentsAdapter(requireActivity());
-        recyclerView.setAdapter(commentsAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        commentsRecyclerView.setAdapter(commentsAdapter);
+        commentsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        for (String commentId : post.getCommentIds())
+        viewModel.getIdsByOwnerId(post).observe(getViewLifecycleOwner(), ids ->
         {
-            viewModel.getById(commentId).observe(getViewLifecycleOwner(), new Observer<Comment>()
+            for (String id : ids)
             {
-                @Override
-                public void onChanged(Comment comment)
+                viewModel.getById(id).observe(getViewLifecycleOwner(), comment ->
                 {
-
-                }
-            });
-        }
+                    commentsAdapter.addComment(comment);
+                });
+            }
+        });
 
         binding.senderToolbar.addMenuProvider(new MenuProvider()
         {
@@ -117,10 +119,16 @@ public class CommentsFragment extends Fragment
                     Comment comment = new Comment();
                     comment.setText(message);
                     comment.setOwnerUser(ownerUser);
-                    viewModel.insert(comment, () ->
+                    viewModel.insert(comment, post, () ->
                     {
-
-                    });
+                        binding.messageText.clearFocus();
+                        binding.messageText.getText().clear();
+                        InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(
+                                Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        commentsRecyclerView.smoothScrollToPosition(commentsAdapter.getItemCount());
+                    }, () -> Snackbar.make(view, R.string.message_is_empty, Snackbar.LENGTH_LONG)
+                                     .show());
                 }
                 return true;
             }

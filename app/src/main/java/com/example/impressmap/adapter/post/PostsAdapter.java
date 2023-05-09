@@ -1,10 +1,12 @@
-package com.example.impressmap.adapter;
+package com.example.impressmap.adapter.post;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.databinding.ItemPostBinding;
@@ -16,13 +18,15 @@ import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHolder>
 {
+    private final PostsAdapterViewModel viewModel;
     private final List<Post> postList;
 
     private OnCommentsButtonClickListener onCommentsButtonClickListener;
 
-    public PostsAdapter()
+    public PostsAdapter(ViewModelStoreOwner viewModelStoreOwner)
     {
         postList = new ArrayList<>();
+        viewModel = new ViewModelProvider(viewModelStoreOwner).get(PostsAdapterViewModel.class);
     }
 
     @NonNull
@@ -51,11 +55,16 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
 
         });
 
-        holder.binding.showCommentsButton.setText(String.valueOf(post.getCommentIds().size()));
         holder.binding.showCommentsButton.setOnClickListener(v ->
         {
             holder.binding.getRoot().setTransitionName(post.getId());
             onCommentsButtonClickListener.onClick(holder.binding.getRoot(), post);
+        });
+
+        // try to avoid this method
+        viewModel.getIdsByOwnerId(post).observeForever(ids ->
+        {
+            holder.binding.showCommentsButton.setText(String.valueOf(ids.size()));
         });
     }
 

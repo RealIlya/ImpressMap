@@ -50,7 +50,6 @@ public class CommentLiveData extends LiveData<Comment>
                             comment.setOwnerUser(ownerUser);
                             comment.setDate(new Date(value.getDate()));
                             comment.setText(value.getText());
-                            comment.setCommentIds(value.getCommentIds());
 
                             setValue(comment);
                         }

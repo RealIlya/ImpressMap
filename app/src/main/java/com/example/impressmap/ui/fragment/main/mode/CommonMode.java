@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.R;
-import com.example.impressmap.adapter.PostsAdapter;
 import com.example.impressmap.adapter.gmap.GMapAdapter;
+import com.example.impressmap.adapter.post.PostsAdapter;
 import com.example.impressmap.databinding.FragmentMainBinding;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GCircleMeta;
@@ -22,8 +22,8 @@ import com.example.impressmap.model.data.gmarker.GMarker;
 import com.example.impressmap.ui.NavigationDrawer;
 import com.example.impressmap.ui.fragment.CommentsFragment;
 import com.example.impressmap.ui.fragment.bottommap.MapInfoFragment;
-import com.example.impressmap.ui.fragment.main.MainFragment;
 import com.example.impressmap.ui.fragment.bottomposts.PostsBottomSheetBehavior;
+import com.example.impressmap.ui.fragment.main.MainFragment;
 import com.example.impressmap.ui.viewmodel.MainFragmentViewModel;
 import com.example.impressmap.ui.viewmodel.MainViewModel;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -53,7 +53,7 @@ public class CommonMode extends Mode
     public void switchOn(GMapAdapter gMapAdapter)
     {
         this.gMapAdapter = gMapAdapter;
-        postsAdapter = new PostsAdapter();
+        postsAdapter = new PostsAdapter(activity);
 
         navigationDrawer = new NavigationDrawer(activity, binding.navigationView,
                 binding.drawerLayout, activity.getSupportFragmentManager());

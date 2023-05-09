@@ -2,15 +2,16 @@ package com.example.impressmap.database.firebase.cases;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.impressmap.database.firebase.repos.CommentIdsRepo;
 import com.example.impressmap.database.firebase.repos.CommentsRepo;
 import com.example.impressmap.model.data.Comment;
 import com.example.impressmap.util.SuccessCallback;
 
-public class CommentCase
+public class CommentsCase
 {
     private final CommentsRepo commentsRepo;
 
-    public CommentCase()
+    public CommentsCase()
     {
         commentsRepo = new CommentsRepo();
     }

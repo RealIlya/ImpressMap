@@ -17,15 +17,15 @@ import com.example.impressmap.databinding.FragmentAuthBinding;
 import com.example.impressmap.ui.fragment.main.MainFragment;
 import com.example.impressmap.ui.viewmodel.AuthViewModel;
 import com.example.impressmap.ui.viewmodel.MainViewModel;
-import com.example.impressmap.util.FailCallback;
+import com.example.impressmap.util.FieldEmptyCallback;
 import com.example.impressmap.util.SuccessCallback;
 import com.google.android.material.snackbar.Snackbar;
 
 public class AuthFragment extends Fragment
 {
     private final SuccessCallback successCallback;
+    private final FieldEmptyCallback fieldEmptyCallback;
     private FragmentAuthBinding binding;
-    private final FailCallback failCallback;
     private AuthViewModel viewModel;
 
     protected AuthFragment()
@@ -39,12 +39,11 @@ public class AuthFragment extends Fragment
             MainFragment fragment = MainFragment.newInstance();
             requireActivity().getSupportFragmentManager()
                              .beginTransaction()
-                             .setPrimaryNavigationFragment(fragment)
                              .replace(R.id.container, fragment)
                              .commit();
         };
 
-        failCallback = () -> Snackbar.make(requireView(), R.string.field_is_necessary,
+        fieldEmptyCallback = () -> Snackbar.make(requireView(), R.string.field_is_necessary,
                 Snackbar.LENGTH_LONG).show();
     }
 
@@ -78,7 +77,9 @@ public class AuthFragment extends Fragment
             String passwordText = binding.passwordView.getText().toString().trim();
 
             viewModel.signUp(nameText, surnameText, emailText, passwordText,
-                    binding.dontLogoutCheckBox.isChecked(), successCallback, failCallback);
+                    binding.dontLogoutCheckBox.isChecked(), successCallback, () ->
+                    {
+                    }, fieldEmptyCallback);
         });
 
         binding.nextButton.setOnClickListener(v ->
@@ -87,7 +88,9 @@ public class AuthFragment extends Fragment
             String passwordText = binding.passwordView.getText().toString().trim();
 
             viewModel.signIn(emailText, passwordText, binding.dontLogoutCheckBox.isChecked(),
-                    successCallback, failCallback);
+                    successCallback, () ->
+                    {
+                    }, fieldEmptyCallback);
         });
 
         binding.signUpCheckBox.setOnCheckedChangeListener((compoundButton, checked) ->

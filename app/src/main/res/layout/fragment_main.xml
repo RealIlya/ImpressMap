@@ -75,7 +75,7 @@
                             style="@style/toolbarTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="?android:attr/actionBarSize"
-                            app:layout_scrollFlags="scroll|enterAlways"
+                            app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
                             app:menu="@menu/menu_map_bottom"
                             app:popupTheme="@style/Theme.ImpressMap.PopupOverlay" />
                     </com.google.android.material.appbar.AppBarLayout>

@@ -1,32 +1,58 @@
 package com.example.impressmap.model.data;
 
 import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
-import static com.example.impressmap.util.Constants.Keys.COMMENT_IDS_NODE;
 import static com.example.impressmap.util.Constants.Keys.DATE_NODE;
 import static com.example.impressmap.util.Constants.Keys.GMARKER_ID;
 import static com.example.impressmap.util.Constants.Keys.OWNER_ID_NODE;
 import static com.example.impressmap.util.Constants.Keys.TEXT_NODE;
+import static com.example.impressmap.util.Constants.Keys.TITLE_NODE;
 
-import androidx.annotation.NonNull;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.Entity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Entity
-public class Post implements TransferableToDatabase, Serializable
+public class Post implements TransferableToDatabase, Parcelable, Owner
 {
+    public static final Creator<Post> CREATOR = new Creator<Post>()
+    {
+        @Override
+        public Post createFromParcel(Parcel in)
+        {
+            return new Post(in);
+        }
+
+        @Override
+        public Post[] newArray(int size)
+        {
+            return new Post[size];
+        }
+    };
     private String id = "";
     private OwnerUser ownerUser = new OwnerUser();
     private Date date = new Date();
+    private String title = "";
     private String text = "";
     private String gMarkerId = "";
-    private List<String> commentIds = new ArrayList<>();
+
+    public Post()
+    {
+    }
+
+    protected Post(Parcel in)
+    {
+        id = in.readString();
+        ownerUser.setId(in.readString());
+        ownerUser.setFullName(in.readString());
+        title = in.readString();
+        text = in.readString();
+        gMarkerId = in.readString();
+    }
 
     @Override
     public Map<String, Object> prepareToTransferToDatabase()
@@ -36,9 +62,9 @@ public class Post implements TransferableToDatabase, Serializable
         data.put(CHILD_ID_NODE, id);
         data.put(OWNER_ID_NODE, ownerUser.getId());
         data.put(DATE_NODE, date.getTime());
+        data.put(TITLE_NODE, title);
         data.put(TEXT_NODE, text);
         data.put(GMARKER_ID, gMarkerId);
-        data.put(COMMENT_IDS_NODE, String.join(" ", commentIds));
 
         return data;
     }
@@ -78,6 +104,16 @@ public class Post implements TransferableToDatabase, Serializable
         this.date = new Date(date);
     }
 
+    public String getTitle()
+    {
+        return title;
+    }
+
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
+
     public String getText()
     {
         return text;
@@ -98,18 +134,21 @@ public class Post implements TransferableToDatabase, Serializable
         this.gMarkerId = gMarkerId;
     }
 
-    public List<String> getCommentIds()
+    @Override
+    public int describeContents()
     {
-        return commentIds;
+        return 0;
     }
 
-    public void setCommentIds(List<String> commentIds)
+    @Override
+    public void writeToParcel(Parcel parcel,
+                              int i)
     {
-        this.commentIds = commentIds;
-    }
-
-    public void setCommentIds(@NonNull String commentIds)
-    {
-        this.commentIds = Arrays.asList(commentIds.split(" "));
+        parcel.writeString(id);
+        parcel.writeString(ownerUser.getId());
+        parcel.writeString(ownerUser.getFullName());
+        parcel.writeString(title);
+        parcel.writeString(text);
+        parcel.writeString(gMarkerId);
     }
 }

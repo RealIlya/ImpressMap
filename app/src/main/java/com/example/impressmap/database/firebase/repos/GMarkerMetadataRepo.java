@@ -4,6 +4,7 @@ import static com.example.impressmap.util.Constants.DATABASE_REF;
 import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
 import static com.example.impressmap.util.Constants.Keys.GMARKERS_NODE;
 import static com.example.impressmap.util.Constants.Keys.MAIN_LIST_NODE;
+import static com.example.impressmap.util.Constants.Keys.USERS_NODE;
 import static com.example.impressmap.util.Constants.UID;
 
 import androidx.lifecycle.LiveData;
@@ -29,6 +30,7 @@ public class GMarkerMetadataRepo implements DatabaseRepo<GMarkerMetadata>
         gMarkersRef = DATABASE_REF.child(GMARKERS_NODE);
         this.addressId = addressId;
         userGMarkersRef = DATABASE_REF.child(MAIN_LIST_NODE)
+                                      .child(USERS_NODE)
                                       .child(UID)
                                       .child(GMARKERS_NODE)
                                       .child(this.addressId);

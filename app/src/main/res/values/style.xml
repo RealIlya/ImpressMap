@@ -54,13 +54,13 @@
         <item name="android:paddingVertical">2dp</item>
     </style>
 
-    <style name="cardCornersOverlay" parent="">
+    <style name="cardCornersOverlay">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopRight">16dp</item>
         <item name="cornerSizeTopLeft">16dp</item>
     </style>
 
-    <style name="avatarOverlay" parent="">
+    <style name="avatarOverlay">
         <item name="cornerSize">50%</item>
     </style>
 

@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import com.example.impressmap.database.firebase.cases.AuthorizationCase;
 import com.example.impressmap.preference.SessionPreferences;
 import com.example.impressmap.util.FailCallback;
+import com.example.impressmap.util.FieldEmptyCallback;
 import com.example.impressmap.util.SuccessCallback;
 
 public class AuthViewModel extends AndroidViewModel
@@ -30,11 +31,12 @@ public class AuthViewModel extends AndroidViewModel
                        String password,
                        boolean rememberMe,
                        SuccessCallback successCallback,
-                       FailCallback failCallback)
+                       FailCallback failCallback,
+                       FieldEmptyCallback fieldEmptyCallback)
     {
         if (name.isEmpty() || surname.isEmpty() || email.isEmpty() || password.isEmpty())
         {
-            failCallback.onFail();
+            fieldEmptyCallback.onEmpty();
             return;
         }
 
@@ -53,11 +55,12 @@ public class AuthViewModel extends AndroidViewModel
                        String password,
                        boolean rememberMe,
                        SuccessCallback successCallback,
-                       FailCallback failCallback)
+                       FailCallback failCallback,
+                       FieldEmptyCallback fieldEmptyCallback)
     {
         if (email.isEmpty() || password.isEmpty())
         {
-            failCallback.onFail();
+            fieldEmptyCallback.onEmpty();
             return;
         }
 

@@ -17,14 +17,14 @@ public class CommentsAdapterViewModel extends ViewModel
         commentsCache = new ArrayList<>();
     }
 
-    public boolean setComments(@NonNull List<Comment> comments)
+    public boolean addComment(Comment comment)
     {
-        if (comments.equals(commentsCache))
+        if (commentsCache.contains(comment))
         {
             return false;
         }
 
-        commentsCache.addAll(comments);
+        commentsCache.add(comment);
         return true;
     }
 

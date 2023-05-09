@@ -97,9 +97,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/vertical_very_small_margin"
                         android:gravity="center"
-                        android:text="@string/menu_reaction_count"
                         app:drawableStartCompat="@drawable/ic_comment"
-                        app:drawableTint="?colorPrimaryFabIcon" />
+                        app:drawableTint="?colorPrimaryFabIcon"
+                        tools:text="@string/menu_reaction_count" />
                 </LinearLayout>
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
