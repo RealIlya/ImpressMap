@@ -1,9 +1,9 @@
-package com.example.impressmap.ui.fragment.bottom.mode;
+package com.example.impressmap.ui.fragment.bottommap.mode;
 
 import androidx.annotation.NonNull;
 
 import com.example.impressmap.R;
-import com.example.impressmap.ui.fragment.bottom.MapInfoFragment;
+import com.example.impressmap.ui.fragment.bottommap.MapInfoFragment;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class CommonMode extends Mode

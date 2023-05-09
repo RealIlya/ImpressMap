@@ -1,17 +1,15 @@
-package com.example.impressmap.ui.postbottomsheet;
-
-import android.view.View;
+package com.example.impressmap.ui.fragment.bottomposts;
 
 import androidx.lifecycle.ViewModel;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 //TODO not work
-public class PostBottomSheetViewModel extends ViewModel
+public class PostsBottomSheetViewModel extends ViewModel
 {
     private int lastState = BottomSheetBehavior.STATE_HIDDEN;
 
-    public PostBottomSheetViewModel()
+    public PostsBottomSheetViewModel()
     {
     }
 

@@ -21,9 +21,9 @@ import com.example.impressmap.model.data.gcircle.GCircle;
 import com.example.impressmap.model.data.gmarker.GMarker;
 import com.example.impressmap.ui.NavigationDrawer;
 import com.example.impressmap.ui.fragment.CommentsFragment;
-import com.example.impressmap.ui.fragment.bottom.MapInfoFragment;
+import com.example.impressmap.ui.fragment.bottommap.MapInfoFragment;
 import com.example.impressmap.ui.fragment.main.MainFragment;
-import com.example.impressmap.ui.postbottomsheet.PostsBottomSheetBehavior;
+import com.example.impressmap.ui.fragment.bottomposts.PostsBottomSheetBehavior;
 import com.example.impressmap.ui.viewmodel.MainFragmentViewModel;
 import com.example.impressmap.ui.viewmodel.MainViewModel;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -168,7 +168,6 @@ public class CommonMode extends Mode
                     .beginTransaction()
                     .replace(R.id.container, CommentsFragment.newInstance(post))
                     .addToBackStack(name)
-                    .addSharedElement(view, "post_transition")
                     .commit();
         });
 

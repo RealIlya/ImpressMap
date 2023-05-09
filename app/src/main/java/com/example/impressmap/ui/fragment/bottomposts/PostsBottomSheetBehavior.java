@@ -1,4 +1,4 @@
-package com.example.impressmap.ui.postbottomsheet;
+package com.example.impressmap.ui.fragment.bottomposts;
 
 import android.view.View;
 
@@ -11,7 +11,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 public class PostsBottomSheetBehavior<T extends View>
 {
     private final BottomSheetBehavior<T> bottomSheetBehavior;
-    private final PostBottomSheetViewModel viewModel;
+    private final PostsBottomSheetViewModel viewModel;
     private Animation animation = new Animation()
     {
         @Override
@@ -31,7 +31,7 @@ public class PostsBottomSheetBehavior<T extends View>
                                     ViewModelStoreOwner viewModelStoreOwner)
     {
         this.bottomSheetBehavior = bottomSheetBehavior;
-        viewModel = new ViewModelProvider(viewModelStoreOwner).get(PostBottomSheetViewModel.class);
+        viewModel = new ViewModelProvider(viewModelStoreOwner).get(PostsBottomSheetViewModel.class);
 
         bottomSheetBehavior.setHalfExpandedRatio(0.4f);
         bottomSheetBehavior.setPeekHeight(300);

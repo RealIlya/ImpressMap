@@ -1,4 +1,4 @@
-package com.example.impressmap.ui.fragment.bottom;
+package com.example.impressmap.ui.fragment.bottommap;
 
 import androidx.lifecycle.ViewModel;
 

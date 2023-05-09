@@ -1,6 +1,6 @@
-package com.example.impressmap.ui.fragment.bottom;
+package com.example.impressmap.ui.fragment.bottommap;
 
-import static com.example.impressmap.ui.fragment.bottom.MapInfoFragment.NAVIGATING_MODE;
+import static com.example.impressmap.ui.fragment.bottommap.MapInfoFragment.NAVIGATING_MODE;
 import static com.example.impressmap.util.Constants.AUTH;
 import static com.example.impressmap.util.Constants.UID;
 

@@ -1,4 +1,4 @@
-package com.example.impressmap.ui.fragment.bottom;
+package com.example.impressmap.ui.fragment.bottommap;
 
 import static com.example.impressmap.util.Constants.LAT_LNG_KEY;
 
@@ -19,9 +19,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.R;
 import com.example.impressmap.databinding.FragmentMapInfoBinding;
-import com.example.impressmap.ui.fragment.bottom.mode.CommonMode;
-import com.example.impressmap.ui.fragment.bottom.mode.Mode;
-import com.example.impressmap.ui.fragment.bottom.mode.NavigatingMode;
+import com.example.impressmap.ui.fragment.bottommap.mode.CommonMode;
+import com.example.impressmap.ui.fragment.bottommap.mode.Mode;
+import com.example.impressmap.ui.fragment.bottommap.mode.NavigatingMode;
 import com.example.impressmap.util.Locations;
 import com.example.impressmap.util.SwitchableMode;
 import com.google.android.gms.maps.model.LatLng;
@@ -153,6 +153,6 @@ public class MapInfoFragment extends BottomSheetDialogFragment implements Switch
     @Override
     public void invalidateMenu()
     {
-        ((MenuHost) binding.toolbar).invalidateMenu();
+        binding.toolbar.invalidateMenu();
     }
 }

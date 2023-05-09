@@ -1,6 +1,6 @@
-package com.example.impressmap.ui.fragment.bottom;
+package com.example.impressmap.ui.fragment.bottommap;
 
-import static com.example.impressmap.ui.fragment.bottom.MapInfoFragment.COMMON_MODE;
+import static com.example.impressmap.ui.fragment.bottommap.MapInfoFragment.COMMON_MODE;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
