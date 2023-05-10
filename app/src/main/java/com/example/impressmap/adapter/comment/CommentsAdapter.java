@@ -20,6 +20,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     public CommentsAdapter(ViewModelStoreOwner viewModelStoreOwner)
     {
         viewModel = new ViewModelProvider(viewModelStoreOwner).get(CommentsAdapterViewModel.class);
+        viewModel.clearCache();
     }
 
     @NonNull

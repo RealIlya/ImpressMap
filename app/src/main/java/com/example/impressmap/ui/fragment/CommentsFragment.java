@@ -29,6 +29,7 @@ import com.example.impressmap.model.data.Comment;
 import com.example.impressmap.model.data.OwnerUser;
 import com.example.impressmap.model.data.Post;
 import com.example.impressmap.ui.viewmodel.CommentsViewModel;
+import com.example.impressmap.ui.viewmodel.MainViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DateFormat;
@@ -87,11 +88,11 @@ public class CommentsFragment extends Fragment
         commentsRecyclerView.setAdapter(commentsAdapter);
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        viewModel.getIdsByOwnerId(post).observe(getViewLifecycleOwner(), ids ->
+        viewModel.getIdsByOwnerId(post).observeForever(ids ->
         {
             for (String id : ids)
             {
-                viewModel.getById(id).observe(getViewLifecycleOwner(), comment ->
+                viewModel.getById(id).observeForever(comment ->
                 {
                     commentsAdapter.addComment(comment);
                 });

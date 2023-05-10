@@ -1,6 +1,5 @@
 package com.example.impressmap.adapter.comment;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
 import com.example.impressmap.model.data.Comment;
@@ -36,5 +35,10 @@ public class CommentsAdapterViewModel extends ViewModel
     public int getCommentsCount()
     {
         return commentsCache.size();
+    }
+
+    public void clearCache()
+    {
+        commentsCache.clear();
     }
 }

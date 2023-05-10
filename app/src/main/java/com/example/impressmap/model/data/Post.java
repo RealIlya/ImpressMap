@@ -10,6 +10,7 @@ import static com.example.impressmap.util.Constants.Keys.TITLE_NODE;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.Nullable;
 import androidx.room.Entity;
 
 import java.util.Date;
@@ -132,6 +133,25 @@ public class Post implements TransferableToDatabase, Parcelable, Owner
     public void setGMarkerId(String gMarkerId)
     {
         this.gMarkerId = gMarkerId;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (obj == this)
+        {
+            return true;
+        }
+        if (!(obj instanceof Post))
+        {
+            return false;
+        }
+        Post o = (Post) obj;
+        return o.id.equals(id);
     }
 
     @Override

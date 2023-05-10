@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.R;
 import com.example.impressmap.databinding.FragmentProfileBinding;
+import com.example.impressmap.model.data.User;
 import com.example.impressmap.ui.viewmodel.MainViewModel;
 import com.example.impressmap.ui.viewmodel.ProfileFragmentViewModel;
 
@@ -74,12 +75,18 @@ public class ProfileFragment extends Fragment
                              .commit();
         });
 
-        viewModel.getUser().observe(getViewLifecycleOwner(), mainViewModel::setUser);
+        User user = mainViewModel.getUser();
+        binding.collapsingToolbar.setTitle(user.getFullName());
+        binding.phoneNumberView.setText(user.getPhoneNumber() != null ? user.getPhoneNumber()
+                                                                      : getText(
+                                                                              R.string.phone_number_not_set));
 
-        mainViewModel.getUser().observe(getViewLifecycleOwner(), user ->
+        viewModel.getUser().observe(getViewLifecycleOwner(), newUser ->
         {
-            binding.collapsingToolbar.setTitle(user.getFullName());
-            binding.phoneNumberView.setText(user.getPhoneNumber() != null ? user.getPhoneNumber()
+            mainViewModel.setUser(newUser);
+
+            binding.collapsingToolbar.setTitle(newUser.getFullName());
+            binding.phoneNumberView.setText(newUser.getPhoneNumber() != null ? newUser.getPhoneNumber()
                                                                           : getText(
                                                                                   R.string.phone_number_not_set));
         });

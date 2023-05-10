@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.impressmap.model.data.Address;
+import com.example.impressmap.model.data.Post;
 import com.example.impressmap.model.data.User;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class MainViewModel extends ViewModel
     private MutableLiveData<Integer> mode;
     private MutableLiveData<List<Address>> selectedAddresses;
     private MutableLiveData<String> selectedAddressId;
-    private MutableLiveData<User> user;
+    private User user;
 
     public MainViewModel()
     {
@@ -53,16 +54,16 @@ public class MainViewModel extends ViewModel
         selectedAddressId.setValue(addressId);
     }
 
-    public LiveData<User> getUser()
+    public User getUser()
     {
         return user;
     }
 
     public void setUser(@NonNull User user)
     {
-        if (!user.equals(this.user.getValue()))
+        if (!user.equals(this.user))
         {
-            this.user.setValue(user);
+            this.user = user;
         }
     }
 
@@ -71,6 +72,6 @@ public class MainViewModel extends ViewModel
         mode = new MutableLiveData<>(-1);
         selectedAddresses = new MutableLiveData<>(new ArrayList<>());
         selectedAddressId = new MutableLiveData<>("");
-        user = new MutableLiveData<>();
+        user = new User();
     }
 }
