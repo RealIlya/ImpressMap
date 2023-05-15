@@ -65,18 +65,25 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
 
         holder.binding.getRoot().setOnClickListener(v ->
         {
-            address.setSelected(!address.isSelected());
-            onAddressClicked(address);
-            notifyItemChanged(holder.getAdapterPosition());
+            if (viewModel.getSelectedAddresses().size() < 5 || address.isSelected())
+            {
+                address.setSelected(!address.isSelected());
+                onAddressClicked(address);
+                notifyItemChanged(holder.getAdapterPosition());
+            }
+            else
+            {
+                onAddressClickListener.onMaxAddresses();
+            }
         });
     }
 
-    public void setAddressList(@NonNull List<Address> addressList)
+    public void setAddresses(@NonNull List<Address> addresses)
     {
-        if (viewModel.setAddresses(addressList))
+        if (viewModel.setAddresses(addresses))
         {
             notifyItemRangeRemoved(0, viewModel.getAddressesCount());
-            notifyItemRangeInserted(0, addressList.size());
+            notifyItemRangeInserted(0, addresses.size());
         }
     }
 
@@ -109,6 +116,8 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
     public interface OnAddressClickListener
     {
         void onAddressClick(Address address);
+
+        void onMaxAddresses();
     }
 
     protected static class AddressViewHolder extends RecyclerView.ViewHolder

@@ -1,6 +1,7 @@
 package com.example.impressmap.ui.fragment.main;
 
 import android.os.Bundle;
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.impressmap.R;
 import com.example.impressmap.adapter.gmap.GMapAdapter;
 import com.example.impressmap.databinding.FragmentMainBinding;
+import com.example.impressmap.ui.activity.main.MainViewModel;
 import com.example.impressmap.ui.fragment.main.mode.AddingMode;
 import com.example.impressmap.ui.fragment.main.mode.CommonMode;
 import com.example.impressmap.ui.fragment.main.mode.Mode;
-import com.example.impressmap.ui.viewmodel.MainFragmentViewModel;
-import com.example.impressmap.ui.viewmodel.MainViewModel;
 import com.example.impressmap.util.SwitchableMode;
 import com.google.android.gms.maps.SupportMapFragment;
 
@@ -56,9 +56,6 @@ public class MainFragment extends Fragment implements SwitchableMode
                               @Nullable Bundle savedInstanceState)
     {
         viewModel = new ViewModelProvider(this).get(MainFragmentViewModel.class);
-
-        binding.map.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
         requireActivity().getOnBackPressedDispatcher()
                          .addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true)
@@ -124,5 +121,13 @@ public class MainFragment extends Fragment implements SwitchableMode
     {
         super.onPause();
         getViewModelStore().clear();
+    }
+
+    @Nullable
+    @Override
+    public Object getExitTransition()
+    {
+        return TransitionInflater.from(requireContext())
+                                 .inflateTransition(android.R.transition.fade);
     }
 }

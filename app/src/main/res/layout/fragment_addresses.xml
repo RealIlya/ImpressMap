@@ -7,57 +7,50 @@
 
         <variable
             name="viewModel"
-            type="com.example.impressmap.ui.viewmodel.AddressesFragmentViewModel" />
+            type="com.example.impressmap.ui.fragment.addresses.AddressesFragmentViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?backgroundPrimaryWindow"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true">
+            android:background="?backgroundPrimaryWindow">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/app_bar_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fitsSystemWindows="true">
+                android:layout_height="wrap_content"
+                android:background="?backgroundToolbar"
+                android:fitsSystemWindows="true"
+                app:elevation="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.appbar.AppBarLayout
-                    android:id="@+id/app_bar_layout"
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
+                    style="@style/toolbarTextStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?backgroundToolbar"
-                    app:elevation="2dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:layout_height="?attr/actionBarSize"
+                    app:navigationIcon="@drawable/ic_arrow"
+                    app:popupTheme="@style/Theme.ImpressMap.PopupOverlay"
+                    app:subtitle="@{viewModel.selectedAddressesCount + @string/selected_addresses_count}"
+                    app:title="@{@string/addresses_count + ' ' + viewModel.addressesCount}" />
+            </com.google.android.material.appbar.AppBarLayout>
 
-                    <com.google.android.material.appbar.MaterialToolbar
-                        android:id="@+id/toolbar"
-                        style="@style/toolbarTextStyle"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        app:navigationIcon="@drawable/ic_arrow"
-                        app:popupTheme="@style/Theme.ImpressMap.PopupOverlay"
-                        app:subtitle="@{viewModel.selectedAddressesCount + @string/selected_addresses_count}"
-                        app:title="@{@string/addresses_count + ' ' + viewModel.addressesCount}" />
-                </com.google.android.material.appbar.AppBarLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/addresses_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
-                    tools:listitem="@layout/item_address" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/addresses_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
+                tools:listitem="@layout/item_address" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_address_button"

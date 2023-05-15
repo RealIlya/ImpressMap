@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 
+import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.GObject;
 import com.example.impressmap.model.data.gcircle.GCircle;
@@ -131,6 +132,20 @@ public class GMapAdapterViewModel extends AndroidViewModel
     {
         GCircle gCircle = lastSelectedGCircle.get();
         return gCircle == null ? null : gCircle.getGCircleMeta().getGMarkers();
+    }
+
+    @Nullable
+    public GCircle getGCircle(Address address)
+    {
+        for (GCircle gCircle : gCirclesCache)
+        {
+            if (gCircle.getGCircleMeta().getAddressId().equals(address.getId()))
+            {
+                return gCircle;
+            }
+        }
+
+        return null;
     }
 
     public void clearCache()

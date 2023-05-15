@@ -18,11 +18,6 @@ public class CommentsAdapterViewModel extends ViewModel
 
     public boolean addComment(Comment comment)
     {
-        if (commentsCache.contains(comment))
-        {
-            return false;
-        }
-
         commentsCache.add(comment);
         return true;
     }

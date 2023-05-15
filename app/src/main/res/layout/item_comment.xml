@@ -95,22 +95,24 @@
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.google.android.material.divider.MaterialDivider
+            <LinearLayout
+                android:id="@+id/comments_"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:dividerColor="@color/light_gray"
-                app:dividerThickness="@dimen/divider_height" />
+                android:layout_height="match_parent">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/show_comments_button"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/ripple_effect"
-                android:gravity="center"
-                android:paddingVertical="@dimen/vertical_very_small_margin"
-                android:text="@string/show_comments_branch"
-                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                android:textColor="?colorSecondaryText" />
+                <com.google.android.material.divider.MaterialDivider style="@style/theBestDividerStyle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/show_comments_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ripple_effect"
+                    android:gravity="center"
+                    android:paddingVertical="@dimen/vertical_very_small_margin"
+                    android:text="@string/show_comments_branch"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                    android:textColor="?colorSecondaryText" />
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/reactions_recycler_view"

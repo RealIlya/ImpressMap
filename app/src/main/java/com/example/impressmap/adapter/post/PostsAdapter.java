@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,20 +14,19 @@ import com.example.impressmap.databinding.ItemPostBinding;
 import com.example.impressmap.model.data.Post;
 
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHolder>
 {
     private final PostsAdapterViewModel viewModel;
-    private final List<Post> postList;
+
 
     private OnCommentsButtonClickListener onCommentsButtonClickListener;
 
     public PostsAdapter(ViewModelStoreOwner viewModelStoreOwner)
     {
-        postList = new ArrayList<>();
         viewModel = new ViewModelProvider(viewModelStoreOwner).get(PostsAdapterViewModel.class);
+        clear();
     }
 
     @NonNull
@@ -42,7 +42,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
     public void onBindViewHolder(@NonNull PostViewHolder holder,
                                  int position)
     {
-        Post post = postList.get(position);
+        Post post = viewModel.getPost(position);
 
         holder.binding.textView.setText(post.getText());
         holder.binding.fullNameView.setText(post.getOwnerUser().getFullName());
@@ -62,29 +62,33 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
         });
 
         // try to avoid this method
-        viewModel.getIdsByOwnerId(post).observeForever(ids ->
+        LiveData<List<String>> ownerId = viewModel.getIdsByOwnerId(post);
+        if (!ownerId.hasActiveObservers())
         {
-            holder.binding.showCommentsButton.setText(String.valueOf(ids.size()));
-        });
+            ownerId.observeForever(ids ->
+            {
+                holder.binding.showCommentsButton.setText(String.valueOf(ids.size()));
+            });
+        }
     }
 
     @Override
     public int getItemCount()
     {
-        return postList.size();
+        return viewModel.getPostsCount();
     }
 
     public void addPost(Post post)
     {
-        postList.add(post);
-        notifyItemInserted(postList.size());
+        viewModel.addPost(post);
+        notifyItemInserted(getItemCount());
     }
 
     public void clear()
     {
-        int size = postList.size();
-        postList.clear();
-        notifyItemRangeRemoved(0, size);
+        int count = getItemCount();
+        viewModel.clearCache();
+        notifyItemRangeRemoved(0, count);
     }
 
     public void setOnCommentsButtonClickListener(OnCommentsButtonClickListener listener)

@@ -75,32 +75,25 @@
                 android:layout_height="match_parent"
                 android:padding="@dimen/vertical_small_margin">
 
-                <LinearLayout
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/show_reactions_button"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="32dp"
                     android:layout_gravity="end"
-                    android:layout_marginTop="@dimen/vertical_very_small_margin"
-                    android:orientation="horizontal">
+                    android:background="@drawable/background_item_reaction_selector"
+                    app:srcCompat="@drawable/ic_hide"
+                    app:tint="?colorPrimaryFabIcon" />
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/show_reactions_button"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/background_item_reaction_selector"
-                        app:srcCompat="@drawable/ic_hide"
-                        app:tint="?colorPrimaryFabIcon" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/show_comments_button"
-                        style="@style/commentButtonStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/vertical_very_small_margin"
-                        android:gravity="center"
-                        app:drawableStartCompat="@drawable/ic_comment"
-                        app:drawableTint="?colorPrimaryFabIcon"
-                        tools:text="@string/menu_reaction_count" />
-                </LinearLayout>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/show_comments_button"
+                    style="@style/commentButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_gravity="start"
+                    android:gravity="center"
+                    app:drawableStartCompat="@drawable/ic_comment"
+                    app:drawableTint="?colorPrimaryFabIcon"
+                    tools:text="@string/menu_reaction_count" />
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
             <androidx.recyclerview.widget.RecyclerView

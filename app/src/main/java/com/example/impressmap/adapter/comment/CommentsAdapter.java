@@ -20,7 +20,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     public CommentsAdapter(ViewModelStoreOwner viewModelStoreOwner)
     {
         viewModel = new ViewModelProvider(viewModelStoreOwner).get(CommentsAdapterViewModel.class);
-        viewModel.clearCache();
+        clear();
     }
 
     @NonNull
@@ -56,18 +56,23 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         });
     }
 
-    public void addComment(Comment comment)
-    {
-        if (viewModel.addComment(comment))
-        {
-            notifyItemInserted(getItemCount());
-        }
-    }
-
     @Override
     public int getItemCount()
     {
         return viewModel.getCommentsCount();
+    }
+
+    public void addComment(Comment comment)
+    {
+        viewModel.addComment(comment);
+        notifyItemInserted(getItemCount());
+    }
+
+    public void clear()
+    {
+        int size = getItemCount();
+        viewModel.clearCache();
+        notifyItemRangeRemoved(0, size);
     }
 
     protected static class CommentsViewHolder extends RecyclerView.ViewHolder

@@ -16,7 +16,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public abstract class MapAdapter
 {
-    public static final int MIN_ZOOM = 18;
+    public static final int MIN_ZOOM = 19;
 
     private final GoogleMap googleMap;
     protected Marker pointer = null;

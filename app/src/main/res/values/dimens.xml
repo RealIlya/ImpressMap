@@ -1,11 +1,13 @@
 <resources>
     <dimen name="card_view_default_elevation">4dp</dimen>
 
+    <dimen name="horizontal_large_margin">48dp</dimen>
     <dimen name="horizontal_medium_margin">32dp</dimen>
     <dimen name="horizontal_margin">16dp</dimen>
     <dimen name="horizontal_small_margin">8dp</dimen>
     <dimen name="horizontal_very_small_margin">4dp</dimen>
 
+    <dimen name="vertical_large_margin">48dp</dimen>
     <dimen name="vertical_medium_margin">32dp</dimen>
     <dimen name="vertical_margin">16dp</dimen>
     <dimen name="vertical_small_margin">8dp</dimen>

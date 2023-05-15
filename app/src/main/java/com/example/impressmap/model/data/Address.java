@@ -11,6 +11,7 @@ import androidx.room.Entity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,12 +88,20 @@ public class Address implements TransferableToDatabase
 
     public String getFullAddress()
     {
-        return fullAddress;
+        return fullAddress.replaceAll("\\|", " ");
     }
 
     public void setFullAddress(String fullAddress)
     {
         this.fullAddress = fullAddress;
+    }
+
+    public String getFullAddressReversed()
+    {
+        List<String> list = Arrays.asList(fullAddress.split("\\|"));
+        Collections.reverse(list);
+
+        return String.join(" ", list);
     }
 
     public String getCountry()

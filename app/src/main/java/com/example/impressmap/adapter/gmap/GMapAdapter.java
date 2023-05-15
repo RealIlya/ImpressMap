@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
+import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GCircleMeta;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.gcircle.CommonGCircle;
@@ -239,6 +240,17 @@ public class GMapAdapter extends MapAdapter
     public List<GMarker> getSelectedGCircleGMarkers()
     {
         return viewModel.getLastSelectedGCircleGMarkers();
+    }
+
+    @Nullable
+    public LatLng getGCircleLatLng(Address address)
+    {
+        return viewModel.getGCircle(address).getGCircleMeta().getCenter();
+    }
+
+    public void animateZoomTo(Address address)
+    {
+        animateZoomTo(getGCircleLatLng(address));
     }
 
     @Override

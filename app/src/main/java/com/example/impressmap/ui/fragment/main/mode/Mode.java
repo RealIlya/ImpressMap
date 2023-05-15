@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import com.example.impressmap.adapter.gmap.GMapAdapter;
 import com.example.impressmap.databinding.FragmentMainBinding;
 import com.example.impressmap.ui.fragment.main.MainFragment;
-import com.example.impressmap.ui.viewmodel.MainFragmentViewModel;
+import com.example.impressmap.ui.fragment.main.MainFragmentViewModel;
 
 public abstract class Mode
 {

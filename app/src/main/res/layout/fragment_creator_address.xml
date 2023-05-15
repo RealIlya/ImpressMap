@@ -1,86 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:background="?backgroundPrimaryWindow">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_layout"
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/app_bar_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fitsSystemWindows="true">
+                android:layout_height="wrap_content"
+                android:background="?backgroundToolbar"
+                android:fitsSystemWindows="true"
+                app:elevation="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.coordinatorlayout.widget.CoordinatorLayout
-                    android:id="@+id/coordinatorLayout"
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
+                    style="@style/toolbarTextStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:layout_height="?attr/actionBarSize"
+                    app:navigationIcon="@drawable/ic_arrow"
+                    app:popupTheme="@style/Theme.ImpressMap.PopupOverlay" />
+            </com.google.android.material.appbar.AppBarLayout>
 
-                    <com.google.android.material.appbar.AppBarLayout
-                        android:id="@+id/app_bar_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?backgroundToolbar"
-                        app:elevation="2dp">
-
-                        <com.google.android.material.appbar.MaterialToolbar
-                            android:id="@+id/toolbar"
-                            style="@style/toolbarTextStyle"
-                            android:layout_width="match_parent"
-                            android:layout_height="?attr/actionBarSize"
-                            app:navigationIcon="@drawable/ic_arrow"
-                            app:popupTheme="@style/Theme.ImpressMap.PopupOverlay" />
-                    </com.google.android.material.appbar.AppBarLayout>
-                </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <LinearLayout
+                android:id="@+id/linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?backgroundSecondaryWindow"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/vertical_medium_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/app_bar_layout">
 
                 <LinearLayout
-                    android:id="@+id/linear_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:paddingVertical="@dimen/vertical_medium_margin"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout">
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/horizontal_margin"
+                    android:orientation="vertical">
 
-                    <LinearLayout
+                    <EditText
+                        android:id="@+id/title_view"
+                        style="@style/textStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/horizontal_margin"
-                        android:orientation="vertical">
+                        android:hint="@string/marker_title_hint"
+                        android:importantForAutofill="no"
+                        android:inputType="text" />
 
-                        <EditText
-                            android:id="@+id/title_view"
-                            style="@style/textStyle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/marker_title_hint"
-                            android:importantForAutofill="no"
-                            android:inputType="text" />
-
-                        <EditText
-                            android:id="@+id/desc_view"
-                            style="@style/textStyle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/address_desc_hint"
-                            android:importantForAutofill="no"
-                            android:inputType="textMultiLine"
-                            android:minLines="1"
-                            android:scrollbars="vertical"
-                            android:scrollHorizontally="false" />
-                    </LinearLayout>
+                    <EditText
+                        android:id="@+id/desc_view"
+                        style="@style/textStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/address_desc_hint"
+                        android:importantForAutofill="no"
+                        android:inputType="textMultiLine"
+                        android:minLines="1"
+                        android:scrollbars="vertical"
+                        android:scrollHorizontally="false" />
                 </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+                <com.google.android.material.divider.MaterialDivider
+                    style="@style/theBestDividerStyle"
+                    android:layout_marginTop="@dimen/vertical_margin" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.appbar.AppBarLayout
+                        android:id="@+id/appBarLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?backgroundSecondaryWindow"
+                        app:elevation="0dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.appbar.MaterialToolbar
+                            android:layout_width="match_parent"
+                            android:layout_height="?attr/actionBarSize"
+                            app:popupTheme="@style/Theme.ImpressMap.PopupOverlay"
+                            app:title="@string/addresses_in_this_location" />
+                    </com.google.android.material.appbar.AppBarLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/addresses_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+                        tools:itemCount="3"
+                        tools:listitem="@layout/item_address" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/confirm_address_button"

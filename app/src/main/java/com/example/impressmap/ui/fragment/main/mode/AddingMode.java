@@ -10,10 +10,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.impressmap.R;
 import com.example.impressmap.adapter.gmap.GMapAdapter;
 import com.example.impressmap.databinding.FragmentMainBinding;
-import com.example.impressmap.ui.fragment.CreatorAddressFragment;
+import com.example.impressmap.ui.activity.main.MainViewModel;
+import com.example.impressmap.ui.fragment.creatoraddress.CreatorAddressFragment;
 import com.example.impressmap.ui.fragment.main.MainFragment;
-import com.example.impressmap.ui.viewmodel.MainFragmentViewModel;
-import com.example.impressmap.ui.viewmodel.MainViewModel;
+import com.example.impressmap.ui.fragment.main.MainFragmentViewModel;
 
 public class AddingMode extends Mode
 {
@@ -51,6 +51,6 @@ public class AddingMode extends Mode
         binding.toolbar.setNavigationOnClickListener(v -> mainViewModel.setMode(COMMON_MODE));
         binding.toolbar.getMenu().clear();
 
-        binding.framePosts.setVisibility(View.INVISIBLE);
+        binding.bottomView.setVisibility(View.INVISIBLE);
     }
 }

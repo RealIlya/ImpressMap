@@ -5,7 +5,7 @@
         <item name="android:backgroundTint">?colorAccent</item>
         <item name="android:textColor">?colorPrimaryText</item>
         <item name="android:textColorHint">?colorSecondaryText</item>
-        <item name="android:textColorHighlight">@color/blue_100_alpha_40</item>
+        <item name="android:textColorHighlight">@color/blue_100_alpha_40</item> <!-- -->
         <item name="android:textCursorDrawable">@drawable/background_cursor</item>
     </style>
 
@@ -18,7 +18,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">vertical</item>
         <item name="android:background">@drawable/ripple_effect</item>
-        <item name="android:paddingStart">@dimen/horizontal_margin</item>
+        <item name="android:paddingHorizontal">@dimen/horizontal_margin</item>
         <item name="android:paddingTop">@dimen/horizontal_small_margin</item>
         <item name="android:paddingBottom">@dimen/horizontal_small_margin</item>
     </style>
@@ -64,15 +64,34 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="theBestDividerStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="dividerColor">?backgroundClickedButton</item>
+        <item name="dividerThickness">@dimen/divider_height</item>
+    </style>
+
+    <style name="titleMediumTextAppearance">
+        <item name="android:textSize">@dimen/medium_text_size</item>
+    </style>
+
     <!-- Toolbar styles -->
     <style name="toolbarTextStyle">
         <item name="titleTextColor">?colorToolbarTitle</item>
         <item name="subtitleTextColor">?colorToolbarSubtitle</item>
-        <item name="subtitleTextAppearance">@style/subtitleTextStyle</item>
+        <item name="subtitleTextAppearance">@style/subtitleTextAppearance</item>
     </style>
 
-    <style name="subtitleTextStyle">
+    <style name="subtitleTextAppearance">
         <item name="android:textSize">@dimen/pre_medium_text_size</item>
+    </style>
+
+    <style name="mapToolbarTextStyle">
+        <item name="android:backgroundTint">@android:color/transparent</item>
+        <item name="android:textColor">?colorToolbarTitle</item>
+        <item name="android:textColorHint">?colorToolbarTitle</item>
+        <item name="android:textColorHighlight">@color/blue_100_alpha_40</item> <!-- -->
+        <item name="android:textCursorDrawable">@drawable/background_cursor</item>
     </style>
 
     <style name="preMessagesToolbarTextStyle" parent="toolbarTextStyle">

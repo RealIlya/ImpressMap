@@ -8,9 +8,12 @@
     <string name="not_stated">Not stated</string>
     <string name="addresses_count">"Addresses"</string>
     <string name="selected_addresses_count">" selected"</string>
-    <string name="write_some_words">Write some words…</string>
-    <string name="show_comments_branch">Show comments branch</string>
-    <string name="message_is_empty">Message is empty</string>
+
+
+    <!--  creator address fragment -->
+    <string name="create_address">Create address</string>
+    <string name="addresses_in_this_location">Addresses in this location</string>
+    <string name="no_address_selected">No address selected</string>
 
     <!--  nav drawer item titles  -->
     <string name="menu_profile">Profile</string>
@@ -29,12 +32,17 @@
     <string name="dont_logout_check_box">Don\'t logout</string>
     <string name="sign_up_check_box">Sign up</string>
 
-    <!--  bottom sheet fragment  -->
+    <!--  creator marker fragment  -->
     <string name="create_marker">Create marker</string>
     <string name="marker_title_hint">Title</string>
     <string name="marker_text_hint">Text</string>
 
     <string name="address_desc_hint">Description</string>
+
+    <!--  comments fragment  -->
+    <string name="write_some_words">Write some words…</string>
+    <string name="show_comments_branch">Show comments branch</string>
+    <string name="message_is_empty">Message is empty</string>
 
     <!--  profile fragment  -->
     <string name="phone_number_sub">Your phone number</string>
@@ -42,7 +50,7 @@
     <string name="title_bio">About yourself</string>
     <string name="desc_bio_sub">Write a few words about yourself</string>
     <string name="title_addresses">Your addresses</string>
-    <string name="desc_addresses_sub">Tap to change your places of residence</string>
+    <string name="desc_addresses_sub">Tap to change your shown addresses</string>
     <string name="email_sub">Your email</string>
 
     <string name="phone_number_not_set"><i>Phone number not set</i></string>

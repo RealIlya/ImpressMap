@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.impressmap.R;
 import com.example.impressmap.model.MenuItemMeta;
-import com.example.impressmap.ui.fragment.ProfileFragment;
+import com.example.impressmap.ui.fragment.profile.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.HashMap;

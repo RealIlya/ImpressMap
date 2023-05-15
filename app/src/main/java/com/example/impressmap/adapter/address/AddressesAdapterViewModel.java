@@ -24,7 +24,38 @@ public class AddressesAdapterViewModel extends ViewModel
             return false;
         }
 
-        addressesCache.addAll(addresses);
+        // todo optimize plz
+        if (!addressesCache.isEmpty())
+        {
+            List<Address> buf = new ArrayList<>();
+
+            for (Address address : addresses)
+            {
+                boolean added = false;
+                for (Address addressCache : addressesCache)
+                {
+                    if (addressCache.equals(address))
+                    {
+                        buf.add(address);
+                        address.setSelected(addressCache.isSelected());
+                        added = true;
+                        break;
+                    }
+                }
+                if (!added)
+                {
+                    buf.add(address);
+                }
+            }
+
+            addressesCache.clear();
+            addressesCache.addAll(buf);
+        }
+        else
+        {
+            addressesCache.addAll(addresses);
+        }
+
         return true;
     }
 
