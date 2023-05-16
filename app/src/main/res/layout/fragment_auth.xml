@@ -108,7 +108,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/horizontal_margin"
                     android:buttonTint="?colorAccent"
-                    android:text="@string/sign_up_check_box" />
+                    android:text="@string/sign_up_button" />
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton

@@ -44,6 +44,6 @@ public class PostsAdapterViewModel extends ViewModel
 
     public LiveData<List<String>> getIdsByOwnerId(Owner owner)
     {
-        return commentOwnerCase.getIdsByOwnerId(owner);
+        return commentOwnerCase.getIdsByOwner(owner);
     }
 }

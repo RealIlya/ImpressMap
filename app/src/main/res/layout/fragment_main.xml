@@ -68,10 +68,9 @@
                                 style="@style/mapToolbarTextStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Search"
+                                android:hint="@string/search"
                                 android:importantForAutofill="no"
-                                android:inputType="textMultiLine"
-                                android:textIsSelectable="false" />
+                                android:inputType="text" />
                         </com.google.android.material.appbar.MaterialToolbar>
                     </com.google.android.material.appbar.AppBarLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>

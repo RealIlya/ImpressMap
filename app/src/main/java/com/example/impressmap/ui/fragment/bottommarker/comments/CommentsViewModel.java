@@ -45,8 +45,8 @@ public class CommentsViewModel extends ViewModel
         return commentsCase.getById(commentId);
     }
 
-    public LiveData<List<String>> getIdsByOwnerId(Owner owner)
+    public LiveData<List<String>> getIdsByOwner(Owner owner)
     {
-        return commentOwnerCase.getIdsByOwnerId(owner);
+        return commentOwnerCase.getIdsByOwner(owner);
     }
 }

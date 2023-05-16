@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="check_internet_connection">Проверьте подключение к сети</string>
+    <string name="user_does_not_exist">Пользователь не существует</string>
+    <string name="field_is_necessary">Поле обязательно</string>
+    <string name="max_addresses_count">Максимальное количество адресов!</string>
+    <string name="not_stated">Не указано</string>
+    <string name="addresses_count">Адреса</string>
+    <string name="selected_addresses_count">" выбрано"</string>
+    <string name="create_address">Создать адрес</string>
+    <string name="addresses_in_this_location">Адреса в этом месте</string>
+    <string name="no_address_selected">Ни один адрес не выбран</string>
+    <string name="menu_profile">Профиль</string>
+    <string name="nav_header_item_settings">Настройки</string>
+    <string name="menu_notification_and_sound">Уведомления и звук</string>
+    <string name="menu_language">Выбрать язык</string>
+    <string name="name_hint">Имя</string>
+    <string name="surname_hint">Фамилия</string>
+    <string name="password_hint">Пароль</string>
+    <string name="email_hint">Почта</string>
+    <string name="sign_in_button">Войти</string>
+    <string name="sign_up_button">Зарегистрироваться</string>
+    <string name="dont_logout_check_box">Не выходить из системы</string>
+    <string name="create_marker">Создать маркер</string>
+    <string name="marker_title_hint">Заголовок</string>
+    <string name="marker_text_hint">Текст</string>
+    <string name="address_desc_hint">Описание</string>
+    <string name="write_some_words">Сообщение…</string>
+    <string name="show_comments_branch">Раскрыть ветку комментариев</string>
+    <string name="message_is_empty">Сообщение пустое</string>
+    <string name="phone_number_sub">Номер телефона</string>
+    <string name="nickname_sub">Никнейм</string>
+    <string name="title_bio">О себе</string>
+    <string name="desc_bio_sub">Напишите немножно о себе</string>
+    <string name="title_addresses">Адреса</string>
+    <string name="desc_addresses_sub">Нажмите, чтобы изменить показанные адреса</string>
+    <string name="email_sub">Почта</string>
+    <string name="phone_number_not_set"><i>Номер телефона не установлен</i></string>
+    <string name="comments">Комментарии</string>
+    <string name="search">Поиск</string>
+</resources>

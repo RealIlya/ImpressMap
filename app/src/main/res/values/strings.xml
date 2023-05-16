@@ -1,13 +1,15 @@
 <resources>
-    <string name="app_name">ImpressMap</string>
+    <string name="app_name" translatable="false">ImpressMap</string>
 
     <string name="check_internet_connection">"Check your Internet connection"</string>
     <string name="user_does_not_exist">This user does not exist</string>
-    <string name="field_is_necessary"><u>Field is necessary</u></string>
+    <string name="field_is_necessary">Field is necessary</string>
     <string name="max_addresses_count">Max addresses count!</string>
     <string name="not_stated">Not stated</string>
     <string name="addresses_count">"Addresses"</string>
     <string name="selected_addresses_count">" selected"</string>
+    <string name="comments">Comments</string>
+    <string name="search">Search</string>
 
 
     <!--  creator address fragment -->
@@ -19,18 +21,17 @@
     <string name="menu_profile">Profile</string>
     <string name="nav_header_item_settings">Settings</string>
     <string name="menu_notification_and_sound">Notification and Sound</string>
-    <string name="menu_map_features">Map Features</string>
+    <string name="menu_map_features" translatable="false">Map Features</string>
     <string name="menu_language">Select Language</string>
 
     <!--  auth fragment  -->
-    <string name="name_hint">Enter your name</string>
-    <string name="surname_hint">Enter your surname</string>
-    <string name="password_hint">Enter your password</string>
-    <string name="email_hint">Enter your email</string>
-    <string name="sign_in_button">Next -&gt;</string>
-    <string name="sign_up_button">Sign up!</string>
+    <string name="name_hint">Name</string>
+    <string name="surname_hint">Surname</string>
+    <string name="password_hint">Password</string>
+    <string name="email_hint">Email</string>
+    <string name="sign_in_button">Sign in</string>
+    <string name="sign_up_button">Sign up</string>
     <string name="dont_logout_check_box">Don\'t logout</string>
-    <string name="sign_up_check_box">Sign up</string>
 
     <!--  creator marker fragment  -->
     <string name="create_marker">Create marker</string>
@@ -60,4 +61,5 @@
     <string name="menu_reaction_like" translatable="false">👍</string>
     <string name="menu_reaction_dislike" translatable="false">👎</string>
     <string name="menu_reaction_love" translatable="false">❤</string>
+
 </resources>

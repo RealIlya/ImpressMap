@@ -99,10 +99,10 @@ public class CommentsFragment extends Fragment
         commentsRecyclerView.setAdapter(commentsAdapter);
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        LiveData<List<String>> idsByOwnerId = viewModel.getIdsByOwnerId(post);
+        LiveData<List<String>> idsByOwnerId = viewModel.getIdsByOwner(post);
         if (!idsByOwnerId.hasActiveObservers())
         {
-            idsByOwnerId.observeForever(ids ->
+            idsByOwnerId.observe(getViewLifecycleOwner(), ids ->
             {
                 commentsAdapter.clear();
                 for (String id : ids)

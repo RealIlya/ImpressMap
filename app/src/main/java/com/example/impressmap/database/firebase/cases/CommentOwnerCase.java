@@ -20,7 +20,7 @@ public class CommentOwnerCase
         commentIdsRepo.insert(id, successCallback);
     }
 
-    public LiveData<List<String>> getIdsByOwnerId(Owner owner)
+    public LiveData<List<String>> getIdsByOwner(Owner owner)
     {
         commentIdsRepo = new CommentIdsRepo(owner);
         return commentIdsRepo.getAll();
