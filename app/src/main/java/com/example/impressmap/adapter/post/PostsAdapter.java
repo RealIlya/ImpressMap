@@ -62,7 +62,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
         });
 
         // try to avoid this method
-        LiveData<List<String>> ownerId = viewModel.getIdsByOwnerId(post);
+        LiveData<List<String>> ownerId = viewModel.getIdsByOwner(post);
         if (!ownerId.hasActiveObservers())
         {
             ownerId.observeForever(ids ->

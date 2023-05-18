@@ -1,6 +1,7 @@
 package com.example.impressmap.adapter.comment;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,8 @@ import java.text.DateFormat;
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>
 {
     private final CommentsAdapterViewModel viewModel;
+
+    private OnCommentsButtonClickListener onCommentsButtonClickListener;
 
     public CommentsAdapter(ViewModelStoreOwner viewModelStoreOwner)
     {
@@ -52,8 +55,13 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
 
         holder.binding.showCommentsButton.setOnClickListener(v ->
         {
-
+            onCommentsButtonClickListener.onClick(v, comment);
         });
+    }
+
+    public void setOnCommentsButtonClickListener(OnCommentsButtonClickListener listener)
+    {
+        onCommentsButtonClickListener = listener;
     }
 
     @Override
@@ -73,6 +81,12 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         int size = getItemCount();
         viewModel.clearCache();
         notifyItemRangeRemoved(0, size);
+    }
+
+    public interface OnCommentsButtonClickListener
+    {
+        void onClick(View view,
+                     Comment comment);
     }
 
     protected static class CommentsViewHolder extends RecyclerView.ViewHolder

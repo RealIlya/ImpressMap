@@ -42,7 +42,7 @@ public class PostsAdapterViewModel extends ViewModel
         postsCache.clear();
     }
 
-    public LiveData<List<String>> getIdsByOwnerId(Owner owner)
+    public LiveData<List<String>> getIdsByOwner(Owner owner)
     {
         return commentOwnerCase.getIdsByOwner(owner);
     }

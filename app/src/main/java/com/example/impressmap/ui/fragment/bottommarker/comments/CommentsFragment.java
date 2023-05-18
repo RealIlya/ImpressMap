@@ -116,6 +116,36 @@ public class CommentsFragment extends Fragment
             });
         }
 
+        commentsAdapter.setOnCommentsButtonClickListener((v, comment) ->
+        {
+            LiveData<List<String>> commentIdsLiveData = viewModel.getIdsByOwner(comment);
+
+            if (!commentIdsLiveData.hasActiveObservers())
+            {
+                commentIdsLiveData.observe(getViewLifecycleOwner(), ids ->
+                {
+                    if (!ids.isEmpty())
+                    {
+                        v.setVisibility(View.VISIBLE);
+                    }
+                    else
+                    {
+                        v.setVisibility(View.GONE);
+                    }
+
+                    commentsAdapter.clear();
+                    for (String id : ids)
+                    {
+                        LiveData<Comment> byId = viewModel.getById(id);
+                        if (!byId.hasActiveObservers())
+                        {
+                            byId.observeForever(commentsAdapter::addComment);
+                        }
+                    }
+                });
+            }
+        });
+
         binding.senderToolbar.addMenuProvider(new MenuProvider()
         {
             @Override
