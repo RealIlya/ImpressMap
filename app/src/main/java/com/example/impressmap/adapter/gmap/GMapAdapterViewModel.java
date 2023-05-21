@@ -153,4 +153,20 @@ public class GMapAdapterViewModel extends AndroidViewModel
         gMarkersCache.clear();
         gCirclesCache.clear();
     }
+
+    public void hideMarkers()
+    {
+        for (GMarker gMarker : gMarkersCache)
+        {
+            gMarker.hide();
+        }
+    }
+
+    public void showMarkers()
+    {
+        for (GMarker gMarker : gMarkersCache)
+        {
+            gMarker.show();
+        }
+    }
 }

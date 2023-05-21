@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.impressmap.databinding.ItemAddressBinding;
+import com.example.impressmap.databinding.ItemUserAddressBinding;
 import com.example.impressmap.model.data.Address;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class PopupAddressesAdapter
                                                 int viewType)
     {
         return new PopupAddressesAdapter.AddressViewHolder(
-                ItemAddressBinding.inflate(LayoutInflater.from(parent.getContext()), parent,
+                ItemUserAddressBinding.inflate(LayoutInflater.from(parent.getContext()), parent,
                         false));
     }
 
@@ -44,7 +44,7 @@ public class PopupAddressesAdapter
         holder.binding.addressSecondaryView.setText(
                 String.format("%s %s", address.getStreet(), address.getHouse()));
 
-        holder.binding.getRoot().setOnClickListener(v -> onClick(address));
+        holder.binding.getRoot().setOnClickListener(v -> onAddressClick(address));
     }
 
     @Override
@@ -59,19 +59,19 @@ public class PopupAddressesAdapter
     }
 
     @Override
-    public void onClick(Address address)
+    public void onAddressClick(Address address)
     {
         if (onAddressClickListener != null)
         {
-            onAddressClickListener.onClick(address);
+            onAddressClickListener.onAddressClick(address);
         }
     }
 
     protected static class AddressViewHolder extends RecyclerView.ViewHolder
     {
-        private final ItemAddressBinding binding;
+        private final ItemUserAddressBinding binding;
 
-        public AddressViewHolder(@NonNull ItemAddressBinding addressBinding)
+        public AddressViewHolder(@NonNull ItemUserAddressBinding addressBinding)
         {
             super(addressBinding.getRoot());
             binding = addressBinding;

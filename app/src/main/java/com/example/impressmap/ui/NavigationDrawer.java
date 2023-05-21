@@ -12,7 +12,8 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.impressmap.R;
 import com.example.impressmap.model.MenuItemMeta;
-import com.example.impressmap.ui.fragment.addresses.UserAddressesFragment;
+import com.example.impressmap.ui.fragment.addresses.AddressesFragment;
+import com.example.impressmap.ui.fragment.addresses.useraddresses.UserAddressesFragment;
 import com.example.impressmap.ui.fragment.profile.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
 
@@ -77,6 +78,16 @@ public class NavigationDrawer implements NavigationView.OnNavigationItemSelected
                                    .addToBackStack(name)
                                    .commit();
                 }), R.drawable.ic_address);
+
+        addNavigationMenuItem(menu, PROFILE_GROUP, order++, R.string.menu_join_address,
+                new MenuItemMeta(() ->
+                {
+                    String name = AddressesFragment.class.getSimpleName();
+                    fragmentManager.beginTransaction()
+                                   .replace(R.id.container, AddressesFragment.newInstance())
+                                   .addToBackStack(name)
+                                   .commit();
+                }), R.drawable.ic_join_address);
         // the next submenu
         /*Menu submenuSettings = menu.addSubMenu(SETTINGS_GROUP, Menu.NONE, order,
                 R.string.nav_header_item_settings);

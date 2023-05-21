@@ -15,7 +15,7 @@ import com.example.impressmap.R;
 import com.example.impressmap.databinding.FragmentProfileBinding;
 import com.example.impressmap.model.data.User;
 import com.example.impressmap.ui.activity.main.MainViewModel;
-import com.example.impressmap.ui.fragment.addresses.UserAddressesFragment;
+import com.example.impressmap.ui.fragment.addresses.useraddresses.UserAddressesFragment;
 import com.example.impressmap.ui.fragment.auth.AuthFragment;
 import com.example.impressmap.ui.fragment.editprofile.EditProfileFragment;
 
@@ -60,6 +60,7 @@ public class ProfileFragment extends Fragment
             viewModel.signOut(() ->
             {
                 mainViewModel.clearCache();
+                requireActivity().getViewModelStore().clear();
                 requireActivity().getSupportFragmentManager()
                                  .beginTransaction()
                                  .replace(R.id.container, AuthFragment.newInstance())

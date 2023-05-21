@@ -7,6 +7,7 @@
         <item name="android:textColorHint">?colorSecondaryText</item>
         <item name="android:textColorHighlight">@color/blue_100_alpha_40</item> <!-- -->
         <item name="android:textCursorDrawable">@drawable/background_cursor</item>
+        <item name="android:inputType">text|textCapSentences</item>
     </style>
 
     <style name="preMessageTextStyle" parent="textStyle">

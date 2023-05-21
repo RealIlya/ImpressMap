@@ -11,9 +11,6 @@
     <string name="addresses_in_this_location">Адреса в этом месте</string>
     <string name="no_address_selected">Ни один адрес не выбран</string>
     <string name="menu_profile">Профиль</string>
-    <string name="nav_header_item_settings">Настройки</string>
-    <string name="menu_notification_and_sound">Уведомления и звук</string>
-    <string name="menu_language">Выбрать язык</string>
     <string name="name_hint">Имя</string>
     <string name="surname_hint">Фамилия</string>
     <string name="password_hint">Пароль</string>
@@ -37,9 +34,11 @@
     <string name="email_sub">Почта</string>
     <string name="phone_number_not_set"><i>Номер телефона не установлен</i></string>
     <string name="comments">Комментарии</string>
-    <string name="search">Поиск</string>
     <string name="menu_addresses">Адреса</string>
-    <string name="change_profile">Изменить профиль</string>
+    <string name="edit_profile">Изменить профиль</string>
     <string name="reply">Ответить</string>
     <string name="is_private">Приватный</string>
+    <string name="addresses">Адреса</string>
+    <string name="comment">Комментарий</string>
+    <string name="menu_join_address">Присоединиться к адресу</string>
 </resources>

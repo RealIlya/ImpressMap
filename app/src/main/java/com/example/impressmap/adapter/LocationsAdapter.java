@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.R;
-import com.example.impressmap.databinding.ItemAddressBinding;
+import com.example.impressmap.databinding.ItemUserAddressBinding;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.util.Converter;
 
@@ -32,7 +32,7 @@ public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.Loca
                                                  int viewType)
     {
         return new LocationViewHolder(
-                ItemAddressBinding.inflate(LayoutInflater.from(parent.getContext()), parent,
+                ItemUserAddressBinding.inflate(LayoutInflater.from(parent.getContext()), parent,
                         false));
     }
 
@@ -107,9 +107,9 @@ public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.Loca
 
     protected static class LocationViewHolder extends RecyclerView.ViewHolder
     {
-        private final ItemAddressBinding binding;
+        private final ItemUserAddressBinding binding;
 
-        public LocationViewHolder(@NonNull ItemAddressBinding addressBinding)
+        public LocationViewHolder(@NonNull ItemUserAddressBinding addressBinding)
         {
             super(addressBinding.getRoot());
             binding = addressBinding;

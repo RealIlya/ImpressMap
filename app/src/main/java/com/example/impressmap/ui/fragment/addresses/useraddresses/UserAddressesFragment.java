@@ -1,15 +1,19 @@
-package com.example.impressmap.ui.fragment.addresses;
+package com.example.impressmap.ui.fragment.addresses.useraddresses;
 
 import static com.example.impressmap.ui.fragment.main.MainFragment.ADDING_MODE;
 
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
@@ -18,18 +22,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.R;
-import com.example.impressmap.adapter.address.AddressCallback;
-import com.example.impressmap.adapter.address.AddressesAdapter;
-import com.example.impressmap.databinding.FragmentAddressesBinding;
+import com.example.impressmap.adapter.addresses.useraddresses.UserAddressesAdapter;
+import com.example.impressmap.adapter.addresses.useraddresses.UserAddressCallback;
+import com.example.impressmap.databinding.FragmentUserAddressesBinding;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.ui.activity.main.MainViewModel;
+import com.example.impressmap.ui.fragment.addresses.AddressesFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
 public class UserAddressesFragment extends Fragment
 {
-    private FragmentAddressesBinding binding;
+    private FragmentUserAddressesBinding binding;
     private UserAddressesFragmentViewModel viewModel;
 
     protected UserAddressesFragment()
@@ -48,7 +53,7 @@ public class UserAddressesFragment extends Fragment
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState)
     {
-        binding = FragmentAddressesBinding.inflate(inflater, container, false);
+        binding = FragmentUserAddressesBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -75,18 +80,45 @@ public class UserAddressesFragment extends Fragment
                     FragmentManager.POP_BACK_STACK_INCLUSIVE);
         });
 
+        binding.toolbar.addMenuProvider(new MenuProvider()
+        {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu,
+                                     @NonNull MenuInflater menuInflater)
+            {
+                menuInflater.inflate(R.menu.menu_user_addresses, menu);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem)
+            {
+                if (menuItem.getItemId() == R.id.menu_addresses)
+                {
+                    String name = AddressesFragment.class.getSimpleName();
+                    requireActivity().getSupportFragmentManager()
+                                     .beginTransaction()
+                                     .replace(R.id.container, AddressesFragment.newInstance())
+                                     .addToBackStack(name)
+                                     .commit();
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
         RecyclerView recyclerView = binding.addressesRecyclerView;
-        AddressesAdapter addressesAdapter = new AddressesAdapter(getContext(), requireActivity());
-        recyclerView.setAdapter(addressesAdapter);
+        UserAddressesAdapter userAddressesAdapter = new UserAddressesAdapter(getContext(), requireActivity());
+        recyclerView.setAdapter(userAddressesAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        addressesAdapter.setOnAddressClickListener(new AddressCallback()
+        userAddressesAdapter.setOnAddressClickListener(new UserAddressCallback()
         {
             @Override
             public void onAddressClick(Address address)
             {
-                viewModel.setSelectedAddressesCount(addressesAdapter.getSelectedAddressCount());
-                mainViewModel.setSelectedAddresses(addressesAdapter.getSelectedAddresses());
+                viewModel.setSelectedAddressesCount(userAddressesAdapter.getSelectedAddressCount());
+                mainViewModel.setSelectedAddresses(userAddressesAdapter.getSelectedAddresses());
             }
 
             @Override
@@ -96,17 +128,17 @@ public class UserAddressesFragment extends Fragment
             }
         });
 
-        viewModel.setAddressesCount(addressesAdapter.getItemCount());
-        viewModel.setSelectedAddressesCount(addressesAdapter.getSelectedAddressCount());
+        viewModel.setAddressesCount(userAddressesAdapter.getItemCount());
+        viewModel.setSelectedAddressesCount(userAddressesAdapter.getSelectedAddressCount());
 
         LiveData<List<Address>> byUser = viewModel.getByUser();
         if (!byUser.hasActiveObservers())
         {
             byUser.observeForever(addressList ->
             {
-                addressesAdapter.setAddresses(addressList);
+                userAddressesAdapter.setAddresses(addressList);
                 viewModel.setAddressesCount(addressList.size());
-                viewModel.setSelectedAddressesCount(addressesAdapter.getSelectedAddressCount());
+                viewModel.setSelectedAddressesCount(userAddressesAdapter.getSelectedAddressCount());
             });
         }
     }

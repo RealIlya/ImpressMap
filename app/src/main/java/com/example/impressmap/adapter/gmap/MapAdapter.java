@@ -17,13 +17,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public abstract class MapAdapter
 {
     public static final int MIN_ZOOM = 19;
+    public static final int MIN_VISIBLE = 16;
 
     private final GoogleMap googleMap;
     protected Marker pointer = null;
+    private GoogleMap.OnCameraMoveListener onCameraMoveListener;
     private GoogleMap.OnMapClickListener onMapClickListener;
     private GoogleMap.OnMapLongClickListener onMapLongClickListener;
     private GoogleMap.OnMarkerClickListener onMarkerClickListener;
-    private GoogleMap.OnMarkerDragListener onMarkerDragListener;
     private GoogleMap.OnCircleClickListener onCircleClickListener;
 
     public MapAdapter(GoogleMap googleMap)
@@ -71,6 +72,13 @@ public abstract class MapAdapter
     }
 
     public void animateZoomTo(LatLng latLng,
+                              GoogleMap.CancelableCallback callback)
+    {
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,
+                Math.max(googleMap.getCameraPosition().zoom, MIN_ZOOM)), callback);
+    }
+
+    public void animateZoomTo(LatLng latLng,
                               OnFinishCallback callback)
     {
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,
@@ -87,14 +95,19 @@ public abstract class MapAdapter
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
-    protected void onMapLongClicked(LatLng latLng)
+    protected void onCameraMoved()
     {
-        onMapLongClickListener.onMapLongClick(latLng);
+        onCameraMoveListener.onCameraMove();
     }
 
     protected void onMapClicked(LatLng latLng)
     {
         onMapClickListener.onMapClick(latLng);
+    }
+
+    protected void onMapLongClicked(LatLng latLng)
+    {
+        onMapLongClickListener.onMapLongClick(latLng);
     }
 
     protected boolean onMarkerClicked(Marker marker)
@@ -114,6 +127,11 @@ public abstract class MapAdapter
         return googleMap.getCameraPosition();
     }
 
+    public void setOnCameraMoveListener(GoogleMap.OnCameraMoveListener listener)
+    {
+        this.onCameraMoveListener = listener;
+    }
+
     public void setOnMapClickListener(@Nullable GoogleMap.OnMapClickListener listener)
     {
         onMapClickListener = listener;
@@ -129,11 +147,6 @@ public abstract class MapAdapter
         onMarkerClickListener = listener;
     }
 
-    public void setOnMarkerDragListener(@Nullable GoogleMap.OnMarkerDragListener listener)
-    {
-        onMarkerDragListener = listener;
-    }
-
     public void setOnCircleClickListener(GoogleMap.OnCircleClickListener listener)
     {
         onCircleClickListener = listener;
@@ -141,6 +154,9 @@ public abstract class MapAdapter
 
     public void removeListeners()
     {
+        onCameraMoveListener = () ->
+        {
+        };
         onMapClickListener = latLng ->
         {
         };
@@ -148,24 +164,6 @@ public abstract class MapAdapter
         {
         };
         onMarkerClickListener = marker -> false;
-        onMarkerDragListener = new GoogleMap.OnMarkerDragListener()
-        {
-            @Override
-            public void onMarkerDrag(@NonNull Marker marker)
-            {
-            }
-
-            @Override
-            public void onMarkerDragEnd(@NonNull Marker marker)
-            {
-            }
-
-            @Override
-            public void onMarkerDragStart(@NonNull Marker marker)
-            {
-            }
-        };
-
         onCircleClickListener = circle ->
         {
         };

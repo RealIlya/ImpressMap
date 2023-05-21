@@ -20,13 +20,12 @@ import java.util.List;
 public class AllAddressesLiveData extends LiveData<List<Address>>
 {
     private DatabaseReference addressesRef;
+
     private final ValueEventListener listener = new ValueEventListener()
     {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot)
         {
-            addressesRef = DATABASE_REF.child(ADDRESSES_NODE);
-
             List<Address> addressList = new ArrayList<>();
             Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
 
@@ -75,8 +74,9 @@ public class AllAddressesLiveData extends LiveData<List<Address>>
         }
     };
 
-    public AllAddressesLiveData()
+    public AllAddressesLiveData(DatabaseReference addressesRef)
     {
+        this.addressesRef = addressesRef;
     }
 
     @Override

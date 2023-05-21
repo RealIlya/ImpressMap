@@ -1,4 +1,4 @@
-package com.example.impressmap.adapter.address;
+package com.example.impressmap.adapter.addresses;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,17 +17,17 @@ import com.example.impressmap.util.Converter;
 import java.util.List;
 
 public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.AddressViewHolder>
-        implements AddressCallback
+        implements OnJoinToAddressButtonClickListener
 {
     private final Context context;
     private final AddressesAdapterViewModel viewModel;
-    private AddressCallback addressCallback;
+
+    private OnJoinToAddressButtonClickListener onJoinToAddressButtonClickListener;
 
     public AddressesAdapter(Context context,
                             ViewModelStoreOwner viewModelStoreOwner)
     {
         this.context = context;
-
         viewModel = new ViewModelProvider(viewModelStoreOwner).get(AddressesAdapterViewModel.class);
     }
 
@@ -54,28 +54,29 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
 
         if (address.isSelected())
         {
-            holder.binding.getRoot()
-                          .setBackgroundColor(Converter.getAttributeColor(context,
-                                  R.attr.backgroundSelectedItem));
+            holder.binding.joinAddressButton.setImageDrawable(
+                    Converter.getDrawable(context, R.drawable.ic_check));
+            holder.binding.joinAddressButton.getDrawable()
+                                            .setTint(context.getColor(R.color.positive));
         }
         else
         {
-            holder.binding.getRoot()
-                          .setBackground(Converter.getDrawable(context, R.drawable.ripple_effect));
+            holder.binding.joinAddressButton.setImageDrawable(
+                    Converter.getDrawable(context, R.drawable.ic_add_group));
         }
 
-        holder.binding.getRoot().setOnClickListener(v ->
+        holder.binding.joinAddressButton.setOnClickListener(v ->
         {
-            if (viewModel.getSelectedAddresses().size() < 5 || address.isSelected())
+            if (address.isSelected())
             {
-                address.setSelected(!address.isSelected());
-                onAddressClick(address);
-                notifyItemChanged(holder.getAdapterPosition());
+                address.setSelected(false);
             }
             else
             {
-                onMaxAddresses();
+                address.setSelected(true);
+                onJoinToAddressClick(address);
             }
+            notifyItemChanged(holder.getAdapterPosition());
         });
     }
 
@@ -94,31 +95,18 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
         return viewModel.getAddressesCount();
     }
 
-    public int getSelectedAddressCount()
+    public void setOnJoinToAddressButtonClickListener(OnJoinToAddressButtonClickListener listener)
     {
-        return viewModel.getSelectedAddresses().size();
-    }
-
-    public List<Address> getSelectedAddresses()
-    {
-        return viewModel.getSelectedAddresses();
-    }
-
-    public void setOnAddressClickListener(AddressCallback listener)
-    {
-        addressCallback = listener;
+        this.onJoinToAddressButtonClickListener = listener;
     }
 
     @Override
-    public void onAddressClick(Address address)
+    public void onJoinToAddressClick(Address address)
     {
-        addressCallback.onAddressClick(address);
-    }
-
-    @Override
-    public void onMaxAddresses()
-    {
-        addressCallback.onMaxAddresses();
+        if (onJoinToAddressButtonClickListener != null)
+        {
+            onJoinToAddressButtonClickListener.onJoinToAddressClick(address);
+        }
     }
 
     protected static class AddressViewHolder extends RecyclerView.ViewHolder

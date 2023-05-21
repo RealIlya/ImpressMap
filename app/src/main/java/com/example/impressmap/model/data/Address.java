@@ -3,13 +3,12 @@ package com.example.impressmap.model.data;
 import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
 import static com.example.impressmap.util.Constants.Keys.DESC_NODE;
 import static com.example.impressmap.util.Constants.Keys.FULL_ADDRESS_NODE;
+import static com.example.impressmap.util.Constants.Keys.NOT_PUBLIC_NODE;
 import static com.example.impressmap.util.Constants.Keys.OWNER_ID_NODE;
-import static com.example.impressmap.util.Constants.Keys.USER_IDS_NODE;
 
 import androidx.annotation.Nullable;
 import androidx.room.Entity;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,7 +19,6 @@ import java.util.Map;
 public class Address implements TransferableToDatabase
 {
     private String id = "";
-    private String userIds = "";
     private String desc = "";
     private String ownerId = "";
     private String fullAddress = "";
@@ -41,7 +39,7 @@ public class Address implements TransferableToDatabase
         data.put(DESC_NODE, desc);
         data.put(OWNER_ID_NODE, ownerId);
         data.put(FULL_ADDRESS_NODE, fullAddress);
-        data.put(USER_IDS_NODE, userIds);
+        data.put(NOT_PUBLIC_NODE, notPublic);
 
         return data;
     }
@@ -74,16 +72,6 @@ public class Address implements TransferableToDatabase
     public void setOwnerId(String ownerId)
     {
         this.ownerId = ownerId;
-    }
-
-    public List<String> getUserIds()
-    {
-        return new ArrayList<>(Arrays.asList(userIds.split(" ")));
-    }
-
-    public void setUserIds(String userIds)
-    {
-        this.userIds = userIds;
     }
 
     public String getFullAddress()

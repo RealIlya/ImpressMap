@@ -99,12 +99,6 @@
                             android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
                             android:textColor="?colorSecondaryText" />
                     </LinearLayout>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/comments_recycler_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        tools:itemCount="2" />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 

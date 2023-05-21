@@ -1,4 +1,4 @@
-package com.example.impressmap.adapter.comment;
+package com.example.impressmap.adapter.comments;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +51,7 @@ public class SubCommentsAdapter extends RecyclerView.Adapter<SubCommentsAdapter.
 
         holder.binding.showCommentsButton.setOnClickListener(v ->
         {
-            onCommentClick(v, holder.binding.commentsRecyclerView, comment);
+            onCommentClick(v, comment);
         });
 
         holder.binding.replyView.setOnClickListener(v ->
@@ -92,12 +92,11 @@ public class SubCommentsAdapter extends RecyclerView.Adapter<SubCommentsAdapter.
 
     @Override
     public void onCommentClick(View view,
-                               RecyclerView commentsRecyclerView,
                                Comment comment)
     {
         if (onCommentsButtonClickListener != null)
         {
-            onCommentsButtonClickListener.onCommentClick(view, commentsRecyclerView, comment);
+            onCommentsButtonClickListener.onCommentClick(view, comment);
         }
     }
 

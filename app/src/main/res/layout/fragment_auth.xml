@@ -10,7 +10,6 @@
             android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:fitsSystemWindows="true"
             android:orientation="vertical">
 
             <LinearLayout
@@ -20,13 +19,6 @@
                 android:layout_marginTop="@dimen/vertical_small_margin"
                 android:orientation="vertical"
                 android:visibility="gone">
-
-                <TextView
-                    android:id="@+id/error_name_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/field_is_necessary"
-                    android:visibility="invisible" />
 
                 <EditText
                     android:id="@+id/name_view"
@@ -49,66 +41,40 @@
                     android:inputType="text" />
             </LinearLayout>
 
-            <LinearLayout
+            <EditText
+                android:id="@+id/email_view"
+                style="@style/textStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginHorizontal="@dimen/horizontal_margin"
+                android:hint="@string/email_hint"
+                android:inputType="textEmailAddress" />
 
-                <TextView
-                    android:id="@+id/error_email_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/field_is_necessary"
-                    android:visibility="invisible" />
-
-                <EditText
-                    android:id="@+id/email_view"
-                    style="@style/textStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/horizontal_margin"
-                    android:hint="@string/email_hint"
-                    android:inputType="text" />
-            </LinearLayout>
-
-            <LinearLayout
+            <EditText
+                android:id="@+id/password_view"
+                style="@style/textStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginHorizontal="@dimen/horizontal_margin"
+                android:autofillHints="password"
+                android:hint="@string/password_hint"
+                android:inputType="textPassword" />
 
-                <TextView
-                    android:id="@+id/error_password_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/field_is_necessary"
-                    android:visibility="invisible" />
+            <CheckBox
+                android:id="@+id/dont_logout_check_box"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/horizontal_margin"
+                android:buttonTint="?colorAccent"
+                android:text="@string/dont_logout_check_box" />
 
-                <EditText
-                    android:id="@+id/password_view"
-                    style="@style/textStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/horizontal_margin"
-                    android:autofillHints="password"
-                    android:hint="@string/password_hint"
-                    android:inputType="textPassword" />
-
-                <CheckBox
-                    android:id="@+id/dont_logout_check_box"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/horizontal_margin"
-                    android:buttonTint="?colorAccent"
-                    android:text="@string/dont_logout_check_box" />
-
-                <CheckBox
-                    android:id="@+id/sign_up_check_box"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/horizontal_margin"
-                    android:buttonTint="?colorAccent"
-                    android:text="@string/sign_up_button" />
-            </LinearLayout>
+            <CheckBox
+                android:id="@+id/sign_up_check_box"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/horizontal_margin"
+                android:buttonTint="?colorAccent"
+                android:text="@string/sign_up_button" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/next_button"

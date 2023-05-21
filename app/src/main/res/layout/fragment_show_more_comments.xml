@@ -43,15 +43,10 @@
                     android:orientation="vertical">
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/post_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/horizontal_very_small_margin"
-                        android:layout_marginTop="@dimen/vertical_very_small_margin"
                         android:layout_marginBottom="@dimen/vertical_very_small_margin"
-                        android:transitionName="post_transition"
                         app:cardBackgroundColor="?backgroundSecondaryWindow"
-                        app:cardCornerRadius="@dimen/horizontal_small_margin"
                         app:cardElevation="0dp">
 
                         <LinearLayout
@@ -59,104 +54,90 @@
                             android:layout_height="match_parent"
                             android:orientation="vertical">
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="@dimen/horizontal_small_margin"
                                 android:layout_marginTop="@dimen/vertical_margin"
-                                android:layout_marginBottom="@dimen/horizontal_small_margin"
-                                android:orientation="horizontal">
-
-                                <com.google.android.material.imageview.ShapeableImageView
-                                    android:id="@+id/avatar_view"
-                                    android:layout_width="48dp"
-                                    android:layout_height="48dp"
-                                    android:src="@drawable/sample_avatar"
-                                    app:shapeAppearanceOverlay="@style/avatarOverlay" />
+                                android:layout_marginBottom="@dimen/horizontal_small_margin">
 
                                 <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
+                                    android:id="@+id/left"
+                                    android:layout_width="36dp"
+                                    android:layout_height="0dp"
                                     android:orientation="vertical"
-                                    android:paddingHorizontal="@dimen/horizontal_small_margin">
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent">
+
+                                    <com.google.android.material.imageview.ShapeableImageView
+                                        android:id="@+id/avatar_view"
+                                        android:layout_width="36dp"
+                                        android:layout_height="36dp"
+                                        android:src="@drawable/sample_avatar"
+                                        app:shapeAppearanceOverlay="@style/avatarOverlay" />
+
+                                    <com.google.android.material.button.MaterialButton
+                                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                                        android:layout_width="36dp"
+                                        android:layout_height="match_parent"
+                                        android:visibility="invisible"
+                                        app:drawableBottomCompat="@drawable/ic_hide"
+                                        app:drawableTint="?colorPrimaryFabIcon" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/linearLayout"
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
+                                    android:paddingHorizontal="@dimen/horizontal_small_margin"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@id/left"
+                                    app:layout_constraintTop_toTopOf="parent">
 
                                     <TextView
                                         android:id="@+id/fullName_view"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginBottom="@dimen/vertical_very_small_margin"
                                         android:gravity="start"
                                         android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
                                         android:textColor="?colorPrimaryText"
                                         tools:text="@tools:sample/full_names" />
 
                                     <TextView
-                                        android:id="@+id/date_view"
+                                        android:id="@+id/text_view"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:gravity="start"
+                                        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                                        android:textColor="?colorPrimaryText"
+                                        tools:text="@tools:sample/lorem" />
+
+                                    <TextView
+                                        android:id="@+id/date_view"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
                                         android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
                                         android:textColor="?colorSecondaryText"
                                         tools:text="@tools:sample/date/ddmmyy" />
                                 </LinearLayout>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/vertical_small_margin"
-                                android:layout_marginHorizontal="@dimen/horizontal_small_margin"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/text_view"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                                    android:textColor="?colorPrimaryText"
-                                    tools:text="@tools:sample/lorem" />
-                            </LinearLayout>
-
-                            <androidx.coordinatorlayout.widget.CoordinatorLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="48dp"
-                                android:padding="@dimen/vertical_small_margin" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/comments_recycler_view"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <com.google.android.material.appbar.AppBarLayout
-                            android:id="@+id/appBarLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="?backgroundSecondaryWindow"
-                            app:elevation="1dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <com.google.android.material.appbar.MaterialToolbar
-                                android:id="@+id/comments_toolbar"
-                                android:layout_width="match_parent"
-                                android:layout_height="?attr/actionBarSize"
-                                app:popupTheme="@style/Theme.ImpressMap.PopupOverlay"
-                                app:title="@string/comments" />
-                        </com.google.android.material.appbar.AppBarLayout>
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/comments_recycler_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:nestedScrollingEnabled="true"
-                            android:overScrollMode="ifContentScrolls"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-                            tools:itemCount="8" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:layout_height="match_parent"
+                        android:nestedScrollingEnabled="true"
+                        android:overScrollMode="ifContentScrolls"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:itemCount="8" />
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
@@ -189,7 +170,7 @@
                         style="@style/preMessageTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="@string/write_some_words"
+                        android:hint="@string/reply"
                         android:importantForAutofill="no"
                         android:inputType="text|textMultiLine" />
                 </com.google.android.material.bottomappbar.BottomAppBar>

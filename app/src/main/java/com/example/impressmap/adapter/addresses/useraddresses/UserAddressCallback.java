@@ -1,8 +1,8 @@
-package com.example.impressmap.adapter.address;
+package com.example.impressmap.adapter.addresses.useraddresses;
 
 import com.example.impressmap.model.data.Address;
 
-public interface AddressCallback
+public interface UserAddressCallback
 {
     void onAddressClick(Address address);
 

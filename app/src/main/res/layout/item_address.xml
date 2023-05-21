@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            style="@style/settingsItemStyle"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/address_secondary_view"
+                style="@style/settingsItemHeaderTextStyle"
+                tools:text="@tools:sample/cities" />
+
+            <TextView
+                android:id="@+id/address_primary_view"
+                style="@style/settingsItemSubheaderTextStyle"
+                tools:text="@tools:sample/cities" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/join_address_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="@dimen/vertical_small_margin"
+            android:background="@drawable/background_comment_selector"
+            app:srcCompat="@drawable/ic_add_group"
+            app:tint="?colorPrimaryFabIcon" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

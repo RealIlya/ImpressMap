@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.R;
-import com.example.impressmap.adapter.post.PostsAdapter;
+import com.example.impressmap.adapter.posts.PostsAdapter;
 import com.example.impressmap.databinding.FragmentPostsBinding;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.GMarkerWithChildrenMetadata;

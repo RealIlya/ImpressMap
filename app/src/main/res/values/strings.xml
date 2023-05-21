@@ -9,10 +9,10 @@
     <string name="addresses_count">"Addresses"</string>
     <string name="selected_addresses_count">" selected"</string>
     <string name="comments">Comments</string>
-    <string name="search">Search</string>
-    <string name="change_profile">Change profile</string>
+    <string name="edit_profile">Edit profile</string>
     <string name="is_private">Private</string>
-
+    <string name="addresses">Addresses</string>
+    <string name="comment">Comment</string>
 
     <!--  creator address fragment -->
     <string name="create_address">Create address</string>
@@ -22,10 +22,7 @@
     <!--  nav drawer item titles  -->
     <string name="menu_profile">Profile</string>
     <string name="menu_addresses">Addresses</string>
-    <string name="nav_header_item_settings">Settings</string>
-    <string name="menu_notification_and_sound">Notification and Sound</string>
-    <string name="menu_map_features" translatable="false">Map Features</string>
-    <string name="menu_language">Select Language</string>
+    <string name="menu_join_address">Join To Address</string>
 
     <!--  auth fragment  -->
     <string name="name_hint">Name</string>
@@ -60,10 +57,6 @@
 
     <string name="phone_number_not_set"><i>Phone number not set</i></string>
 
-    <!--  menu item reactions  -->
-    <string name="menu_reaction_count" translatable="false">200</string>
-    <string name="menu_reaction_like" translatable="false">👍</string>
-    <string name="menu_reaction_dislike" translatable="false">👎</string>
-    <string name="menu_reaction_love" translatable="false">❤</string>
+    <string name="comments_count" translatable="false">200</string>
 
 </resources>

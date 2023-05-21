@@ -25,15 +25,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.R;
-import com.example.impressmap.adapter.comment.CommentsAdapter;
-import com.example.impressmap.adapter.comment.OnCommentsButtonClickListener;
-import com.example.impressmap.adapter.comment.OnReplyButtonClickListener;
-import com.example.impressmap.adapter.comment.SubCommentsAdapter;
+import com.example.impressmap.adapter.comments.CommentsAdapter;
+import com.example.impressmap.adapter.comments.OnCommentsButtonClickListener;
+import com.example.impressmap.adapter.comments.OnReplyButtonClickListener;
 import com.example.impressmap.databinding.FragmentCommentsBinding;
 import com.example.impressmap.model.data.Comment;
 import com.example.impressmap.model.data.OwnerUser;
 import com.example.impressmap.model.data.Post;
-import com.example.impressmap.ui.fragment.inputmessage.InputMessageFragment;
+import com.example.impressmap.ui.fragment.bottommarker.showmorecomments.ShowMoreCommentsFragment;
 import com.example.impressmap.util.MessageViewTextWatcher;
 
 import java.text.DateFormat;
@@ -169,48 +168,20 @@ public class CommentsFragment extends Fragment
     public void onReplyClick(View view,
                              Comment comment)
     {
-        if (!InputMessageFragment.active)
-        {
-            getParentFragmentManager().beginTransaction()
-                                      .add(R.id.bottom_container,
-                                              InputMessageFragment.newInstance(comment))
-                                      .commit();
-        }
+        getParentFragmentManager().beginTransaction()
+                                  .add(R.id.bottom_container,
+                                          ShowMoreCommentsFragment.newInstance(comment))
+                                  .commit();
     }
 
     @Override
     public void onCommentClick(View v,
-                               RecyclerView commentsRecyclerView,
                                Comment comment)
     {
-        LiveData<List<String>> commentIdsLiveData = viewModel.getIdsByOwner(comment);
-
-        if (!commentIdsLiveData.hasActiveObservers())
-        {
-            commentIdsLiveData.observe(getViewLifecycleOwner(), ids ->
-            {
-                if (!ids.isEmpty())
-                {
-                    v.setVisibility(View.GONE);
-                }
-
-                SubCommentsAdapter subCommentsAdapter = new SubCommentsAdapter();
-                commentsRecyclerView.setAdapter(subCommentsAdapter);
-                commentsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-                subCommentsAdapter.setOnCommentsButtonClickListener(this);
-                subCommentsAdapter.setOnReplyButtonClickListener(this);
-
-                for (String id : ids)
-                {
-                    LiveData<Comment> byId = viewModel.getById(id);
-                    if (!byId.hasActiveObservers())
-                    {
-                        byId.observeForever(subCommentsAdapter::addComment);
-                    }
-                }
-            });
-        }
+        getParentFragmentManager().beginTransaction()
+                                  .add(R.id.bottom_container,
+                                          ShowMoreCommentsFragment.newInstance(comment))
+                                  .commit();
     }
 
     @Nullable

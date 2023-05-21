@@ -56,8 +56,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/marker_title_hint"
-                        android:importantForAutofill="no"
-                        android:inputType="text" />
+                        android:importantForAutofill="no" />
 
                     <EditText
                         android:id="@+id/desc_view"
@@ -66,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/address_desc_hint"
                         android:importantForAutofill="no"
-                        android:inputType="textMultiLine"
+                        android:inputType="textMultiLine|textCapSentences"
                         android:minLines="1"
                         android:scrollbars="vertical"
                         android:scrollHorizontally="false" />
@@ -93,6 +92,7 @@
                         android:layout_height="wrap_content"
                         android:background="?backgroundSecondaryWindow"
                         app:elevation="0dp"
+                        app:layout_constraintBottom_toTopOf="@+id/nestedScrollView"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -104,15 +104,22 @@
                             app:title="@string/addresses_in_this_location" />
                     </com.google.android.material.appbar.AppBarLayout>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/addresses_recycler_view"
+                    <androidx.core.widget.NestedScrollView
+                        android:id="@+id/nestedScrollView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-                        tools:itemCount="3"
-                        tools:listitem="@layout/item_user_address" />
+                        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/addresses_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            tools:itemCount="3"
+                            tools:listitem="@layout/item_user_address" />
+                    </androidx.core.widget.NestedScrollView>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

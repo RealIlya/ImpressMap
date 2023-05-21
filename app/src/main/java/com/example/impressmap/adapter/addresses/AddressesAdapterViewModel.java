@@ -1,4 +1,4 @@
-package com.example.impressmap.adapter.address;
+package com.example.impressmap.adapter.addresses;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
@@ -24,7 +24,6 @@ public class AddressesAdapterViewModel extends ViewModel
             return false;
         }
 
-        // todo optimize plz
         if (!addressesCache.isEmpty())
         {
             List<Address> buf = new ArrayList<>();

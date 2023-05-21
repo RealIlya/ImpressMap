@@ -84,7 +84,7 @@
                     android:gravity="center"
                     app:drawableStartCompat="@drawable/ic_comment"
                     app:drawableTint="?colorPrimaryFabIcon"
-                    tools:text="@string/menu_reaction_count" />
+                    tools:text="@string/comments_count" />
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

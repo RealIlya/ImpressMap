@@ -1,4 +1,4 @@
-package com.example.impressmap.adapter.post;
+package com.example.impressmap.adapter.posts;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;

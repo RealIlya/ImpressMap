@@ -1,4 +1,4 @@
-package com.example.impressmap.ui.fragment.addresses;
+package com.example.impressmap.ui.fragment.addresses.useraddresses;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

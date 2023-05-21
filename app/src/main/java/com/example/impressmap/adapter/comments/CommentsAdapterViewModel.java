@@ -1,4 +1,4 @@
-package com.example.impressmap.adapter.comment;
+package com.example.impressmap.adapter.comments;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;

@@ -84,4 +84,14 @@ public abstract class GMarker implements GObject
     {
         this.clickable = clickable;
     }
+
+    public void hide()
+    {
+        marker.setVisible(false);
+    }
+
+    public void show()
+    {
+        marker.setVisible(true);
+    }
 }

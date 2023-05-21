@@ -44,6 +44,24 @@ public class GMapAdapter extends MapAdapter
             zoomTo(lastCameraPosition);
         }
 
+        googleMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener()
+        {
+            @Override
+            public void onCameraMove()
+            {
+                if (googleMap.getCameraPosition().zoom < MIN_VISIBLE)
+                {
+                    viewModel.hideMarkers();
+                }
+                else
+                {
+                    viewModel.showMarkers();
+                }
+
+                onCameraMoved();
+            }
+        });
+
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener()
         {
             @Override
@@ -61,22 +79,6 @@ public class GMapAdapter extends MapAdapter
             public void onMapLongClick(@NonNull LatLng latLng)
             {
                 onMapLongClicked(latLng);
-            }
-        });
-
-        googleMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener()
-        {
-            @Override
-            public void onCameraMove()
-            {
-                /*if (googleMap.getCameraPosition().zoom < MIN_ZOOM)
-                {
-                    hideMarkers();
-                }
-                else
-                {
-                    showMarkers();
-                }*/
             }
         });
 
@@ -188,14 +190,13 @@ public class GMapAdapter extends MapAdapter
         Marker marker = super.addMarker(gMarkerMetadata);
 
         GMarker gMarker;
-        switch (gMarkerMetadata.getType())
+        if (gMarkerMetadata.getType() == GMarkerMetadata.ADDRESS_MARKER)
         {
-            case GMarkerMetadata.ADDRESS_MARKER:
-                gMarker = new AddressGMarker(context, marker, gMarkerMetadata);
-                break;
-            default:
-                gMarker = new CommonGMarker(context, marker, gMarkerMetadata);
-                break;
+            gMarker = new AddressGMarker(context, marker, gMarkerMetadata);
+        }
+        else
+        {
+            gMarker = new CommonGMarker(context, marker, gMarkerMetadata);
         }
 
         viewModel.addGMarkerInCache(gMarker);
@@ -251,6 +252,12 @@ public class GMapAdapter extends MapAdapter
     public void animateZoomTo(Address address)
     {
         animateZoomTo(getGCircleLatLng(address));
+    }
+
+    public void animateZoomTo(Address address,
+                              OnFinishCallback callback)
+    {
+        animateZoomTo(getGCircleLatLng(address), callback);
     }
 
     @Override

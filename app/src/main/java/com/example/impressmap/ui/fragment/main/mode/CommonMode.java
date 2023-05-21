@@ -85,13 +85,11 @@ public class CommonMode extends Mode
         {
             addressesLiveData.observe(activity, addressList ->
             {
-                // not optimized
                 gMapAdapter.clearMap();
                 if (!addressList.isEmpty())
                 {
                     for (Address address : addressList)
                     {
-                        //TODO only add. Must fix
                         viewModel.getGMarkerMetadataByAddress(address)
                                  .observeForever(gMapAdapter::addZone);
                     }
@@ -207,8 +205,10 @@ public class CommonMode extends Mode
                     mainViewModel.getSelectedAddresses().getValue());
             popupAddressesAdapter.setOnAddressClickListener(address ->
             {
+                binding.selectedAddressesFab.setEnabled(false);
                 popupWindow.dismiss();
-                gMapAdapter.animateZoomTo(address);
+                gMapAdapter.animateZoomTo(address,
+                        () -> binding.selectedAddressesFab.setEnabled(true));
             });
 
             recyclerView.setAdapter(popupAddressesAdapter);

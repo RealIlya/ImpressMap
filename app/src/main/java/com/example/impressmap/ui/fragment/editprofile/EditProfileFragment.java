@@ -17,11 +17,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.R;
 import com.example.impressmap.databinding.FragmentEditProfileBinding;
+import com.example.impressmap.model.data.User;
+import com.example.impressmap.ui.activity.main.MainViewModel;
 import com.example.impressmap.util.FieldEmptyCallback;
 import com.example.impressmap.util.SuccessCallback;
 import com.google.android.material.snackbar.Snackbar;
-
-import org.jetbrains.annotations.Contract;
 
 public class EditProfileFragment extends Fragment
 {
@@ -62,7 +62,14 @@ public class EditProfileFragment extends Fragment
 
         binding.toolbar.setNavigationOnClickListener(
                 v -> requireActivity().getSupportFragmentManager().popBackStack());
-        binding.toolbar.setTitle(R.string.change_profile);
+        binding.toolbar.setTitle(R.string.edit_profile);
+
+        MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
+                MainViewModel.class);
+
+        User user = mainViewModel.getUser();
+        binding.nameView.setText(user.getName());
+        binding.surnameView.setText(user.getSurname());
 
         binding.toolbar.addMenuProvider(new MenuProvider()
         {

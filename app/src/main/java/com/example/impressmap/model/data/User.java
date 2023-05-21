@@ -65,13 +65,13 @@ public class User implements TransferableToDatabase
 
     public String getName()
     {
-        String[] split = fullName.split("");
+        String[] split = fullName.split(" ");
         return split[0];
     }
 
     public String getSurname()
     {
-        String[] split = fullName.split("");
+        String[] split = fullName.split(" ");
         return split.length > 1 ? split[1] : "";
     }
 

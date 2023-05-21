@@ -6,14 +6,11 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class Constants
 {
-    public static String DATABASE_NAME = "impress_database";
-
     public static final FirebaseAuth AUTH = FirebaseAuth.getInstance();
-    public static String UID;
-
     public static final DatabaseReference DATABASE_REF;
-
     public static final String LAT_LNG_KEY = "LAT_LNG_KEY";
+    public static String DATABASE_NAME = "impress_database";
+    public static String UID;
 
     static
     {
@@ -44,6 +41,7 @@ public class Constants
         public static final String PHONE_NUMBER_NODE = "phoneNumber";
         public static final String EMAIL_NODE = "email";
         public static final String USER_IDS_NODE = "userIds";
+        public static final String NOT_PUBLIC_NODE = "notPublic";
         public static final String OWNER_ID_NODE = "ownerId";
         public static final String DESC_NODE = "desc";
         public static final String GMARKER_ID = "gmarkerId";

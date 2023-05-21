@@ -10,7 +10,6 @@ import static com.example.impressmap.util.Constants.UID;
 import androidx.lifecycle.LiveData;
 
 import com.example.impressmap.database.DatabaseRepo;
-import com.example.impressmap.database.firebase.data.AllAddressesLiveData;
 import com.example.impressmap.database.firebase.data.AllUserAddressesLiveData;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.util.SuccessCallback;
@@ -20,14 +19,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AddressesRepo implements DatabaseRepo<Address>
+public class UserAddressesRepo implements DatabaseRepo<Address>
 {
-    private final DatabaseReference addressesRef;
     private final DatabaseReference userAddressesRef;
 
-    public AddressesRepo()
+    public UserAddressesRepo()
     {
-        addressesRef = DATABASE_REF.child(ADDRESSES_NODE);
         userAddressesRef = DATABASE_REF.child(MAIN_LIST_NODE)
                                        .child(USERS_NODE)
                                        .child(UID)
@@ -37,27 +34,22 @@ public class AddressesRepo implements DatabaseRepo<Address>
     @Override
     public LiveData<List<Address>> getAll()
     {
-        return new AllAddressesLiveData(addressesRef);
+        return new AllUserAddressesLiveData(userAddressesRef);
     }
 
     @Override
     public void insert(Address address,
                        SuccessCallback successCallback)
     {
-        String addressKey = userAddressesRef.push().getKey();
+        String addressKey = address.getId();
 
-        address.setId(addressKey);
         address.setOwnerId(UID);
-        Map<String, Object> data = address.prepareToTransferToDatabase();
 
         Map<String, Object> sData = new HashMap<>();
         sData.put(CHILD_ID_NODE, addressKey);
-        addressesRef.child(addressKey)
-                    .updateChildren(data)
-                    .addOnSuccessListener(unused -> userAddressesRef.child(addressKey)
-                                                                    .updateChildren(sData)
-                                                                    .addOnSuccessListener(
-                                                                            unused1 -> successCallback.onSuccess()));
+        userAddressesRef.child(addressKey)
+                        .updateChildren(sData)
+                        .addOnSuccessListener(unused1 -> successCallback.onSuccess());
     }
 
     @Override
@@ -70,12 +62,6 @@ public class AddressesRepo implements DatabaseRepo<Address>
     @Override
     public void delete(Address address,
                        SuccessCallback successCallback)
-    {
-
-    }
-
-    public void join(Address address,
-                     SuccessCallback successCallback)
     {
 
     }

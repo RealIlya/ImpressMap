@@ -59,22 +59,14 @@
 
                             <com.google.android.material.appbar.MaterialToolbar
                                 android:id="@+id/toolbar"
+                                style="@style/toolbarTextStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="?actionBarSize"
                                 android:layout_marginHorizontal="@dimen/horizontal_medium_margin"
                                 android:background="@drawable/background_toolbar_main"
                                 android:elevation="4dp"
-                                app:navigationIcon="@drawable/ic_menu_drawer">
-
-                                <EditText
-                                    android:id="@+id/message_text"
-                                    style="@style/mapToolbarTextStyle"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:hint="@string/search"
-                                    android:importantForAutofill="no"
-                                    android:inputType="text" />
-                            </com.google.android.material.appbar.MaterialToolbar>
+                                app:navigationIcon="@drawable/ic_menu_drawer"
+                                app:title="@string/app_name" />
                         </com.google.android.material.appbar.AppBarLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.coordinatorlayout.widget.CoordinatorLayout>
