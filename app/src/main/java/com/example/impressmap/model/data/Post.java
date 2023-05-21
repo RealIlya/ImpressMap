@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Entity
-public class Post implements TransferableToDatabase, Parcelable, Owner
+public class Post implements TransferableToDatabase, Owner
 {
     public static final Creator<Post> CREATOR = new Creator<Post>()
     {

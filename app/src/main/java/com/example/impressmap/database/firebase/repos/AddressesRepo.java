@@ -10,6 +10,7 @@ import static com.example.impressmap.util.Constants.UID;
 import androidx.lifecycle.LiveData;
 
 import com.example.impressmap.database.DatabaseRepo;
+import com.example.impressmap.database.firebase.data.AllAddressesLiveData;
 import com.example.impressmap.database.firebase.data.AllUserAddressesLiveData;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.util.SuccessCallback;
@@ -33,10 +34,15 @@ public class AddressesRepo implements DatabaseRepo<Address>
                                        .child(ADDRESSES_NODE);
     }
 
+    public LiveData<List<Address>> getUserAll()
+    {
+        return new AllUserAddressesLiveData(userAddressesRef);
+    }
+
     @Override
     public LiveData<List<Address>> getAll()
     {
-        return new AllUserAddressesLiveData(userAddressesRef);
+        return new AllAddressesLiveData();
     }
 
     @Override

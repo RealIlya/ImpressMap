@@ -19,8 +19,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/horizontal_small_margin"
                 android:layout_marginTop="@dimen/vertical_margin"
-                android:layout_marginBottom="@dimen/horizontal_small_margin"
-                android:orientation="horizontal">
+                android:layout_marginBottom="@dimen/horizontal_small_margin">
 
                 <LinearLayout
                     android:id="@+id/left"
@@ -78,14 +77,28 @@
                         android:textColor="?colorPrimaryText"
                         tools:text="@tools:sample/lorem" />
 
-                    <TextView
-                        android:id="@+id/date_view"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:gravity="start"
-                        android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
-                        android:textColor="?colorSecondaryText"
-                        tools:text="@tools:sample/date/ddmmyy" />
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/date_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                            android:textColor="?colorSecondaryText"
+                            tools:text="@tools:sample/date/ddmmyy" />
+
+                        <TextView
+                            android:id="@+id/reply_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingHorizontal="@dimen/horizontal_margin"
+                            android:text="@string/reply"
+                            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                            android:textColor="?colorSecondaryText" />
+                    </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/comments_recycler_view"
@@ -96,9 +109,9 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
-                android:id="@+id/comments_"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <com.google.android.material.divider.MaterialDivider style="@style/theBestDividerStyle" />
 
@@ -113,14 +126,6 @@
                     android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                     android:textColor="?colorSecondaryText" />
             </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/reactions_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="@dimen/horizontal_margin"
-                android:orientation="horizontal"
-                tools:listitem="@layout/item_reaction" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>

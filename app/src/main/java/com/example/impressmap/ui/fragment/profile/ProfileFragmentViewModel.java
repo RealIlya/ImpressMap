@@ -33,12 +33,6 @@ public class ProfileFragmentViewModel extends AndroidViewModel
         return userCase.getUser();
     }
 
-    public void changeFullName(String newFullName,
-                               SuccessCallback successCallback)
-    {
-        userCase.changeFullName(newFullName, successCallback);
-    }
-
     public void signOut(SuccessCallback successCallback)
     {
         authorizationCase.signOut(() ->

@@ -1,6 +1,10 @@
 package com.example.impressmap.model.data;
 
-public interface Owner
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
+public interface Owner extends Parcelable
 {
     String getId();
 }

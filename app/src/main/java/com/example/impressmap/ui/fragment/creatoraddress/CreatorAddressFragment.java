@@ -4,6 +4,7 @@ import static com.example.impressmap.ui.fragment.main.MainFragment.COMMON_MODE;
 import static com.example.impressmap.util.Constants.LAT_LNG_KEY;
 
 import android.os.Bundle;
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,7 +85,8 @@ public class CreatorAddressFragment extends Fragment
             Address address = locationsAdapter.getSelectedAddress();
             if (address == null)
             {
-                Snackbar.make(requireView(), R.string.no_address_selected, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(requireView(), R.string.no_address_selected, Snackbar.LENGTH_LONG)
+                        .show();
                 return;
             }
 
@@ -93,6 +95,7 @@ public class CreatorAddressFragment extends Fragment
             if (!title.isEmpty() && !desc.isEmpty())
             {
                 address.setDesc(desc);
+                address.setNotPublic(binding.privateCheckBox.isChecked());
 
                 GMarkerMetadata gMarkerMetadata = new GMarkerMetadata();
                 gMarkerMetadata.setTitle(title);
@@ -108,5 +111,21 @@ public class CreatorAddressFragment extends Fragment
                 });
             }
         });
+    }
+
+    @Nullable
+    @Override
+    public Object getEnterTransition()
+    {
+        return TransitionInflater.from(requireContext())
+                                 .inflateTransition(android.R.transition.fade);
+    }
+
+    @Nullable
+    @Override
+    public Object getExitTransition()
+    {
+        return TransitionInflater.from(requireContext())
+                                 .inflateTransition(android.R.transition.fade);
     }
 }

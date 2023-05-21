@@ -33,6 +33,6 @@ public class GMarkerAddressCase
 
     public LiveData<List<Address>> getByUser()
     {
-        return addressesRepo.getAll();
+        return addressesRepo.getUserAll();
     }
 }

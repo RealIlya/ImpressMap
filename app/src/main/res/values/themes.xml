@@ -4,6 +4,7 @@
 
         <item name="android:statusBarColor">@color/blue_100_alpha_5</item>
         <item name="android:navigationBarColor">?backgroundPrimaryWindow</item>
+        <item name="android:windowLightStatusBar">true</item>
 
         <item name="android:colorEdgeEffect">?colorAccent</item>
 

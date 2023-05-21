@@ -26,16 +26,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.R;
 import com.example.impressmap.adapter.comment.CommentsAdapter;
+import com.example.impressmap.adapter.comment.OnCommentsButtonClickListener;
+import com.example.impressmap.adapter.comment.OnReplyButtonClickListener;
+import com.example.impressmap.adapter.comment.SubCommentsAdapter;
 import com.example.impressmap.databinding.FragmentCommentsBinding;
 import com.example.impressmap.model.data.Comment;
 import com.example.impressmap.model.data.OwnerUser;
 import com.example.impressmap.model.data.Post;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.impressmap.ui.fragment.inputmessage.InputMessageFragment;
+import com.example.impressmap.util.MessageViewTextWatcher;
 
 import java.text.DateFormat;
 import java.util.List;
 
 public class CommentsFragment extends Fragment
+        implements OnCommentsButtonClickListener, OnReplyButtonClickListener
 {
     private static final String POST_KEY = "POST_KEY";
 
@@ -116,35 +121,11 @@ public class CommentsFragment extends Fragment
             });
         }
 
-        commentsAdapter.setOnCommentsButtonClickListener((v, comment) ->
-        {
-            LiveData<List<String>> commentIdsLiveData = viewModel.getIdsByOwner(comment);
+        commentsAdapter.setOnCommentsButtonClickListener(this);
+        commentsAdapter.setOnReplyButtonClickListener(this);
 
-            if (!commentIdsLiveData.hasActiveObservers())
-            {
-                commentIdsLiveData.observe(getViewLifecycleOwner(), ids ->
-                {
-                    if (!ids.isEmpty())
-                    {
-                        v.setVisibility(View.VISIBLE);
-                    }
-                    else
-                    {
-                        v.setVisibility(View.GONE);
-                    }
-
-                    commentsAdapter.clear();
-                    for (String id : ids)
-                    {
-                        LiveData<Comment> byId = viewModel.getById(id);
-                        if (!byId.hasActiveObservers())
-                        {
-                            byId.observeForever(commentsAdapter::addComment);
-                        }
-                    }
-                });
-            }
-        });
+        binding.messageText.addTextChangedListener(new MessageViewTextWatcher(
+                binding.senderToolbar.getMenu().findItem(R.id.menu_send)));
 
         binding.senderToolbar.addMenuProvider(new MenuProvider()
         {
@@ -175,12 +156,61 @@ public class CommentsFragment extends Fragment
                                 Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                         commentsRecyclerView.smoothScrollToPosition(commentsAdapter.getItemCount());
-                    }, () -> Snackbar.make(requireView(), R.string.message_is_empty,
-                            Snackbar.LENGTH_LONG).show());
+                    }, () ->
+                    {
+                    });
                 }
                 return true;
             }
         });
+    }
+
+    @Override
+    public void onReplyClick(View view,
+                             Comment comment)
+    {
+        if (!InputMessageFragment.active)
+        {
+            getParentFragmentManager().beginTransaction()
+                                      .add(R.id.bottom_container,
+                                              InputMessageFragment.newInstance(comment))
+                                      .commit();
+        }
+    }
+
+    @Override
+    public void onCommentClick(View v,
+                               RecyclerView commentsRecyclerView,
+                               Comment comment)
+    {
+        LiveData<List<String>> commentIdsLiveData = viewModel.getIdsByOwner(comment);
+
+        if (!commentIdsLiveData.hasActiveObservers())
+        {
+            commentIdsLiveData.observe(getViewLifecycleOwner(), ids ->
+            {
+                if (!ids.isEmpty())
+                {
+                    v.setVisibility(View.GONE);
+                }
+
+                SubCommentsAdapter subCommentsAdapter = new SubCommentsAdapter();
+                commentsRecyclerView.setAdapter(subCommentsAdapter);
+                commentsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+                subCommentsAdapter.setOnCommentsButtonClickListener(this);
+                subCommentsAdapter.setOnReplyButtonClickListener(this);
+
+                for (String id : ids)
+                {
+                    LiveData<Comment> byId = viewModel.getById(id);
+                    if (!byId.hasActiveObservers())
+                    {
+                        byId.observeForever(subCommentsAdapter::addComment);
+                    }
+                }
+            });
+        }
     }
 
     @Nullable

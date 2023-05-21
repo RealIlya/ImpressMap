@@ -38,4 +38,8 @@
     <string name="phone_number_not_set"><i>Номер телефона не установлен</i></string>
     <string name="comments">Комментарии</string>
     <string name="search">Поиск</string>
+    <string name="menu_addresses">Адреса</string>
+    <string name="change_profile">Изменить профиль</string>
+    <string name="reply">Ответить</string>
+    <string name="is_private">Приватный</string>
 </resources>

@@ -49,7 +49,6 @@
                     app:navigationIcon="@drawable/ic_arrow"
                     app:popupTheme="@style/Theme.ImpressMap.PopupOverlay"
                     tools:title="@tools:sample/full_names" />
-
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -63,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:background="?backgroundSecondaryWindow"
                 android:orientation="vertical"
-                android:paddingTop="@dimen/vertical_medium_margin">
+                android:paddingTop="@dimen/vertical_margin">
 
                 <LinearLayout
                     android:id="@+id/settings_phone_number_view"
@@ -77,20 +76,6 @@
                     <TextView
                         style="@style/settingsItemSubheaderTextStyle"
                         android:text="@string/phone_number_sub" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/settings_nickname_view"
-                    style="@style/settingsItemStyle">
-
-                    <TextView
-                        android:id="@+id/nickname_view"
-                        style="@style/settingsItemHeaderTextStyle"
-                        tools:text="\@abobus" />
-
-                    <TextView
-                        style="@style/settingsItemSubheaderTextStyle"
-                        android:text="@string/nickname_sub" />
                 </LinearLayout>
 
                 <LinearLayout

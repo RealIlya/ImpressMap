@@ -5,6 +5,9 @@ import static com.example.impressmap.util.Constants.Keys.DATE_NODE;
 import static com.example.impressmap.util.Constants.Keys.OWNER_ID_NODE;
 import static com.example.impressmap.util.Constants.Keys.TEXT_NODE;
 
+import android.os.Parcel;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.Entity;
 
@@ -15,10 +18,36 @@ import java.util.Map;
 @Entity
 public class Comment implements TransferableToDatabase, Owner
 {
+    public static final Creator<Comment> CREATOR = new Creator<Comment>()
+    {
+        @Override
+        public Comment createFromParcel(Parcel in)
+        {
+            return new Comment(in);
+        }
+
+        @Override
+        public Comment[] newArray(int size)
+        {
+            return new Comment[size];
+        }
+    };
     private String id = "";
     private OwnerUser ownerUser = new OwnerUser();
     private Date date = new Date();
     private String text = "";
+
+    public Comment()
+    {
+    }
+
+    protected Comment(Parcel in)
+    {
+        id = in.readString();
+        ownerUser.setId(in.readString());
+        ownerUser.setFullName(in.readString());
+        text = in.readString();
+    }
 
     @Override
     public Map<String, Object> prepareToTransferToDatabase()
@@ -95,5 +124,21 @@ public class Comment implements TransferableToDatabase, Owner
         }
         Comment o = (Comment) obj;
         return o.id.equals(id);
+    }
+
+    @Override
+    public int describeContents()
+    {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel,
+                              int flags)
+    {
+        parcel.writeString(id);
+        parcel.writeString(ownerUser.getId());
+        parcel.writeString(ownerUser.getFullName());
+        parcel.writeString(text);
     }
 }

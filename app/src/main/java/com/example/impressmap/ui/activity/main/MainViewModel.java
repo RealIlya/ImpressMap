@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.impressmap.model.data.Address;
-import com.example.impressmap.model.data.Post;
 import com.example.impressmap.model.data.User;
 
 import java.util.ArrayList;

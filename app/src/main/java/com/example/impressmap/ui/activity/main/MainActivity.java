@@ -26,8 +26,8 @@ public class MainActivity extends FragmentActivity
 
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
 
-        binding.container.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+/*        binding.container.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);*/
 
         setContentView(binding.getRoot());
 

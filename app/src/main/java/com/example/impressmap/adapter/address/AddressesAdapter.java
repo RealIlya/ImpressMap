@@ -17,10 +17,11 @@ import com.example.impressmap.util.Converter;
 import java.util.List;
 
 public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.AddressViewHolder>
+        implements AddressCallback
 {
     private final Context context;
     private final AddressesAdapterViewModel viewModel;
-    private OnAddressClickListener onAddressClickListener;
+    private AddressCallback addressCallback;
 
     public AddressesAdapter(Context context,
                             ViewModelStoreOwner viewModelStoreOwner)
@@ -68,12 +69,12 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
             if (viewModel.getSelectedAddresses().size() < 5 || address.isSelected())
             {
                 address.setSelected(!address.isSelected());
-                onAddressClicked(address);
+                onAddressClick(address);
                 notifyItemChanged(holder.getAdapterPosition());
             }
             else
             {
-                onAddressClickListener.onMaxAddresses();
+                onMaxAddresses();
             }
         });
     }
@@ -85,11 +86,6 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
             notifyItemRangeRemoved(0, viewModel.getAddressesCount());
             notifyItemRangeInserted(0, addresses.size());
         }
-    }
-
-    private void onAddressClicked(Address address)
-    {
-        onAddressClickListener.onAddressClick(address);
     }
 
     @Override
@@ -108,16 +104,21 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
         return viewModel.getSelectedAddresses();
     }
 
-    public void setOnAddressClickListener(OnAddressClickListener listener)
+    public void setOnAddressClickListener(AddressCallback listener)
     {
-        onAddressClickListener = listener;
+        addressCallback = listener;
     }
 
-    public interface OnAddressClickListener
+    @Override
+    public void onAddressClick(Address address)
     {
-        void onAddressClick(Address address);
+        addressCallback.onAddressClick(address);
+    }
 
-        void onMaxAddresses();
+    @Override
+    public void onMaxAddresses()
+    {
+        addressCallback.onMaxAddresses();
     }
 
     protected static class AddressViewHolder extends RecyclerView.ViewHolder

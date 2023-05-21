@@ -20,10 +20,13 @@ public class UserCase
         return usersRepo.getUser();
     }
 
-    public void changeFullName(String newFullName, SuccessCallback successCallback)
+    public void changeFullName(String newFullName,
+                               SuccessCallback successCallback)
     {
-        User user = usersRepo.getUser().getValue();
-        user.setFullName(newFullName);
-        usersRepo.update(user, successCallback);
+        usersRepo.getUser().observeForever(user ->
+        {
+            user.setFullName(newFullName);
+            usersRepo.update(user, successCallback);
+        });
     }
 }

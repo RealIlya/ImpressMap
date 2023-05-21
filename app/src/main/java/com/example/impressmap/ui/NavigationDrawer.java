@@ -8,11 +8,11 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.impressmap.R;
 import com.example.impressmap.model.MenuItemMeta;
+import com.example.impressmap.ui.fragment.addresses.UserAddressesFragment;
 import com.example.impressmap.ui.fragment.profile.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
 
@@ -27,7 +27,7 @@ public class NavigationDrawer implements NavigationView.OnNavigationItemSelected
     private final NavigationView navigationView;
     private final DrawerLayout drawerLayout;
     private final FragmentManager fragmentManager;
-    private final Map<Integer, MenuItemMeta> menuItemMetas = new HashMap<>();
+    private final Map<Integer, MenuItemMeta> menuItemMeta = new HashMap<>();
 
     public NavigationDrawer(Context context,
                             NavigationView navigationView,
@@ -46,8 +46,7 @@ public class NavigationDrawer implements NavigationView.OnNavigationItemSelected
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item)
     {
-        menuItemMetas.get(item.getItemId()).onClick();
-
+        menuItemMeta.get(item.getItemId()).onClick();
         close();
 
         return true;
@@ -56,7 +55,6 @@ public class NavigationDrawer implements NavigationView.OnNavigationItemSelected
     private void initNavigationMenu()
     {
         Menu menu = navigationView.getMenu();
-        menu.clear();
 
         int order = 0;
 
@@ -70,15 +68,24 @@ public class NavigationDrawer implements NavigationView.OnNavigationItemSelected
                                    .commit();
                 }), R.drawable.ic_menu_profile);
 
+        addNavigationMenuItem(menu, PROFILE_GROUP, order++, R.string.menu_addresses,
+                new MenuItemMeta(() ->
+                {
+                    String name = UserAddressesFragment.class.getSimpleName();
+                    fragmentManager.beginTransaction()
+                                   .replace(R.id.container, UserAddressesFragment.newInstance())
+                                   .addToBackStack(name)
+                                   .commit();
+                }), R.drawable.ic_address);
         // the next submenu
-        Menu submenuSettings = menu.addSubMenu(SETTINGS_GROUP, Menu.NONE, order,
+        /*Menu submenuSettings = menu.addSubMenu(SETTINGS_GROUP, Menu.NONE, order,
                 R.string.nav_header_item_settings);
 
-        addNavigationMenuItem(submenuSettings, SETTINGS_GROUP, order, R.string.menu_language,
+        addNavigationMenuItem(submenuSettings, SETTINGS_GROUP, ++order, R.string.menu_language,
                 new MenuItemMeta(() -> fragmentManager.beginTransaction()
                                                       .replace(R.id.container, new Fragment())
                                                       .addToBackStack("")
-                                                      .commit()), R.drawable.ic_menu_international);
+                                                      .commit()), R.drawable.ic_menu_international);*/
     }
 
     private void addNavigationMenuItem(Menu menu,
@@ -100,7 +107,7 @@ public class NavigationDrawer implements NavigationView.OnNavigationItemSelected
     {
         MenuItem menuItem = menu.add(groupId, order, order, title).setIcon(icon);
 
-        menuItemMetas.put(menuItem.getItemId(), menuItemMeta);
+        this.menuItemMeta.put(menuItem.getItemId(), menuItemMeta);
     }
 
     public boolean isOpen()

@@ -17,6 +17,7 @@ import java.text.DateFormat;
 import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHolder>
+        implements OnCommentsButtonClickListener
 {
     private final PostsAdapterViewModel viewModel;
 
@@ -50,18 +51,17 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
                                       .format(post.getDate());
         holder.binding.dateView.setText(dateString);
 
-        holder.binding.showReactionsButton.setOnClickListener(v ->
+        /*holder.binding.showReactionsButton.setOnClickListener(v ->
         {
 
-        });
+        });*/
 
         holder.binding.showCommentsButton.setOnClickListener(v ->
         {
             holder.binding.getRoot().setTransitionName(post.getId());
-            onCommentsButtonClickListener.onClick(holder.binding.getRoot(), post);
+            onCommentClick(holder.binding.getRoot(), post);
         });
 
-        // try to avoid this method
         LiveData<List<String>> ownerId = viewModel.getIdsByOwner(post);
         if (!ownerId.hasActiveObservers())
         {
@@ -96,10 +96,14 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
         this.onCommentsButtonClickListener = listener;
     }
 
-    public interface OnCommentsButtonClickListener
+    @Override
+    public void onCommentClick(View view,
+                               Post post)
     {
-        void onClick(View view,
-                     Post post);
+        if (onCommentsButtonClickListener != null)
+        {
+            onCommentsButtonClickListener.onCommentClick(view, post);
+        }
     }
 
     protected static class PostViewHolder extends RecyclerView.ViewHolder

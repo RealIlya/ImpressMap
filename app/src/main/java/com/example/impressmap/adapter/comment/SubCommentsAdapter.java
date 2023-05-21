@@ -5,27 +5,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.databinding.ItemCommentBinding;
 import com.example.impressmap.model.data.Comment;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
-public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>
+public class SubCommentsAdapter extends RecyclerView.Adapter<SubCommentsAdapter.CommentsViewHolder>
         implements OnCommentsButtonClickListener, OnReplyButtonClickListener
 {
-    private final CommentsAdapterViewModel viewModel;
+    private List<Comment> comments;
 
     private OnCommentsButtonClickListener onCommentsButtonClickListener;
     private OnReplyButtonClickListener onReplyButtonClickListener;
 
-    public CommentsAdapter(ViewModelStoreOwner viewModelStoreOwner)
+    public SubCommentsAdapter()
     {
-        viewModel = new ViewModelProvider(viewModelStoreOwner).get(CommentsAdapterViewModel.class);
-        clear();
+        comments = new ArrayList<>();
     }
 
     @NonNull
@@ -42,7 +41,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     public void onBindViewHolder(@NonNull CommentsViewHolder holder,
                                  int position)
     {
-        Comment comment = viewModel.getComment(position);
+        Comment comment = comments.get(position);
 
         holder.binding.textView.setText(comment.getText());
         holder.binding.fullNameView.setText(comment.getOwnerUser().getFullName());
@@ -65,19 +64,19 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     @Override
     public int getItemCount()
     {
-        return viewModel.getCommentsCount();
+        return comments.size();
     }
 
     public void addComment(Comment comment)
     {
-        viewModel.addComment(comment);
+        comments.add(comment);
         notifyItemInserted(getItemCount());
     }
 
     public void clear()
     {
         int size = getItemCount();
-        viewModel.clearCache();
+        comments.clear();
         notifyItemRangeRemoved(0, size);
     }
 

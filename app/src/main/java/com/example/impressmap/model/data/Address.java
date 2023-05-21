@@ -19,12 +19,12 @@ import java.util.Map;
 @Entity
 public class Address implements TransferableToDatabase
 {
-    //    @TypeConverters(StringListConverter.class)
     private String id = "";
     private String userIds = "";
     private String desc = "";
     private String ownerId = "";
     private String fullAddress = "";
+    private boolean notPublic = false; // private
 
     private boolean selected;
 
@@ -137,6 +137,16 @@ public class Address implements TransferableToDatabase
     public void setSelected(boolean selected)
     {
         this.selected = selected;
+    }
+
+    public boolean isNotPublic()
+    {
+        return notPublic;
+    }
+
+    public void setNotPublic(boolean notPublic)
+    {
+        this.notPublic = notPublic;
     }
 
     @Override

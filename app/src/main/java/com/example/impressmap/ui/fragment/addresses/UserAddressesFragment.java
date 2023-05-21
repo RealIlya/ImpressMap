@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.R;
+import com.example.impressmap.adapter.address.AddressCallback;
 import com.example.impressmap.adapter.address.AddressesAdapter;
 import com.example.impressmap.databinding.FragmentAddressesBinding;
 import com.example.impressmap.model.data.Address;
@@ -26,19 +27,19 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
-public class AddressesFragment extends Fragment
+public class UserAddressesFragment extends Fragment
 {
     private FragmentAddressesBinding binding;
-    private AddressesFragmentViewModel viewModel;
+    private UserAddressesFragmentViewModel viewModel;
 
-    protected AddressesFragment()
+    protected UserAddressesFragment()
     {
     }
 
     @NonNull
-    public static AddressesFragment newInstance()
+    public static UserAddressesFragment newInstance()
     {
-        return new AddressesFragment();
+        return new UserAddressesFragment();
     }
 
     @Nullable
@@ -55,9 +56,9 @@ public class AddressesFragment extends Fragment
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState)
     {
-        viewModel = new ViewModelProvider(this).get(AddressesFragmentViewModel.class);
+        viewModel = new ViewModelProvider(this).get(UserAddressesFragmentViewModel.class);
         binding.setViewModel(viewModel);
-        binding.setLifecycleOwner(this);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
 
         binding.toolbar.setNavigationOnClickListener(
                 v -> requireActivity().getSupportFragmentManager().popBackStack());
@@ -79,7 +80,7 @@ public class AddressesFragment extends Fragment
         recyclerView.setAdapter(addressesAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        addressesAdapter.setOnAddressClickListener(new AddressesAdapter.OnAddressClickListener()
+        addressesAdapter.setOnAddressClickListener(new AddressCallback()
         {
             @Override
             public void onAddressClick(Address address)

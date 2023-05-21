@@ -9,14 +9,14 @@ import com.example.impressmap.model.data.Address;
 
 import java.util.List;
 
-public class AddressesFragmentViewModel extends ViewModel
+public class UserAddressesFragmentViewModel extends ViewModel
 {
     private final GMarkerAddressCase gMarkerAddressCase;
 
     private final MutableLiveData<Integer> addressesCount;
     private final MutableLiveData<Integer> selectedAddressesCount;
 
-    public AddressesFragmentViewModel()
+    public UserAddressesFragmentViewModel()
     {
         gMarkerAddressCase = new GMarkerAddressCase();
 

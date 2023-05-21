@@ -17,16 +17,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class AllUserAddressesLiveData extends LiveData<List<Address>>
+public class AllAddressesLiveData extends LiveData<List<Address>>
 {
-    private final DatabaseReference userAddressesRef;
-
+    private DatabaseReference addressesRef;
     private final ValueEventListener listener = new ValueEventListener()
     {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot)
         {
-            DatabaseReference addressesRef = DATABASE_REF.child(ADDRESSES_NODE);
+            addressesRef = DATABASE_REF.child(ADDRESSES_NODE);
 
             List<Address> addressList = new ArrayList<>();
             Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
@@ -49,7 +48,10 @@ public class AllUserAddressesLiveData extends LiveData<List<Address>>
                                 public void onDataChange(@NonNull DataSnapshot snapshot)
                                 {
                                     Address address = snapshot.getValue(Address.class);
+                                    if (!address.isNotPublic() || address.getOwnerId().equals(UID))
+                                    {
                                         addressList.add(address);
+                                    }
 
                                     if (!hasNext)
                                     {
@@ -73,20 +75,19 @@ public class AllUserAddressesLiveData extends LiveData<List<Address>>
         }
     };
 
-    public AllUserAddressesLiveData(DatabaseReference userAddressesRef)
+    public AllAddressesLiveData()
     {
-        this.userAddressesRef = userAddressesRef;
     }
 
     @Override
     protected void onActive()
     {
-        userAddressesRef.addValueEventListener(listener);
+        addressesRef.addListenerForSingleValueEvent(listener);
     }
 
     @Override
     protected void onInactive()
     {
-        userAddressesRef.removeEventListener(listener);
+        addressesRef.removeEventListener(listener);
     }
 }

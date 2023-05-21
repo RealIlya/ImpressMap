@@ -13,6 +13,7 @@ import java.util.List;
 
 public class PopupAddressesAdapter
         extends RecyclerView.Adapter<PopupAddressesAdapter.AddressViewHolder>
+        implements OnAddressClickListener
 {
     private final List<Address> addresses;
     private OnAddressClickListener onAddressClickListener;
@@ -43,7 +44,7 @@ public class PopupAddressesAdapter
         holder.binding.addressSecondaryView.setText(
                 String.format("%s %s", address.getStreet(), address.getHouse()));
 
-        holder.binding.getRoot().setOnClickListener(v -> onAddressClicked(address));
+        holder.binding.getRoot().setOnClickListener(v -> onClick(address));
     }
 
     @Override
@@ -52,19 +53,18 @@ public class PopupAddressesAdapter
         return addresses.size();
     }
 
-    private void onAddressClicked(Address address)
-    {
-        onAddressClickListener.onAddressClick(address);
-    }
-
     public void setOnAddressClickListener(OnAddressClickListener listener)
     {
         onAddressClickListener = listener;
     }
 
-    public interface OnAddressClickListener
+    @Override
+    public void onClick(Address address)
     {
-        void onAddressClick(Address address);
+        if (onAddressClickListener != null)
+        {
+            onAddressClickListener.onClick(address);
+        }
     }
 
     protected static class AddressViewHolder extends RecyclerView.ViewHolder
