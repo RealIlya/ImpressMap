@@ -1,5 +1,6 @@
 package com.example.impressmap.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -8,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.databinding.ItemUserAddressBinding;
 import com.example.impressmap.model.data.Address;
+import com.example.impressmap.model.data.Location;
+import com.example.impressmap.util.Locations;
 
 import java.util.List;
 
@@ -15,11 +18,14 @@ public class PopupAddressesAdapter
         extends RecyclerView.Adapter<PopupAddressesAdapter.AddressViewHolder>
         implements OnAddressClickListener
 {
+    private final Context context;
     private final List<Address> addresses;
     private OnAddressClickListener onAddressClickListener;
 
-    public PopupAddressesAdapter(List<Address> addresses)
+    public PopupAddressesAdapter(Context context,
+                                 List<Address> addresses)
     {
+        this.context = context;
         this.addresses = addresses;
     }
 
@@ -39,10 +45,15 @@ public class PopupAddressesAdapter
     {
         Address address = addresses.get(position);
 
-        holder.binding.addressPrimaryView.setText(
-                String.format("%s %s", address.getCountry(), address.getCity()));
-        holder.binding.addressSecondaryView.setText(
-                String.format("%s %s", address.getStreet(), address.getHouse()));
+        Location location = Locations.getOneFromLatLng(context, address.getPosition());
+
+        if (location != null)
+        {
+            holder.binding.addressPrimaryView.setText(
+                    String.format("%s %s", location.getCountry(), location.getCity()));
+            holder.binding.addressSecondaryView.setText(
+                    String.format("%s %s", location.getStreet(), location.getHouse()));
+        }
 
         holder.binding.getRoot().setOnClickListener(v -> onAddressClick(address));
     }

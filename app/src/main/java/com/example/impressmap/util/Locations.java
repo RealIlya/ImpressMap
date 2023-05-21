@@ -2,11 +2,10 @@ package com.example.impressmap.util;
 
 import android.content.Context;
 import android.location.Geocoder;
-import android.location.Location;
 
 import androidx.annotation.NonNull;
 
-import com.example.impressmap.model.data.Address;
+import com.example.impressmap.model.data.Location;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.jetbrains.annotations.Nullable;
@@ -24,16 +23,16 @@ public class Locations
                                     double endLongitude)
     {
         float[] distance = new float[2];
-        Location.distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude,
-                distance);
+        android.location.Location.distanceBetween(startLatitude, startLongitude, endLatitude,
+                endLongitude, distance);
 
         return distance[0];
     }
 
     @Nullable
-    private static Address locationToAddress(@NonNull android.location.Address location)
+    private static Location convertLocation(@NonNull android.location.Address location)
     {
-        Address address = new Address();
+        Location locationResult = new Location();
         String country = location.getCountryName();
         String city = location.getLocality();
         String state = location.getAdminArea();
@@ -41,29 +40,29 @@ public class Locations
         String house = location.getSubThoroughfare();
         if (country != null && city != null && state != null && street != null && house != null)
         {
-            address.setFullAddress(
+            locationResult.setFullAddress(
                     String.format("%s|%s|%s|%s|%s", country, city, state, street, house));
-            return address;
+            return locationResult;
         }
 
         return null;
     }
 
     @Nullable
-    public static Address getOneFromLatLng(Context context,
-                                           @NonNull LatLng latLng)
+    public static Location getOneFromLatLng(Context context,
+                                            @NonNull LatLng latLng)
     {
         try
         {
             List<android.location.Address> locations = new Geocoder(context,
-                    Locale.ENGLISH).getFromLocation(latLng.latitude, latLng.longitude, 6);
+                    Locale.getDefault()).getFromLocation(latLng.latitude, latLng.longitude, 6);
 
-            for (android.location.Address location : locations)
+            for (android.location.Address address : locations)
             {
-                Address address = locationToAddress(location);
-                if (address != null)
+                Location location = convertLocation(address);
+                if (location != null)
                 {
-                    return address;
+                    return location;
                 }
             }
 
@@ -76,25 +75,25 @@ public class Locations
     }
 
     @Nullable
-    public static List<Address> getFromLatLng(Context context,
-                                              @NonNull LatLng latLng)
+    public static List<Location> getFromLatLng(Context context,
+                                               @NonNull LatLng latLng)
     {
         try
         {
-            List<android.location.Address> locations = new Geocoder(context,
-                    Locale.ENGLISH).getFromLocation(latLng.latitude, latLng.longitude, 6);
+            List<android.location.Address> addresses = new Geocoder(context,
+                    Locale.getDefault()).getFromLocation(latLng.latitude, latLng.longitude, 6);
 
-            List<Address> addresses = new ArrayList<>();
-            for (android.location.Address location : locations)
+            List<Location> locations = new ArrayList<>();
+            for (android.location.Address address : addresses)
             {
-                Address address = locationToAddress(location);
-                if (address != null)
+                Location location = convertLocation(address);
+                if (location != null)
                 {
-                    addresses.add(address);
+                    locations.add(location);
                 }
             }
 
-            return addresses;
+            return locations;
         }
         catch (IOException e)
         {

@@ -12,11 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.impressmap.R;
 import com.example.impressmap.databinding.ItemUserAddressBinding;
 import com.example.impressmap.model.data.Address;
+import com.example.impressmap.model.data.Location;
 import com.example.impressmap.util.Converter;
+import com.example.impressmap.util.Locations;
 
 import java.util.List;
 
-public class UserAddressesAdapter extends RecyclerView.Adapter<UserAddressesAdapter.UserAddressViewHolder>
+public class UserAddressesAdapter
+        extends RecyclerView.Adapter<UserAddressesAdapter.UserAddressViewHolder>
         implements UserAddressCallback
 {
     private final Context context;
@@ -27,7 +30,8 @@ public class UserAddressesAdapter extends RecyclerView.Adapter<UserAddressesAdap
                                 ViewModelStoreOwner viewModelStoreOwner)
     {
         this.context = context;
-        viewModel = new ViewModelProvider(viewModelStoreOwner).get(UserAddressesAdapterViewModel.class);
+        viewModel = new ViewModelProvider(viewModelStoreOwner).get(
+                UserAddressesAdapterViewModel.class);
     }
 
     @NonNull
@@ -46,10 +50,15 @@ public class UserAddressesAdapter extends RecyclerView.Adapter<UserAddressesAdap
     {
         Address address = viewModel.getAddress(position);
 
-        holder.binding.addressPrimaryView.setText(
-                String.format("%s %s", address.getCountry(), address.getCity()));
-        holder.binding.addressSecondaryView.setText(
-                String.format("%s %s", address.getStreet(), address.getHouse()));
+        Location location = Locations.getOneFromLatLng(context, address.getPosition());
+
+        if (location != null)
+        {
+            holder.binding.addressPrimaryView.setText(
+                    String.format("%s %s", location.getCountry(), location.getCity()));
+            holder.binding.addressSecondaryView.setText(
+                    String.format("%s %s", location.getStreet(), location.getHouse()));
+        }
 
         if (address.isSelected())
         {

@@ -37,8 +37,9 @@
     <string name="menu_addresses">Адреса</string>
     <string name="edit_profile">Изменить профиль</string>
     <string name="reply">Ответить</string>
-    <string name="is_private">Приватный</string>
     <string name="addresses">Адреса</string>
     <string name="comment">Комментарий</string>
     <string name="menu_join_address">Присоединиться к адресу</string>
+    <string name="edit_phone_number">Изменить номер телефона</string>
+    <string name="phone_number_hint">Номер телефона</string>
 </resources>

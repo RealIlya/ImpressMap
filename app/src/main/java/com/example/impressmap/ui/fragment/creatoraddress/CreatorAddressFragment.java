@@ -19,8 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.impressmap.R;
 import com.example.impressmap.adapter.LocationsAdapter;
 import com.example.impressmap.databinding.FragmentCreatorAddressBinding;
-import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GMarkerMetadata;
+import com.example.impressmap.model.data.Location;
 import com.example.impressmap.ui.activity.main.MainViewModel;
 import com.example.impressmap.util.Locations;
 import com.google.android.gms.maps.model.LatLng;
@@ -73,8 +73,8 @@ public class CreatorAddressFragment extends Fragment
 
         LocationsAdapter locationsAdapter = new LocationsAdapter(requireContext());
 
-        List<Address> addresses = Locations.getFromLatLng(getContext(), latLng);
-        locationsAdapter.setAddresses(addresses);
+        List<Location> locations = Locations.getFromLatLng(getContext(), latLng);
+        locationsAdapter.setAddresses(locations);
 
         RecyclerView recyclerView = binding.addressesRecyclerView;
         recyclerView.setAdapter(locationsAdapter);
@@ -82,8 +82,8 @@ public class CreatorAddressFragment extends Fragment
 
         binding.confirmAddressButton.setOnClickListener(v ->
         {
-            Address address = locationsAdapter.getSelectedAddress();
-            if (address == null)
+            Location location = locationsAdapter.getSelectedAddress();
+            if (location == null)
             {
                 Snackbar.make(requireView(), R.string.no_address_selected, Snackbar.LENGTH_LONG)
                         .show();
@@ -94,15 +94,15 @@ public class CreatorAddressFragment extends Fragment
             String desc = binding.descView.getText().toString();
             if (!title.isEmpty() && !desc.isEmpty())
             {
-                address.setDesc(desc);
-                address.setNotPublic(binding.privateCheckBox.isChecked());
+                location.setPositionLatLng(latLng);
+                location.setDesc(desc);
 
                 GMarkerMetadata gMarkerMetadata = new GMarkerMetadata();
                 gMarkerMetadata.setTitle(title);
                 gMarkerMetadata.setPositionLatLng(latLng);
                 gMarkerMetadata.setType(GMarkerMetadata.ADDRESS_MARKER);
 
-                viewModel.insert(address, gMarkerMetadata, () ->
+                viewModel.insert(location, gMarkerMetadata, () ->
                 {
                     requireActivity().getSupportFragmentManager().popBackStack();
                     MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(

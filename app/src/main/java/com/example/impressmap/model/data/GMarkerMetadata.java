@@ -9,15 +9,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.Nullable;
-import androidx.room.Entity;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.HashMap;
 import java.util.Map;
 
-// for database store
-@Entity
 public class GMarkerMetadata implements TransferableToDatabase, Parcelable
 {
     public static final int ADDRESS_MARKER = 0, COMMON_MARKER = 1;

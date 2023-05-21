@@ -1,4 +1,4 @@
-package com.example.impressmap.ui.fragment.editprofile;
+package com.example.impressmap.ui.fragment.editphone;
 
 import androidx.lifecycle.ViewModel;
 
@@ -7,11 +7,11 @@ import com.example.impressmap.model.data.User;
 import com.example.impressmap.util.FieldEmptyCallback;
 import com.example.impressmap.util.SuccessCallback;
 
-public class EditProfileFragmentViewModel extends ViewModel
+public class EditPhoneFragmentViewModel extends ViewModel
 {
     private final UserCase userCase;
 
-    public EditProfileFragmentViewModel()
+    public EditPhoneFragmentViewModel()
     {
         userCase = new UserCase();
     }
@@ -20,7 +20,7 @@ public class EditProfileFragmentViewModel extends ViewModel
                        SuccessCallback successCallback,
                        FieldEmptyCallback fieldEmptyCallback)
     {
-        if (user.getName().isEmpty() || user.getSurname().isEmpty())
+        if (user.getPhoneNumber().isEmpty())
         {
             fieldEmptyCallback.onEmpty();
             return;

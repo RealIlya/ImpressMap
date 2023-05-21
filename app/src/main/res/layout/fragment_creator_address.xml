@@ -69,13 +69,6 @@
                         android:minLines="1"
                         android:scrollbars="vertical"
                         android:scrollHorizontally="false" />
-
-                    <CheckBox
-                        android:id="@+id/private_check_box"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:buttonTint="?colorAccent"
-                        android:text="@string/is_private" />
                 </LinearLayout>
 
                 <com.google.android.material.divider.MaterialDivider

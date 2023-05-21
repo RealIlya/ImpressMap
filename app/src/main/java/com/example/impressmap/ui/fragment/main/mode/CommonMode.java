@@ -202,7 +202,7 @@ public class CommonMode extends Mode
 
             RecyclerView recyclerView = popupAddressesBinding.addressesRecyclerView;
             PopupAddressesAdapter popupAddressesAdapter = new PopupAddressesAdapter(
-                    mainViewModel.getSelectedAddresses().getValue());
+                    fragment.requireContext(), mainViewModel.getSelectedAddresses().getValue());
             popupAddressesAdapter.setOnAddressClickListener(address ->
             {
                 binding.selectedAddressesFab.setEnabled(false);
@@ -234,17 +234,7 @@ public class CommonMode extends Mode
             @Override
             public void onSlide(float slideOffset)
             {
-                /*binding.toolbarView.animate()
-                                   .alpha((float) Math.pow(slideOffset, 5))
-                                   .setDuration(0);*/
             }
         });
-    }
-
-    private boolean onDeselectCircle(MenuItem menuItem)
-    {
-        mainViewModel.setSelectedAddressId("");
-        postsSheetBehavior.hide();
-        return true;
     }
 }

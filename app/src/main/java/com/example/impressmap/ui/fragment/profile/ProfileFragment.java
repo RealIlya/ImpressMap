@@ -17,6 +17,7 @@ import com.example.impressmap.model.data.User;
 import com.example.impressmap.ui.activity.main.MainViewModel;
 import com.example.impressmap.ui.fragment.addresses.useraddresses.UserAddressesFragment;
 import com.example.impressmap.ui.fragment.auth.AuthFragment;
+import com.example.impressmap.ui.fragment.editphone.EditPhoneFragment;
 import com.example.impressmap.ui.fragment.editprofile.EditProfileFragment;
 
 public class ProfileFragment extends Fragment
@@ -69,6 +70,16 @@ public class ProfileFragment extends Fragment
             return true;
         });
 
+        binding.settingsPhoneNumberView.setOnClickListener(v ->
+        {
+            String name = EditPhoneFragment.class.getSimpleName();
+            requireActivity().getSupportFragmentManager()
+                             .beginTransaction()
+                             .replace(R.id.container, EditPhoneFragment.newInstance())
+                             .addToBackStack(name)
+                             .commit();
+        });
+
         binding.settingsAddressesView.setOnClickListener(v ->
         {
             String name = UserAddressesFragment.class.getSimpleName();
@@ -91,9 +102,9 @@ public class ProfileFragment extends Fragment
 
         User user = mainViewModel.getUser();
         binding.collapsingToolbar.setTitle(user.getFullName());
-        binding.phoneNumberView.setText(user.getPhoneNumber() != null ? user.getPhoneNumber()
-                                                                      : getText(
-                                                                              R.string.phone_number_not_set));
+        binding.phoneNumberView.setText(
+                user.getPhoneNumber().isEmpty() ? getText(R.string.phone_number_not_set)
+                                                : user.getPhoneNumber());
 
         viewModel.getUser().observe(getViewLifecycleOwner(), newUser ->
         {
@@ -101,8 +112,8 @@ public class ProfileFragment extends Fragment
 
             binding.collapsingToolbar.setTitle(newUser.getFullName());
             binding.phoneNumberView.setText(
-                    newUser.getPhoneNumber() != null ? newUser.getPhoneNumber()
-                                                     : getText(R.string.phone_number_not_set));
+                    newUser.getPhoneNumber().isEmpty() ? getText(R.string.phone_number_not_set)
+                                                       : newUser.getPhoneNumber());
         });
     }
 

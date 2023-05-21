@@ -35,7 +35,6 @@ public class AddingMode extends Mode
 
         gMapAdapter.setOnMapClickListener(latLng ->
         {
-//            gMapAdapter.setPointer(latLng);
             gMapAdapter.animateZoomTo(latLng);
 
             CreatorAddressFragment fragment = CreatorAddressFragment.newInstance(latLng);

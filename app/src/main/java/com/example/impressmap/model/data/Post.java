@@ -8,16 +8,13 @@ import static com.example.impressmap.util.Constants.Keys.TEXT_NODE;
 import static com.example.impressmap.util.Constants.Keys.TITLE_NODE;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
 import androidx.annotation.Nullable;
-import androidx.room.Entity;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Entity
 public class Post implements TransferableToDatabase, Owner
 {
     public static final Creator<Post> CREATOR = new Creator<Post>()

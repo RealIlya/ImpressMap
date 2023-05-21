@@ -11,94 +11,59 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/coordinatorLayout2"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.coordinatorlayout.widget.CoordinatorLayout
-                    android:id="@+id/coordinatorLayout2"
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    app:layout_constraintBottom_toTopOf="@+id/bottom_layout"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:layout_height="match_parent" />
 
-                    <androidx.fragment.app.FragmentContainerView
-                        android:id="@+id/map"
-                        android:name="com.google.android.gms.maps.SupportMapFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <!--<View
-                            android:id="@+id/toolbar_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:alpha="0"
-                            android:background="?colorAccent"
-                            android:fitsSystemWindows="true"
-                            app:layout_constraintBottom_toBottomOf="@+id/appbarLayout"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />-->
-
-                        <com.google.android.material.appbar.AppBarLayout
-                            android:id="@+id/appbarLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@android:color/transparent"
-                            android:fitsSystemWindows="true"
-                            app:elevation="0dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
-
-                            <com.google.android.material.appbar.MaterialToolbar
-                                android:id="@+id/toolbar"
-                                style="@style/toolbarTextStyle"
-                                android:layout_width="match_parent"
-                                android:layout_height="?actionBarSize"
-                                android:layout_marginHorizontal="@dimen/horizontal_medium_margin"
-                                android:background="@drawable/background_toolbar_main"
-                                android:elevation="4dp"
-                                app:navigationIcon="@drawable/ic_menu_drawer"
-                                app:title="@string/app_name" />
-                        </com.google.android.material.appbar.AppBarLayout>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-                <androidx.coordinatorlayout.widget.CoordinatorLayout
-                    android:id="@+id/bottom_layout"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout2">
+                    android:layout_height="wrap_content">
 
-                    <com.google.android.material.bottomappbar.BottomAppBar
-                        android:id="@+id/bottom_app_bar"
+                    <com.google.android.material.appbar.AppBarLayout
+                        android:id="@+id/appbarLayout"
                         android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        app:backgroundTint="?backgroundPrimaryWindow"
-                        app:elevation="2dp"
-                        app:popupTheme="@style/Theme.ImpressMap.PopupOverlay" />
-                </androidx.coordinatorlayout.widget.CoordinatorLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:fitsSystemWindows="true"
+                        app:elevation="0dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.appbar.MaterialToolbar
+                            android:id="@+id/toolbar"
+                            style="@style/toolbarTextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="?actionBarSize"
+                            android:layout_marginHorizontal="@dimen/horizontal_medium_margin"
+                            android:background="@drawable/background_toolbar_main"
+                            android:elevation="4dp"
+                            app:navigationIcon="@drawable/ic_menu_drawer"
+                            app:title="@string/app_name" />
+                    </com.google.android.material.appbar.AppBarLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/selected_addresses_fab"
                 style="@style/fabStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
                 android:layout_marginEnd="@dimen/fab_margin"
+                android:layout_marginBottom="@dimen/fab_margin"
                 app:backgroundTint="?backgroundSecondaryFab"
-                app:layout_anchor="@id/bottom_app_bar"
-                app:layout_anchorGravity="end"
                 app:srcCompat="@drawable/ic_other_addresses"
                 app:tint="?colorSecondaryFabIcon" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>

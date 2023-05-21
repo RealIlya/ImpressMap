@@ -18,11 +18,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.R;
 import com.example.impressmap.databinding.FragmentMapInfoBinding;
-import com.example.impressmap.model.data.Address;
-import com.example.impressmap.ui.fragment.bottommap.marker.CreatorCommonMarkerPreFragment;
+import com.example.impressmap.model.data.Location;
 import com.example.impressmap.ui.fragment.bottommap.mapinfo.mode.CommonMode;
 import com.example.impressmap.ui.fragment.bottommap.mapinfo.mode.Mode;
 import com.example.impressmap.ui.fragment.bottommap.mapinfo.mode.NavigatingMode;
+import com.example.impressmap.ui.fragment.bottommap.marker.CreatorCommonMarkerPreFragment;
 import com.example.impressmap.util.Locations;
 import com.example.impressmap.util.SwitchableMode;
 import com.google.android.gms.maps.model.LatLng;
@@ -78,10 +78,10 @@ public class MapInfoFragment extends BottomSheetDialogFragment implements Switch
 
         switchMode(COMMON_MODE);
 
-        Address address = Locations.getOneFromLatLng(getContext(), latLng);
+        Location location = Locations.getOneFromLatLng(getContext(), latLng);
 
-        binding.toolbar.setTitle(
-                address != null ? address.getFullAddressReversed() : getString(R.string.not_stated));
+        binding.toolbar.setTitle(location != null ? location.getFullAddressReversed()
+                                                  : getString(R.string.not_stated));
         binding.toolbar.setSubtitle(latLng.latitude + " : " + latLng.longitude);
 
         if (inZone)

@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.impressmap.R;
 import com.example.impressmap.databinding.ItemAddressBinding;
 import com.example.impressmap.model.data.Address;
+import com.example.impressmap.model.data.Location;
 import com.example.impressmap.util.Converter;
+import com.example.impressmap.util.Locations;
 
 import java.util.List;
 
@@ -47,10 +49,15 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
     {
         Address address = viewModel.getAddress(position);
 
-        holder.binding.addressPrimaryView.setText(
-                String.format("%s %s", address.getCountry(), address.getCity()));
-        holder.binding.addressSecondaryView.setText(
-                String.format("%s %s", address.getStreet(), address.getHouse()));
+        Location location = Locations.getOneFromLatLng(context, address.getPosition());
+
+        if (location != null)
+        {
+            holder.binding.addressPrimaryView.setText(
+                    String.format("%s %s", location.getCountry(), location.getCity()));
+            holder.binding.addressSecondaryView.setText(
+                    String.format("%s %s", location.getStreet(), location.getHouse()));
+        }
 
         if (address.isSelected())
         {

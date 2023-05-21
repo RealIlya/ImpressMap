@@ -1,4 +1,4 @@
-package com.example.impressmap.ui.fragment.editprofile;
+package com.example.impressmap.ui.fragment.editphone;
 
 import android.os.Bundle;
 import android.transition.TransitionInflater;
@@ -16,21 +16,21 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.R;
-import com.example.impressmap.databinding.FragmentEditProfileBinding;
+import com.example.impressmap.databinding.FragmentEditPhoneBinding;
 import com.example.impressmap.model.data.User;
 import com.example.impressmap.ui.activity.main.MainViewModel;
 import com.example.impressmap.util.FieldEmptyCallback;
 import com.example.impressmap.util.SuccessCallback;
 import com.google.android.material.snackbar.Snackbar;
 
-public class EditProfileFragment extends Fragment
+public class EditPhoneFragment extends Fragment
 {
     private final SuccessCallback successCallback;
     private final FieldEmptyCallback fieldEmptyCallback;
-    private FragmentEditProfileBinding binding;
-    private EditProfileFragmentViewModel viewModel;
+    private FragmentEditPhoneBinding binding;
+    private EditPhoneFragmentViewModel viewModel;
 
-    protected EditProfileFragment()
+    protected EditPhoneFragment()
     {
         successCallback = () -> requireActivity().getSupportFragmentManager().popBackStack();
         fieldEmptyCallback = () -> Snackbar.make(requireView(), R.string.field_is_necessary,
@@ -38,9 +38,9 @@ public class EditProfileFragment extends Fragment
     }
 
     @NonNull
-    public static EditProfileFragment newInstance()
+    public static EditPhoneFragment newInstance()
     {
-        return new EditProfileFragment();
+        return new EditPhoneFragment();
     }
 
     @Nullable
@@ -49,7 +49,7 @@ public class EditProfileFragment extends Fragment
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState)
     {
-        binding = FragmentEditProfileBinding.inflate(inflater, container, false);
+        binding = FragmentEditPhoneBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -57,18 +57,17 @@ public class EditProfileFragment extends Fragment
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState)
     {
-        viewModel = new ViewModelProvider(this).get(EditProfileFragmentViewModel.class);
+        viewModel = new ViewModelProvider(this).get(EditPhoneFragmentViewModel.class);
 
         binding.toolbar.setNavigationOnClickListener(
                 v -> requireActivity().getSupportFragmentManager().popBackStack());
-        binding.toolbar.setTitle(R.string.edit_profile);
+        binding.toolbar.setTitle(R.string.edit_phone_number);
 
         MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
                 MainViewModel.class);
 
         User user = mainViewModel.getUser();
-        binding.nameView.setText(user.getName());
-        binding.surnameView.setText(user.getSurname());
+        binding.phoneView.setText(user.getPhoneNumber());
 
         binding.toolbar.addMenuProvider(new MenuProvider()
         {
@@ -82,12 +81,11 @@ public class EditProfileFragment extends Fragment
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem)
             {
-                String nameText = binding.nameView.getText().toString().trim();
-                String surnameText = binding.surnameView.getText().toString().trim();
+                String phoneText = binding.phoneView.getText().toString().trim();
 
                 if (menuItem.getItemId() == R.id.menu_create)
                 {
-                    user.setFullName(nameText + " " + surnameText);
+                    user.setPhoneNumber(phoneText);
                     viewModel.update(user, successCallback, fieldEmptyCallback);
                     return true;
                 }

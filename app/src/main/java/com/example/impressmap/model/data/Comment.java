@@ -9,13 +9,11 @@ import android.os.Parcel;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.room.Entity;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@Entity
 public class Comment implements TransferableToDatabase, Owner
 {
     public static final Creator<Comment> CREATOR = new Creator<Comment>()

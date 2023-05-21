@@ -3,14 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?backgroundPrimaryWindow">
+    android:background="?backgroundSecondaryWindow">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?backgroundToolbar"
-        android:fitsSystemWindows="true"
         app:elevation="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,21 +35,12 @@
         app:layout_constraintTop_toBottomOf="@+id/app_bar_layout">
 
         <EditText
-            android:id="@+id/name_view"
+            android:id="@+id/phone_view"
             style="@style/textStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/horizontal_margin"
-            android:hint="@string/name_hint"
-            android:inputType="text" />
-
-        <EditText
-            android:id="@+id/surname_view"
-            style="@style/textStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/horizontal_margin"
-            android:hint="@string/surname_hint"
-            android:inputType="text" />
+            android:hint="@string/phone_number_hint"
+            android:inputType="phone" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

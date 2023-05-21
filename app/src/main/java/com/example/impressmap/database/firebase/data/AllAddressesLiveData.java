@@ -1,9 +1,5 @@
 package com.example.impressmap.database.firebase.data;
 
-import static com.example.impressmap.util.Constants.DATABASE_REF;
-import static com.example.impressmap.util.Constants.Keys.ADDRESSES_NODE;
-import static com.example.impressmap.util.Constants.UID;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
@@ -47,10 +43,7 @@ public class AllAddressesLiveData extends LiveData<List<Address>>
                                 public void onDataChange(@NonNull DataSnapshot snapshot)
                                 {
                                     Address address = snapshot.getValue(Address.class);
-                                    if (!address.isNotPublic() || address.getOwnerId().equals(UID))
-                                    {
-                                        addressList.add(address);
-                                    }
+                                    addressList.add(address);
 
                                     if (!hasNext)
                                     {

@@ -80,19 +80,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/settings_bio_view"
-                    style="@style/settingsItemStyle">
-
-                    <TextView
-                        style="@style/settingsItemHeaderTextStyle"
-                        android:text="@string/title_bio" />
-
-                    <TextView
-                        style="@style/settingsItemSubheaderTextStyle"
-                        android:text="@string/desc_bio_sub" />
-                </LinearLayout>
-
-                <LinearLayout
                     android:id="@+id/settings_addresses_view"
                     style="@style/settingsItemStyle">
 

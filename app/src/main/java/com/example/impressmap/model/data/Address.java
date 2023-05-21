@@ -2,29 +2,24 @@ package com.example.impressmap.model.data;
 
 import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
 import static com.example.impressmap.util.Constants.Keys.DESC_NODE;
-import static com.example.impressmap.util.Constants.Keys.FULL_ADDRESS_NODE;
-import static com.example.impressmap.util.Constants.Keys.NOT_PUBLIC_NODE;
 import static com.example.impressmap.util.Constants.Keys.OWNER_ID_NODE;
+import static com.example.impressmap.util.Constants.Keys.POSITION_NODE;
 
 import androidx.annotation.Nullable;
-import androidx.room.Entity;
 
-import java.util.Arrays;
-import java.util.Collections;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-@Entity
 public class Address implements TransferableToDatabase
 {
-    private String id = "";
-    private String desc = "";
-    private String ownerId = "";
-    private String fullAddress = "";
-    private boolean notPublic = false; // private
+    protected String id = "";
+    protected String desc = "";
+    protected String ownerId = "";
+    protected String position = "";
 
-    private boolean selected;
+    protected boolean selected;
 
     public Address()
     {
@@ -38,8 +33,7 @@ public class Address implements TransferableToDatabase
         data.put(CHILD_ID_NODE, id);
         data.put(DESC_NODE, desc);
         data.put(OWNER_ID_NODE, ownerId);
-        data.put(FULL_ADDRESS_NODE, fullAddress);
-        data.put(NOT_PUBLIC_NODE, notPublic);
+        data.put(POSITION_NODE, position);
 
         return data;
     }
@@ -74,47 +68,20 @@ public class Address implements TransferableToDatabase
         this.ownerId = ownerId;
     }
 
-    public String getFullAddress()
+    public LatLng getPosition()
     {
-        return fullAddress.replaceAll("\\|", " ");
+        String[] pos = position.split(" ");
+        return new LatLng(Double.parseDouble(pos[0]), Double.parseDouble(pos[1]));
     }
 
-    public void setFullAddress(String fullAddress)
+    public void setPosition(String position)
     {
-        this.fullAddress = fullAddress;
+        this.position = position;
     }
 
-    public String getFullAddressReversed()
+    public void setPositionLatLng(LatLng position)
     {
-        List<String> list = Arrays.asList(fullAddress.split("\\|"));
-        Collections.reverse(list);
-
-        return String.join(" ", list);
-    }
-
-    public String getCountry()
-    {
-        return fullAddress.split("\\|")[0];
-    }
-
-    public String getCity()
-    {
-        return fullAddress.split("\\|")[1];
-    }
-
-    public String getState()
-    {
-        return fullAddress.split("\\|")[2];
-    }
-
-    public String getStreet()
-    {
-        return fullAddress.split("\\|")[3];
-    }
-
-    public String getHouse()
-    {
-        return fullAddress.split("\\|")[4];
+        this.position = String.format("%s %s", position.latitude, position.longitude);
     }
 
     public boolean isSelected()
@@ -125,16 +92,6 @@ public class Address implements TransferableToDatabase
     public void setSelected(boolean selected)
     {
         this.selected = selected;
-    }
-
-    public boolean isNotPublic()
-    {
-        return notPublic;
-    }
-
-    public void setNotPublic(boolean notPublic)
-    {
-        this.notPublic = notPublic;
     }
 
     @Override

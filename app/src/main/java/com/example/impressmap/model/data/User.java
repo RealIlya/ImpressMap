@@ -6,18 +6,28 @@ import static com.example.impressmap.util.Constants.Keys.FULL_NAME_NODE;
 import static com.example.impressmap.util.Constants.Keys.PHONE_NUMBER_NODE;
 
 import androidx.annotation.NonNull;
-import androidx.room.Entity;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Entity
 public class User implements TransferableToDatabase
 {
-    private String id;
-    private String fullName;
-    private String email;
-    private String phoneNumber;
+    private String id = "";
+    private String fullName = "";
+    private String email = "";
+    private String phoneNumber = "";
+
+    @NonNull
+    public static User createUser(String fullName,
+                                  String email)
+    {
+        User user = new User();
+        user.email = email;
+        user.fullName = fullName;
+        user.phoneNumber = "";
+
+        return user;
+    }
 
     @Override
     public Map<String, Object> prepareToTransferToDatabase()
@@ -30,17 +40,6 @@ public class User implements TransferableToDatabase
         data.put(PHONE_NUMBER_NODE, phoneNumber);
 
         return data;
-    }
-
-    @NonNull
-    public static User createUser(String fullName, String email)
-    {
-        User user = new User();
-        user.email = email;
-        user.fullName = fullName;
-        user.phoneNumber = "";
-
-        return user;
     }
 
     public String getId()
