@@ -74,11 +74,13 @@ public class CreatorAddressFragment extends Fragment
         LocationsAdapter locationsAdapter = new LocationsAdapter(requireContext());
 
         List<Location> locations = Locations.getFromLatLng(getContext(), latLng);
-        locationsAdapter.setAddresses(locations);
-
-        RecyclerView recyclerView = binding.addressesRecyclerView;
-        recyclerView.setAdapter(locationsAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        if (locations != null)
+        {
+            locationsAdapter.setAddresses(locations);
+            RecyclerView recyclerView = binding.addressesRecyclerView;
+            recyclerView.setAdapter(locationsAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        }
 
         binding.confirmAddressButton.setOnClickListener(v ->
         {
@@ -92,7 +94,7 @@ public class CreatorAddressFragment extends Fragment
 
             String title = binding.titleView.getText().toString();
             String desc = binding.descView.getText().toString();
-            if (!title.isEmpty() && !desc.isEmpty())
+            if (!title.isEmpty())
             {
                 location.setPositionLatLng(latLng);
                 location.setDesc(desc);
@@ -109,6 +111,11 @@ public class CreatorAddressFragment extends Fragment
                             MainViewModel.class);
                     mainViewModel.setMode(COMMON_MODE);
                 });
+            }
+            else
+            {
+                Snackbar.make(requireView(), R.string.field_is_necessary, Snackbar.LENGTH_LONG)
+                        .show();
             }
         });
     }

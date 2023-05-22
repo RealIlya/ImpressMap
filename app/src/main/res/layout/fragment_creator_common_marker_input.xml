@@ -1,63 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?backgroundPrimaryWindow">
+        android:layout_height="wrap_content"
+        android:background="?backgroundSecondaryWindow">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <LinearLayout
+            android:id="@+id/linear_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?backgroundSecondaryWindow"
-            android:fitsSystemWindows="true">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/horizontal_margin"
+            android:paddingVertical="@dimen/vertical_medium_margin">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_layout"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="?backgroundSecondaryWindow">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:id="@+id/linear_layout"
+                <EditText
+                    android:id="@+id/marker_title_view"
+                    style="@style/textStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="?backgroundSecondaryWindow"
-                    android:orientation="vertical"
-                    android:paddingVertical="@dimen/vertical_medium_margin"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
+                    android:layout_height="wrap_content"
+                    android:hint="@string/marker_title_hint"
+                    android:importantForAutofill="no" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/horizontal_margin"
-                        android:orientation="vertical">
-
-                        <EditText
-                            android:id="@+id/marker_title_view"
-                            style="@style/textStyle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/marker_title_hint"
-                            android:importantForAutofill="no" />
-
-                        <EditText
-                            android:id="@+id/marker_text_view"
-                            style="@style/textStyle"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="top|start"
-                            android:hint="@string/marker_text_hint"
-                            android:importantForAutofill="no"
-                            android:inputType="textMultiLine|textCapSentences"
-                            android:minLines="1"
-                            android:scrollbars="vertical"
-                            android:scrollHorizontally="false" />
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+                <EditText
+                    android:id="@+id/marker_text_view"
+                    style="@style/textStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|start"
+                    android:hint="@string/marker_text_hint"
+                    android:importantForAutofill="no"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:minLines="1"
+                    android:scrollbars="vertical"
+                    android:scrollHorizontally="false" />
+            </LinearLayout>
+        </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

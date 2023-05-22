@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/create_common_marker_button"
@@ -9,5 +9,5 @@
         android:layout_height="wrap_content"
         android:background="@drawable/ripple_effect"
         android:text="@string/create_marker"
-        android:textColor="?colorAccent" />
+        android:textColor="?colorSecondaryText" />
 </LinearLayout>

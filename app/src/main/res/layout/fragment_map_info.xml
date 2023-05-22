@@ -27,7 +27,6 @@
                     style="@style/toolbarTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:layout_marginTop="@dimen/vertical_margin"
                     app:navigationIcon="@drawable/ic_hide"
                     app:popupTheme="@style/Theme.ImpressMap.PopupOverlay" />
             </com.google.android.material.appbar.AppBarLayout>

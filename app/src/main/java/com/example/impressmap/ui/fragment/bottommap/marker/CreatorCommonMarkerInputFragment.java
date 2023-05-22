@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuHost;
@@ -24,10 +25,11 @@ import com.example.impressmap.databinding.FragmentCreatorCommonMarkerInputBindin
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.OwnerUser;
 import com.example.impressmap.model.data.Post;
-import com.example.impressmap.ui.fragment.bottommap.mapinfo.MapInfoFragmentViewModel;
 import com.example.impressmap.ui.activity.main.MainViewModel;
+import com.example.impressmap.ui.fragment.bottommap.mapinfo.MapInfoFragmentViewModel;
 import com.example.impressmap.util.SwitchableMode;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.snackbar.Snackbar;
 
 public class CreatorCommonMarkerInputFragment extends Fragment implements MenuProvider
 {
@@ -101,7 +103,11 @@ public class CreatorCommonMarkerInputFragment extends Fragment implements MenuPr
                         gMarkerMetadata, post,
                         () -> ((BottomSheetDialogFragment) requireParentFragment()).dismiss());
             }
-
+            else
+            {
+                Snackbar.make(requireView(), R.string.field_is_necessary, Snackbar.LENGTH_LONG)
+                        .show();
+            }
             return true;
         }
 

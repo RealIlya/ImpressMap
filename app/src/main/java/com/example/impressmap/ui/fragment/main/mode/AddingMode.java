@@ -35,15 +35,18 @@ public class AddingMode extends Mode
 
         gMapAdapter.setOnMapClickListener(latLng ->
         {
-            gMapAdapter.animateZoomTo(latLng);
-
-            CreatorAddressFragment fragment = CreatorAddressFragment.newInstance(latLng);
-            String name = CreatorAddressFragment.class.getSimpleName();
-            activity.getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container, fragment)
-                    .addToBackStack(name)
-                    .commit();
+            gMapAdapter.setPointer(latLng);
+            gMapAdapter.animateZoomTo(latLng, () ->
+            {
+                CreatorAddressFragment fragment = CreatorAddressFragment.newInstance(latLng);
+                String name = CreatorAddressFragment.class.getSimpleName();
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, fragment)
+                        .addToBackStack(name)
+                        .commit();
+                gMapAdapter.removePointer();
+            });
         });
 
         binding.toolbar.setNavigationIcon(R.drawable.ic_arrow);
