@@ -7,6 +7,7 @@
         android:background="?backgroundSecondaryWindow">
 
         <LinearLayout
+            android:id="@+id/linearLayout2"
             android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -47,6 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/horizontal_margin"
+                android:autofillHints="emailAddress"
                 android:hint="@string/email_hint"
                 android:inputType="textEmailAddress" />
 
@@ -66,7 +68,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/horizontal_margin"
                 android:buttonTint="?colorAccent"
-                android:text="@string/dont_logout_check_box" />
+                android:text="@string/dont_logout_check_box"
+                android:textColor="?colorPrimaryText" />
 
             <CheckBox
                 android:id="@+id/sign_up_check_box"
@@ -74,7 +77,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/horizontal_margin"
                 android:buttonTint="?colorAccent"
-                android:text="@string/sign_up_button" />
+                android:text="@string/sign_up_button"
+                android:textColor="?colorPrimaryText" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/next_button"

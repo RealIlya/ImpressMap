@@ -1,16 +1,58 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.ImpressMap" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-<!--        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>-->
-        <!-- Secondary brand color. -->
-<!--        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>-->
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+
+        <item name="android:statusBarColor">@color/blue_100_alpha_5</item>
+        <item name="android:navigationBarColor">?backgroundPrimaryWindow</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+        <item name="android:colorEdgeEffect">?colorAccent</item>
+
+        <item name="colorAccent">@color/blue_300</item>
+        <item name="backgroundToolbar">@color/black_blue</item>
+
+        <item name="colorToolbarTitle">@color/white</item>
+        <item name="colorToolbarSubtitle">@color/white</item>
+        <item name="colorToolbarIcon">@color/white</item>
+
+        <item name="colorAlternativeToolbarTitle">@color/gray</item>
+        <item name="colorAlternativeToolbarSubtitle">@color/gray</item>
+        <item name="colorAlternativeToolbarIcon">@color/gray</item>
+
+        <item name="colorPopupMenuIcon">@color/icon_gray</item>
+        <item name="colorPopupMenuText">@color/gray</item>
+
+        <item name="backgroundPrimaryWindow">@color/background_black</item>
+        <item name="backgroundSecondaryWindow">@color/gray_black</item>
+
+        <item name="backgroundPrimaryFab">@color/background_black</item>
+        <item name="colorPrimaryFabIcon">@color/white</item>
+
+        <item name="backgroundSecondaryFab">@color/blue_300</item>
+        <item name="colorSecondaryFabIcon">@color/white</item>
+
+        <item name="backgroundClickedButton">@color/light_gray</item>
+
+        <item name="colorPrimaryText">@color/white</item>
+        <item name="colorSecondaryText">@color/icon_gray</item>
+        <item name="colorTertiaryText">@color/white</item>
+
+        <item name="backgroundSelectedItem">@color/blue_100_alpha_40</item>
+
+        <item name="colorNavigationItemHeader">?colorAccent</item>
+        <item name="colorNavigationItemText">?colorPrimaryText</item>
+        <item name="colorNavigationItemIcon">@color/icon_gray</item>
+
+        <item name="backgroundSelectedMarker">@color/blue_100_alpha_80</item>
+        <item name="backgroundDeselectedMarker">@color/blue_100_alpha_40</item>
+    </style>
+
+    <style name="Theme.ImpressMap.NavigationView">
+        <item name="android:listDivider">@color/background_black</item>
+    </style>
+
+    <style name="Theme.ImpressMap.SplashScreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/dim_gray</item>
+        <item name="android:windowFullscreen">true</item>
     </style>
 </resources>

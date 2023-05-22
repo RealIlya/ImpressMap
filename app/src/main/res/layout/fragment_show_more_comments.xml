@@ -75,8 +75,9 @@
                                         android:id="@+id/avatar_view"
                                         android:layout_width="36dp"
                                         android:layout_height="36dp"
-                                        android:src="@drawable/sample_avatar"
-                                        app:shapeAppearanceOverlay="@style/avatarOverlay" />
+                                        app:shapeAppearanceOverlay="@style/avatarOverlay"
+                                        app:srcCompat="@drawable/sample_avatar"
+                                        app:tint="?colorPrimaryText" />
 
                                     <com.google.android.material.button.MaterialButton
                                         style="@style/Widget.MaterialComponents.Button.TextButton"

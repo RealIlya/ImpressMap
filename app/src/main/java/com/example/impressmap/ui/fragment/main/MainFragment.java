@@ -1,5 +1,6 @@
 package com.example.impressmap.ui.fragment.main;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.example.impressmap.ui.fragment.main.mode.CommonMode;
 import com.example.impressmap.ui.fragment.main.mode.Mode;
 import com.example.impressmap.util.SwitchableMode;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.MapStyleOptions;
 
 public class MainFragment extends Fragment implements SwitchableMode
 {
@@ -70,14 +72,18 @@ public class MainFragment extends Fragment implements SwitchableMode
                                  {
                                      fragmentManager.popBackStack();
                                  }
-                                 else if (mainViewModel.getMode().getValue() == ADDING_MODE)
-                                 {
-                                     mainViewModel.setMode(COMMON_MODE);
-                                 }
                                  else
                                  {
-                                     setEnabled(false);
-                                     requireActivity().onBackPressed();
+                                     Integer mode = mainViewModel.getMode().getValue();
+                                     if (mode != null && mode == ADDING_MODE)
+                                     {
+                                         mainViewModel.setMode(COMMON_MODE);
+                                     }
+                                     else
+                                     {
+                                         setEnabled(false);
+                                         requireActivity().onBackPressed();
+                                     }
                                  }
                              }
                          });
@@ -92,6 +98,19 @@ public class MainFragment extends Fragment implements SwitchableMode
                 gMapAdapter = new GMapAdapter(getContext(), googleMap, requireActivity());
                 gMapAdapter.removeListeners();
 
+                int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                switch (currentNightMode)
+                {
+                    case Configuration.UI_MODE_NIGHT_NO:
+                        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(),
+                                R.raw.map_day));
+                        break;
+                    case Configuration.UI_MODE_NIGHT_YES:
+                        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(),
+                                R.raw.map_night));
+                        break;
+                }
+
                 MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
                         MainViewModel.class);
                 mainViewModel.getMode().observe(getViewLifecycleOwner(), this::switchMode);
@@ -103,14 +122,13 @@ public class MainFragment extends Fragment implements SwitchableMode
     {
         Mode modeClass;
 
-        switch (mode)
+        if (mode == ADDING_MODE)
         {
-            case ADDING_MODE:
-                modeClass = new AddingMode(this, viewModel, binding);
-                break;
-            default:
-                modeClass = new CommonMode(this, viewModel, binding);
-                break;
+            modeClass = new AddingMode(this, viewModel, binding);
+        }
+        else
+        {
+            modeClass = new CommonMode(this, viewModel, binding);
         }
 
         modeClass.switchOn(gMapAdapter);

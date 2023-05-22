@@ -1,7 +1,9 @@
 package com.example.impressmap.ui.fragment.main.mode;
 
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupWindow;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.widget.Toolbar;
@@ -9,17 +11,20 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.R;
+import com.example.impressmap.adapter.PopupAddressesAdapter;
 import com.example.impressmap.adapter.gmap.GMapAdapter;
 import com.example.impressmap.databinding.FragmentMainBinding;
+import com.example.impressmap.databinding.PopupAddressesBinding;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GCircleMeta;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.GMarkerWithChildrenMetadata;
 import com.example.impressmap.model.data.gcircle.GCircle;
 import com.example.impressmap.model.data.gmarker.GMarker;
-import com.example.impressmap.ui.fragment.main.PopupAddressesWindow;
 import com.example.impressmap.ui.activity.main.MainViewModel;
 import com.example.impressmap.ui.fragment.bottommap.mapinfo.MapInfoFragment;
 import com.example.impressmap.ui.fragment.bottommarker.behavior.PostsBottomSheetBehavior;
@@ -39,7 +44,6 @@ public class CommonMode extends Mode
     private final MainViewModel mainViewModel;
     private NavigationDrawer navigationDrawer;
     private PostsBottomSheetBehavior<MaterialCardView> postsSheetBehavior;
-    private GMapAdapter gMapAdapter;
 
     public CommonMode(MainFragment fragment,
                       MainFragmentViewModel viewModel,
@@ -53,8 +57,6 @@ public class CommonMode extends Mode
     @Override
     public void switchOn(GMapAdapter gMapAdapter)
     {
-        this.gMapAdapter = gMapAdapter;
-
         navigationDrawer = new NavigationDrawer(activity, binding.navigationView,
                 binding.drawerLayout, activity.getSupportFragmentManager());
 
@@ -126,18 +128,29 @@ public class CommonMode extends Mode
         gMapAdapter.setOnMarkerClickListener(marker ->
         {
             postsSheetBehavior.showHalf();
-            GMarkerMetadata gMarkerMetadata = ((GMarker) marker.getTag()).getGMarkerMetadata();
+            GMarker markerTag = (GMarker) marker.getTag();
+            if (markerTag == null)
+            {
+                return false;
+            }
+            GMarkerMetadata gMarkerMetadata = markerTag.getGMarkerMetadata();
 
             FragmentTransaction transaction = fragment.getChildFragmentManager().beginTransaction();
 
-            PostsFragment postsFragment = null;
+            PostsFragment postsFragment;
             if (gMarkerMetadata.getType() == GMarkerMetadata.ADDRESS_MARKER)
             {
                 GMarkerWithChildrenMetadata withChildrenMetadata = GMarkerWithChildrenMetadata.convert(
                         gMarkerMetadata);
                 List<GMarkerMetadata> gMarkerMetadataList = new ArrayList<>();
 
-                for (GMarker gMarker : gMapAdapter.getSelectedGCircleGMarkers())
+                List<GMarker> selectedGCircleGMarkers = gMapAdapter.getSelectedGCircleGMarkers();
+                if (selectedGCircleGMarkers == null)
+                {
+                    return false;
+                }
+
+                for (GMarker gMarker : selectedGCircleGMarkers)
                 {
                     gMarkerMetadataList.add(gMarker.getGMarkerMetadata());
                 }
@@ -146,7 +159,7 @@ public class CommonMode extends Mode
 
                 postsFragment = PostsFragment.newInstance(withChildrenMetadata);
             }
-            else if (gMarkerMetadata.getType() == GMarkerMetadata.COMMON_MARKER)
+            else
             {
                 postsFragment = PostsFragment.newInstance(gMarkerMetadata);
             }
@@ -170,7 +183,12 @@ public class CommonMode extends Mode
         });
         gMapAdapter.setOnCircleClickListener(circle ->
         {
-            GCircleMeta gCircleMeta = ((GCircle) circle.getTag()).getGCircleMeta();
+            GCircle circleTag = (GCircle) circle.getTag();
+            if (circleTag == null)
+            {
+                return;
+            }
+            GCircleMeta gCircleMeta = circleTag.getGCircleMeta();
             postsSheetBehavior.hide(
                     () -> mainViewModel.setSelectedAddressId(gCircleMeta.getAddressId()));
         });
@@ -188,26 +206,30 @@ public class CommonMode extends Mode
 
         binding.selectedAddressesFab.setOnClickListener(v ->
         {
-            List<Address> selectedAddresses = mainViewModel.getSelectedAddresses().getValue();
+            PopupAddressesBinding popupAddressesBinding = PopupAddressesBinding.inflate(
+                    LayoutInflater.from(activity));
 
-            if (selectedAddresses == null)
+            PopupWindow popupWindow = new PopupWindow(popupAddressesBinding.getRoot(), 450, 600,
+                    true);
+            popupWindow.setOverlapAnchor(true);
+
+            RecyclerView recyclerView = popupAddressesBinding.addressesRecyclerView;
+            PopupAddressesAdapter popupAddressesAdapter = new PopupAddressesAdapter(
+                    fragment.requireContext(), mainViewModel.getSelectedAddresses().getValue());
+            popupAddressesAdapter.setOnAddressClickListener(address ->
             {
-                return;
-            }
+                binding.selectedAddressesFab.setEnabled(false);
+                popupWindow.dismiss();
+                gMapAdapter.animateZoomTo(address,
+                        () -> binding.selectedAddressesFab.setEnabled(true));
+            });
 
-            if (selectedAddresses.size() > 0)
+            recyclerView.setAdapter(popupAddressesAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+            int itemCount = popupAddressesAdapter.getItemCount();
+            if (itemCount > 0)
             {
-                PopupAddressesWindow popupAddressesWindow = new PopupAddressesWindow(
-                        fragment.requireContext(), selectedAddresses);
-
-                popupAddressesWindow.setOnAddressClickListener(address ->
-                {
-                    binding.selectedAddressesFab.setEnabled(false);
-                    gMapAdapter.animateZoomTo(address,
-                            () -> binding.selectedAddressesFab.setEnabled(true));
-                });
-
-                popupAddressesWindow.showAsDropDown(v);
+                popupWindow.showAsDropDown(v, -200, -20);
             }
         });
 

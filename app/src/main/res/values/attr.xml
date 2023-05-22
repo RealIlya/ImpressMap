@@ -19,7 +19,6 @@
     <attr name="colorPrimaryText" format="color" />
     <attr name="colorSecondaryText" format="color" />
     <attr name="colorTertiaryText" format="color" />
-    <attr name="colorWrongText" format="color" />
     <attr name="backgroundSelectedItem" format="color" />
     <attr name="colorNavigationItemHeader" format="color" />
     <attr name="colorNavigationItemText" format="color" />

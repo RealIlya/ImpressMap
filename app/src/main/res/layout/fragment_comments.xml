@@ -70,8 +70,9 @@
                                     android:id="@+id/avatar_view"
                                     android:layout_width="48dp"
                                     android:layout_height="48dp"
-                                    android:src="@drawable/sample_avatar"
-                                    app:shapeAppearanceOverlay="@style/avatarOverlay" />
+                                    app:shapeAppearanceOverlay="@style/avatarOverlay"
+                                    app:srcCompat="@drawable/sample_avatar"
+                                    app:tint="?colorPrimaryText" />
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -123,17 +124,16 @@
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/comments_recycler_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:nestedScrollingEnabled="true"
-                            android:overScrollMode="ifContentScrolls"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            tools:itemCount="8" />
-                 </LinearLayout>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/comments_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:nestedScrollingEnabled="true"
+                        android:overScrollMode="ifContentScrolls"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:itemCount="8" />
+                </LinearLayout>
             </androidx.core.widget.NestedScrollView>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -155,6 +155,7 @@
                     style="@style/toolbarTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
+                    android:backgroundTint="?backgroundSecondaryWindow"
                     app:menu="@menu/menu_sender_toolbar"
                     app:navigationIcon="@drawable/ic_emoji"
                     app:navigationIconTint="?backgroundSecondaryWindow"

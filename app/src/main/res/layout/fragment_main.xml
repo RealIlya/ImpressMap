@@ -63,6 +63,7 @@
                 android:layout_gravity="end|bottom"
                 android:layout_marginEnd="@dimen/fab_margin"
                 android:layout_marginBottom="@dimen/fab_margin"
+                android:importantForAccessibility="no"
                 app:backgroundTint="?backgroundSecondaryFab"
                 app:srcCompat="@drawable/ic_other_addresses"
                 app:tint="?colorSecondaryFabIcon" />
@@ -77,6 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="invisible"
+                app:backgroundTint="?backgroundSecondaryWindow"
                 app:behavior_hideable="true"
                 app:cardPreventCornerOverlap="false"
                 app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
@@ -94,6 +96,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
+            android:backgroundTint="?backgroundSecondaryWindow"
             android:paddingTop="@dimen/vertical_margin"
             app:itemIconTint="?colorNavigationItemIcon"
             app:itemTextAppearance="@style/subtitleTextAppearance"

@@ -34,7 +34,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/vertical_very_small_margin</item>
-        <item name="android:textColor">@color/gray</item>
+        <item name="android:textColor">?colorSecondaryText</item>
         <item name="android:textSize">@dimen/pre_medium_text_size</item>
     </style>
 

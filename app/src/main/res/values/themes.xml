@@ -36,7 +36,6 @@
         <item name="colorPrimaryText">@color/black_blue</item>
         <item name="colorSecondaryText">@color/gray</item>
         <item name="colorTertiaryText">@color/icon_gray</item>
-        <item name="colorWrongText">@color/gray_500</item>
 
         <item name="backgroundSelectedItem">@color/blue_100_alpha_40</item>
 
