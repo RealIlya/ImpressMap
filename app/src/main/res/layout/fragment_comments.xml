@@ -168,7 +168,7 @@
                         android:layout_height="match_parent"
                         android:hint="@string/write_some_words"
                         android:importantForAutofill="no"
-                        android:inputType="text|textMultiLine" />
+                        android:inputType="textMultiLine|textCapSentences" />
                 </com.google.android.material.bottomappbar.BottomAppBar>
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
         </androidx.cardview.widget.CardView>
