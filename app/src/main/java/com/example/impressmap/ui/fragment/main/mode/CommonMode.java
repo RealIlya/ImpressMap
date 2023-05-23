@@ -1,5 +1,7 @@
 package com.example.impressmap.ui.fragment.main.mode;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -7,6 +9,8 @@ import android.widget.PopupWindow;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
@@ -63,6 +67,19 @@ public class CommonMode extends Mode
         postsSheetBehavior = new PostsBottomSheetBehavior<>(
                 BottomSheetBehavior.from(binding.bottomView), activity);
 
+        ActivityCompat.requestPermissions(
+                activity,
+                new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+                0
+        );
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED)
+        {
+            gMapAdapter.setMyLocationEnabled(true);
+        }
+
         activity.getOnBackPressedDispatcher().addCallback(fragment, new OnBackPressedCallback(true)
         {
             @Override
@@ -74,6 +91,13 @@ public class CommonMode extends Mode
                 }
             }
         });
+
+        /*gMapAdapter.setOnMyLocationClickListener(new GoogleMap.OnMyLocationClickListener() {
+            @Override
+            public void onMyLocationClick(@NonNull Location location) {
+                gMapAdapter.animateZoomTo(new LatLng(location.getLatitude(), location.getLongitude()));
+            }
+        });*/
 
         Toolbar toolbar = binding.toolbar;
 
@@ -231,6 +255,10 @@ public class CommonMode extends Mode
             {
                 popupWindow.showAsDropDown(v, -200, -20);
             }
+        });
+        binding.myLocationFab.setOnClickListener(v ->
+        {
+            gMapAdapter.animateZoomToMyLocation();
         });
 
         postsSheetBehavior.setAnimation(new PostsBottomSheetBehavior.Animation()

@@ -1,6 +1,9 @@
 package com.example.impressmap.ui.fragment.main;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.location.Location;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
@@ -10,6 +13,7 @@ import android.view.ViewGroup;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -22,7 +26,9 @@ import com.example.impressmap.ui.fragment.main.mode.AddingMode;
 import com.example.impressmap.ui.fragment.main.mode.CommonMode;
 import com.example.impressmap.ui.fragment.main.mode.Mode;
 import com.example.impressmap.util.SwitchableMode;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 
 public class MainFragment extends Fragment implements SwitchableMode

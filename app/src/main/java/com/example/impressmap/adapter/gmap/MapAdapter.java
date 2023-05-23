@@ -1,7 +1,11 @@
 package com.example.impressmap.adapter.gmap;
 
+import android.content.Context;
+import android.location.Location;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresPermission;
 
 import com.example.impressmap.model.data.GCircleMeta;
 import com.example.impressmap.model.data.GMarkerMetadata;
@@ -31,6 +35,8 @@ public abstract class MapAdapter
     {
         this.googleMap = googleMap;
         removeListeners();
+        googleMap.getUiSettings().setCompassEnabled(false);
+        googleMap.getUiSettings().setMyLocationButtonEnabled(false);
     }
 
     public Marker addMarker(@NonNull GMarkerMetadata gMarkerMetadata)
@@ -167,6 +173,24 @@ public abstract class MapAdapter
         onCircleClickListener = circle ->
         {
         };
+    }
+
+    @RequiresPermission(anyOf = {"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"})
+    public void setMyLocationEnabled(boolean enabled)
+    {
+        googleMap.setMyLocationEnabled(enabled);
+    }
+
+    public void animateZoomToMyLocation()
+    {
+        Location myLocation = googleMap.getMyLocation();
+        if (myLocation == null)
+        {
+            return;
+        }
+        double latitude = myLocation.getLatitude();
+        double longitude = myLocation.getLongitude();
+        animateZoomTo(new LatLng(latitude, longitude));
     }
 
     public interface OnFinishCallback extends GoogleMap.CancelableCallback
