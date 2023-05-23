@@ -1,9 +1,7 @@
 package com.example.impressmap.ui.fragment.main;
 
 import android.Manifest;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.location.Location;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
@@ -11,9 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.ActivityResultRegistry;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -26,9 +30,7 @@ import com.example.impressmap.ui.fragment.main.mode.AddingMode;
 import com.example.impressmap.ui.fragment.main.mode.CommonMode;
 import com.example.impressmap.ui.fragment.main.mode.Mode;
 import com.example.impressmap.util.SwitchableMode;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 
 public class MainFragment extends Fragment implements SwitchableMode
@@ -38,6 +40,12 @@ public class MainFragment extends Fragment implements SwitchableMode
     private FragmentMainBinding binding;
     private GMapAdapter gMapAdapter;
     private MainFragmentViewModel viewModel;
+
+    private final ActivityResultLauncher<String> permission = registerForActivityResult(new ActivityResultContracts.RequestPermission(), result ->
+    {
+        gMapAdapter.setMyLocationEnabled(true);
+        binding.myLocationFab.setOnClickListener(v -> gMapAdapter.animateZoomToMyLocation());
+    });
 
     protected MainFragment()
     {
@@ -103,6 +111,8 @@ public class MainFragment extends Fragment implements SwitchableMode
             {
                 gMapAdapter = new GMapAdapter(getContext(), googleMap, requireActivity());
                 gMapAdapter.removeListeners();
+
+                permission.launch(Manifest.permission.ACCESS_FINE_LOCATION);
 
                 int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
                 switch (currentNightMode)
