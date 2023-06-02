@@ -1,6 +1,6 @@
-package com.example.impressmap.ui.fragment.main.mode;
+package com.example.impressmap.ui.fragment.map.mode;
 
-import static com.example.impressmap.ui.fragment.main.MainFragment.COMMON_MODE;
+import static com.example.impressmap.ui.fragment.map.MapFragment.COMMON_MODE;
 
 import android.view.View;
 
@@ -9,20 +9,20 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.R;
 import com.example.impressmap.adapter.gmap.GMapAdapter;
-import com.example.impressmap.databinding.FragmentMainBinding;
+import com.example.impressmap.databinding.FragmentMapBinding;
 import com.example.impressmap.ui.activity.main.MainViewModel;
 import com.example.impressmap.ui.fragment.creatoraddress.CreatorAddressFragment;
-import com.example.impressmap.ui.fragment.main.MainFragment;
-import com.example.impressmap.ui.fragment.main.MainFragmentViewModel;
+import com.example.impressmap.ui.fragment.map.MapFragment;
+import com.example.impressmap.ui.fragment.map.MapFragmentViewModel;
 
 public class AddingMode extends Mode
 {
     private final FragmentActivity activity;
     private MainViewModel mainViewModel;
 
-    public AddingMode(MainFragment fragment,
-                      MainFragmentViewModel viewModel,
-                      FragmentMainBinding binding)
+    public AddingMode(MapFragment fragment,
+                      MapFragmentViewModel viewModel,
+                      FragmentMapBinding binding)
     {
         super(fragment, viewModel, binding);
         activity = fragment.requireActivity();

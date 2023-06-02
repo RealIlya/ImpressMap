@@ -33,6 +33,16 @@ public class MainViewModel extends ViewModel
         this.mode.setValue(mode);
     }
 
+    public int getSelectedAddressesCount()
+    {
+        List<Address> value = selectedAddresses.getValue();
+        if (value != null)
+        {
+            return value.size();
+        }
+        return 0;
+    }
+
     public LiveData<List<Address>> getSelectedAddresses()
     {
         return selectedAddresses;

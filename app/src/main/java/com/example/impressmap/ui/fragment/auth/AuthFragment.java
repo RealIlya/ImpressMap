@@ -1,6 +1,6 @@
 package com.example.impressmap.ui.fragment.auth;
 
-import static com.example.impressmap.ui.fragment.main.MainFragment.COMMON_MODE;
+import static com.example.impressmap.ui.fragment.map.MapFragment.COMMON_MODE;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,38 +14,31 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.R;
 import com.example.impressmap.databinding.FragmentAuthBinding;
-import com.example.impressmap.ui.fragment.main.MainFragment;
 import com.example.impressmap.ui.activity.AuthViewModel;
 import com.example.impressmap.ui.activity.main.MainViewModel;
+import com.example.impressmap.ui.fragment.map.MapFragment;
 import com.example.impressmap.util.FieldEmptyCallback;
 import com.example.impressmap.util.SuccessCallback;
 import com.google.android.material.snackbar.Snackbar;
 
 public class AuthFragment extends Fragment
 {
-    private final SuccessCallback successCallback;
-    private final FieldEmptyCallback fieldEmptyCallback;
+    private final SuccessCallback successCallback = () ->
+    {
+        MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
+                MainViewModel.class);
+        mainViewModel.setMode(COMMON_MODE);
+
+        MapFragment fragment = MapFragment.newInstance();
+        requireActivity().getSupportFragmentManager()
+                         .beginTransaction()
+                         .replace(R.id.container, fragment)
+                         .commit();
+    };
+    private final FieldEmptyCallback fieldEmptyCallback = () -> Snackbar.make(requireView(),
+            R.string.field_is_necessary, Snackbar.LENGTH_LONG).show();
     private FragmentAuthBinding binding;
     private AuthViewModel viewModel;
-
-    protected AuthFragment()
-    {
-        successCallback = () ->
-        {
-            MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
-                    MainViewModel.class);
-            mainViewModel.setMode(COMMON_MODE);
-
-            MainFragment fragment = MainFragment.newInstance();
-            requireActivity().getSupportFragmentManager()
-                             .beginTransaction()
-                             .replace(R.id.container, fragment)
-                             .commit();
-        };
-
-        fieldEmptyCallback = () -> Snackbar.make(requireView(), R.string.field_is_necessary,
-                Snackbar.LENGTH_LONG).show();
-    }
 
     @NonNull
     public static AuthFragment newInstance()

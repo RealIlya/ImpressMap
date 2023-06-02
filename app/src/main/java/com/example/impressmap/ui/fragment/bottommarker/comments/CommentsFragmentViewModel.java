@@ -12,12 +12,12 @@ import com.example.impressmap.util.SuccessCallback;
 
 import java.util.List;
 
-public class CommentsViewModel extends ViewModel
+public class CommentsFragmentViewModel extends ViewModel
 {
     private final CommentsCase commentsCase;
     private final CommentOwnerCase commentOwnerCase;
 
-    public CommentsViewModel()
+    public CommentsFragmentViewModel()
     {
         commentsCase = new CommentsCase();
         commentOwnerCase = new CommentOwnerCase();

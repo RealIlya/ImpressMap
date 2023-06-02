@@ -1,7 +1,6 @@
 package com.example.impressmap.ui.activity.main;
 
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.core.view.WindowCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -12,7 +11,7 @@ import com.example.impressmap.R;
 import com.example.impressmap.databinding.ActivityMainBinding;
 import com.example.impressmap.ui.activity.AuthViewModel;
 import com.example.impressmap.ui.fragment.auth.AuthFragment;
-import com.example.impressmap.ui.fragment.main.MainFragment;
+import com.example.impressmap.ui.fragment.map.MapFragment;
 
 
 public class MainActivity extends FragmentActivity
@@ -34,7 +33,7 @@ public class MainActivity extends FragmentActivity
         AuthViewModel authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         authViewModel.tryToSignIn(
-                () -> transaction.replace(R.id.container, MainFragment.newInstance()).commit(),
+                () -> transaction.replace(R.id.container, MapFragment.newInstance()).commit(),
                 () -> transaction.replace(R.id.container, AuthFragment.newInstance()).commit());
     }
 }

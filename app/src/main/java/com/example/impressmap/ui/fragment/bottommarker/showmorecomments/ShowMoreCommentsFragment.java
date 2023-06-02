@@ -44,10 +44,6 @@ public class ShowMoreCommentsFragment extends Fragment
 
     private FragmentShowMoreCommentsBinding binding;
 
-    protected ShowMoreCommentsFragment()
-    {
-    }
-
     public static ShowMoreCommentsFragment newInstance(Comment comment)
     {
         Bundle arguments = new Bundle();

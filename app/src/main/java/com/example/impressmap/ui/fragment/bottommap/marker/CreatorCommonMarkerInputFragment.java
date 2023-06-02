@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuHost;
@@ -35,10 +34,6 @@ public class CreatorCommonMarkerInputFragment extends Fragment implements MenuPr
 {
     private FragmentCreatorCommonMarkerInputBinding binding;
     private MapInfoFragmentViewModel viewModel;
-
-    protected CreatorCommonMarkerInputFragment()
-    {
-    }
 
     @NonNull
     public static CreatorCommonMarkerInputFragment newInstance()

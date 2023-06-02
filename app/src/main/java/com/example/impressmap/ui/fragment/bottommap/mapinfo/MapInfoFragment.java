@@ -38,10 +38,6 @@ public class MapInfoFragment extends BottomSheetDialogFragment implements Switch
 
     private DialogInterface.OnDismissListener onDismissListener;
 
-    protected MapInfoFragment()
-    {
-    }
-
     @NonNull
     public static MapInfoFragment newInstance(@NonNull LatLng latLng,
                                               boolean inZone)
@@ -111,14 +107,13 @@ public class MapInfoFragment extends BottomSheetDialogFragment implements Switch
     {
         Mode modeClass;
 
-        switch (mode)
+        if (mode == COMMON_MODE)
         {
-            case COMMON_MODE:
-                modeClass = new CommonMode(this);
-                break;
-            default:
-                modeClass = new NavigatingMode(this);
-                break;
+            modeClass = new CommonMode(this);
+        }
+        else
+        {
+            modeClass = new NavigatingMode(this);
         }
 
         modeClass.switchOn(binding.toolbar);

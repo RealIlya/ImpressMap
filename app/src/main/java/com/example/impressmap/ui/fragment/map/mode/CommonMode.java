@@ -1,28 +1,18 @@
-package com.example.impressmap.ui.fragment.main.mode;
+package com.example.impressmap.ui.fragment.map.mode;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.PopupWindow;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.R;
-import com.example.impressmap.adapter.PopupAddressesAdapter;
 import com.example.impressmap.adapter.gmap.GMapAdapter;
-import com.example.impressmap.databinding.FragmentMainBinding;
-import com.example.impressmap.databinding.PopupAddressesBinding;
+import com.example.impressmap.databinding.FragmentMapBinding;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GCircleMeta;
 import com.example.impressmap.model.data.GMarkerMetadata;
@@ -30,12 +20,14 @@ import com.example.impressmap.model.data.GMarkerWithChildrenMetadata;
 import com.example.impressmap.model.data.gcircle.GCircle;
 import com.example.impressmap.model.data.gmarker.GMarker;
 import com.example.impressmap.ui.activity.main.MainViewModel;
+import com.example.impressmap.ui.fragment.addresses.useraddresses.UserAddressesFragment;
 import com.example.impressmap.ui.fragment.bottommap.mapinfo.MapInfoFragment;
 import com.example.impressmap.ui.fragment.bottommarker.behavior.PostsBottomSheetBehavior;
 import com.example.impressmap.ui.fragment.bottommarker.posts.PostsFragment;
-import com.example.impressmap.ui.fragment.main.MainFragment;
-import com.example.impressmap.ui.fragment.main.MainFragmentViewModel;
-import com.example.impressmap.ui.fragment.main.NavigationDrawer;
+import com.example.impressmap.ui.fragment.map.MapFragment;
+import com.example.impressmap.ui.fragment.map.MapFragmentPopupWindow;
+import com.example.impressmap.ui.fragment.map.MapFragmentViewModel;
+import com.example.impressmap.ui.fragment.map.NavigationDrawer;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.card.MaterialCardView;
 
@@ -49,9 +41,9 @@ public class CommonMode extends Mode
     private NavigationDrawer navigationDrawer;
     private PostsBottomSheetBehavior<MaterialCardView> postsSheetBehavior;
 
-    public CommonMode(MainFragment fragment,
-                      MainFragmentViewModel viewModel,
-                      FragmentMainBinding binding)
+    public CommonMode(MapFragment fragment,
+                      MapFragmentViewModel viewModel,
+                      FragmentMapBinding binding)
     {
         super(fragment, viewModel, binding);
         activity = fragment.requireActivity();
@@ -67,17 +59,18 @@ public class CommonMode extends Mode
         postsSheetBehavior = new PostsBottomSheetBehavior<>(
                 BottomSheetBehavior.from(binding.bottomView), activity);
 
-        activity.getOnBackPressedDispatcher().addCallback(fragment, new OnBackPressedCallback(true)
-        {
-            @Override
-            public void handleOnBackPressed()
-            {
-                if (navigationDrawer.isOpen())
+        activity.getOnBackPressedDispatcher()
+                .addCallback(fragment.getViewLifecycleOwner(), new OnBackPressedCallback(true)
                 {
-                    navigationDrawer.close();
-                }
-            }
-        });
+                    @Override
+                    public void handleOnBackPressed()
+                    {
+                        if (navigationDrawer.isOpen())
+                        {
+                            navigationDrawer.close();
+                        }
+                    }
+                });
 
         Toolbar toolbar = binding.toolbar;
 
@@ -98,7 +91,7 @@ public class CommonMode extends Mode
             });
         }
 
-        mainViewModel.getSelectedAddressId().observe(fragment, addressId ->
+        mainViewModel.getSelectedAddressId().observe(fragment.getViewLifecycleOwner(), addressId ->
         {
             MenuItem item = toolbar.getMenu().findItem(R.id.deselect_circle_item);
 
@@ -176,6 +169,7 @@ public class CommonMode extends Mode
                 public void handleOnBackPressed()
                 {
                     postsSheetBehavior.hide(gMapAdapter::deselectGMarker);
+                    setEnabled(false);
                 }
             });
             transaction.replace(R.id.bottom_container, postsFragment);
@@ -206,34 +200,29 @@ public class CommonMode extends Mode
             postsSheetBehavior.hide(() -> mainViewModel.setSelectedAddressId(""));
             return true;
         });
-        toolbar.getMenu().findItem(R.id.deselect_circle_item).setVisible(false);
 
         binding.selectedAddressesFab.setOnClickListener(v ->
         {
-            PopupAddressesBinding popupAddressesBinding = PopupAddressesBinding.inflate(
-                    LayoutInflater.from(activity));
-
-            PopupWindow popupWindow = new PopupWindow(popupAddressesBinding.getRoot(), 450, 600,
-                    true);
-            popupWindow.setOverlapAnchor(true);
-
-            RecyclerView recyclerView = popupAddressesBinding.addressesRecyclerView;
-            PopupAddressesAdapter popupAddressesAdapter = new PopupAddressesAdapter(
-                    fragment.requireContext(), mainViewModel.getSelectedAddresses().getValue());
-            popupAddressesAdapter.setOnAddressClickListener(address ->
+            if (mainViewModel.getSelectedAddressesCount() > 0)
             {
-                binding.selectedAddressesFab.setEnabled(false);
-                popupWindow.dismiss();
-                gMapAdapter.animateZoomTo(address,
-                        () -> binding.selectedAddressesFab.setEnabled(true));
-            });
-
-            recyclerView.setAdapter(popupAddressesAdapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(activity));
-            int itemCount = popupAddressesAdapter.getItemCount();
-            if (itemCount > 0)
-            {
+                MapFragmentPopupWindow popupWindow = new MapFragmentPopupWindow(fragment);
+                popupWindow.setOnAddressClickListener(address ->
+                {
+                    binding.selectedAddressesFab.setEnabled(false);
+                    popupWindow.dismiss();
+                    gMapAdapter.animateZoomTo(address,
+                            () -> binding.selectedAddressesFab.setEnabled(true));
+                });
                 popupWindow.showAsDropDown(v, -200, -20);
+            }
+            else
+            {
+                String name = UserAddressesFragment.class.getSimpleName();
+                activity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, UserAddressesFragment.newInstance())
+                        .addToBackStack(name)
+                        .commit();
             }
         });
 

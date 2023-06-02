@@ -1,6 +1,7 @@
-package com.example.impressmap.ui.fragment.main;
+package com.example.impressmap.ui.fragment.map;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.transition.TransitionInflater;
@@ -8,53 +9,39 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.ActivityResultRegistry;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.R;
 import com.example.impressmap.adapter.gmap.GMapAdapter;
-import com.example.impressmap.databinding.FragmentMainBinding;
+import com.example.impressmap.databinding.FragmentMapBinding;
 import com.example.impressmap.ui.activity.main.MainViewModel;
-import com.example.impressmap.ui.fragment.main.mode.AddingMode;
-import com.example.impressmap.ui.fragment.main.mode.CommonMode;
-import com.example.impressmap.ui.fragment.main.mode.Mode;
+import com.example.impressmap.ui.fragment.map.mode.AddingMode;
+import com.example.impressmap.ui.fragment.map.mode.CommonMode;
+import com.example.impressmap.ui.fragment.map.mode.Mode;
 import com.example.impressmap.util.SwitchableMode;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
 
-public class MainFragment extends Fragment implements SwitchableMode
+public class MapFragment extends Fragment implements SwitchableMode, ActivityResultCallback<Boolean>
 {
     public static final int COMMON_MODE = 0, ADDING_MODE = 1;
-
-    private FragmentMainBinding binding;
+    private final ActivityResultLauncher<String> permission = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(), this);
+    private FragmentMapBinding binding;
     private GMapAdapter gMapAdapter;
-    private MainFragmentViewModel viewModel;
-
-    private final ActivityResultLauncher<String> permission = registerForActivityResult(new ActivityResultContracts.RequestPermission(), result ->
-    {
-        gMapAdapter.setMyLocationEnabled(true);
-        binding.myLocationFab.setOnClickListener(v -> gMapAdapter.animateZoomToMyLocation());
-    });
-
-    protected MainFragment()
-    {
-    }
+    private MapFragmentViewModel viewModel;
 
     @NonNull
-    public static MainFragment newInstance()
+    public static MapFragment newInstance()
     {
-        return new MainFragment();
+        return new MapFragment();
     }
 
     @Nullable
@@ -63,7 +50,7 @@ public class MainFragment extends Fragment implements SwitchableMode
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState)
     {
-        binding = FragmentMainBinding.inflate(inflater, container, false);
+        binding = FragmentMapBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -71,36 +58,11 @@ public class MainFragment extends Fragment implements SwitchableMode
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState)
     {
-        viewModel = new ViewModelProvider(this).get(MainFragmentViewModel.class);
+        viewModel = new ViewModelProvider(this).get(MapFragmentViewModel.class);
 
         requireActivity().getOnBackPressedDispatcher()
-                         .addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true)
-                         {
-                             @Override
-                             public void handleOnBackPressed()
-                             {
-                                 MainViewModel mainViewModel = new ViewModelProvider(
-                                         requireActivity()).get(MainViewModel.class);
-                                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                                 if (fragmentManager.getBackStackEntryCount() > 0)
-                                 {
-                                     fragmentManager.popBackStack();
-                                 }
-                                 else
-                                 {
-                                     Integer mode = mainViewModel.getMode().getValue();
-                                     if (mode != null && mode == ADDING_MODE)
-                                     {
-                                         mainViewModel.setMode(COMMON_MODE);
-                                     }
-                                     else
-                                     {
-                                         setEnabled(false);
-                                         requireActivity().onBackPressed();
-                                     }
-                                 }
-                             }
-                         });
+                         .addCallback(getViewLifecycleOwner(),
+                                 new MapFragmentOnBackPressedCallback(this));
 
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(
                 R.id.map);
@@ -112,7 +74,8 @@ public class MainFragment extends Fragment implements SwitchableMode
                 gMapAdapter = new GMapAdapter(getContext(), googleMap, requireActivity());
                 gMapAdapter.removeListeners();
 
-                permission.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+                permission.launch(Manifest.permission.ACCESS_FINE_LOCATION,
+                        ActivityOptionsCompat.makeBasic());
 
                 int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
                 switch (currentNightMode)
@@ -155,6 +118,22 @@ public class MainFragment extends Fragment implements SwitchableMode
     {
         super.onPause();
         getViewModelStore().clear();
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onActivityResult(Boolean result)
+    {
+        if (result)
+        {
+            gMapAdapter.setMyLocationEnabled(true);
+            binding.myLocationFab.setOnClickListener(v -> gMapAdapter.animateZoomToMyLocation());
+        }
+        else
+        {
+            binding.myLocationFab.setOnClickListener(
+                    v -> permission.launch(Manifest.permission.ACCESS_FINE_LOCATION));
+        }
     }
 
     @Nullable

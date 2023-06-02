@@ -1,6 +1,6 @@
 package com.example.impressmap.ui.fragment.creatoraddress;
 
-import static com.example.impressmap.ui.fragment.main.MainFragment.COMMON_MODE;
+import static com.example.impressmap.ui.fragment.map.MapFragment.COMMON_MODE;
 import static com.example.impressmap.util.Constants.LAT_LNG_KEY;
 
 import android.os.Bundle;
@@ -32,10 +32,6 @@ public class CreatorAddressFragment extends Fragment
 {
     private FragmentCreatorAddressBinding binding;
     private CreatorAddressFragmentViewModel viewModel;
-
-    protected CreatorAddressFragment()
-    {
-    }
 
     @NonNull
     public static CreatorAddressFragment newInstance(@NonNull LatLng latLng)

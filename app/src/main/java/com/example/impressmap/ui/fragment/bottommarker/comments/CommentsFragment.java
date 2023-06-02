@@ -43,12 +43,8 @@ public class CommentsFragment extends Fragment
 {
     private static final String POST_KEY = "POST_KEY";
 
-    private CommentsViewModel viewModel;
+    private CommentsFragmentViewModel viewModel;
     private FragmentCommentsBinding binding;
-
-    protected CommentsFragment()
-    {
-    }
 
     @NonNull
     public static CommentsFragment newInstance(Post post)
@@ -75,7 +71,7 @@ public class CommentsFragment extends Fragment
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState)
     {
-        viewModel = new ViewModelProvider(this).get(CommentsViewModel.class);
+        viewModel = new ViewModelProvider(this).get(CommentsFragmentViewModel.class);
 
         Post post = requireArguments().getParcelable(POST_KEY);
 

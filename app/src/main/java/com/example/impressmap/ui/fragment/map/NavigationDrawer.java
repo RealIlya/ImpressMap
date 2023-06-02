@@ -1,4 +1,4 @@
-package com.example.impressmap.ui.fragment.main;
+package com.example.impressmap.ui.fragment.map;
 
 import android.content.Context;
 import android.view.Menu;

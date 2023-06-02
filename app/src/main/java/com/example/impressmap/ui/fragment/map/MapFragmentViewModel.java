@@ -1,21 +1,19 @@
-package com.example.impressmap.ui.fragment.main;
+package com.example.impressmap.ui.fragment.map;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.impressmap.database.firebase.cases.GMarkerCommonCase;
-import com.example.impressmap.database.firebase.cases.PostGMarkerCase;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GMarkerMetadata;
-import com.example.impressmap.model.data.Post;
 
 import java.util.List;
 
-public class MainFragmentViewModel extends ViewModel
+public class MapFragmentViewModel extends ViewModel
 {
     private final GMarkerCommonCase gMarkerCommonCase;
 
-    public MainFragmentViewModel()
+    public MapFragmentViewModel()
     {
         gMarkerCommonCase = new GMarkerCommonCase();
     }

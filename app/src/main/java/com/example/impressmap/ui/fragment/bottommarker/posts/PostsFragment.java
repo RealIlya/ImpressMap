@@ -33,10 +33,6 @@ public class PostsFragment extends Fragment
     private View.OnClickListener onDeselectItemClickListener;
     private OnBackPressedCallback onBackPressedCallback;
 
-    protected PostsFragment()
-    {
-    }
-
     @NonNull
     public static PostsFragment newInstance(GMarkerMetadata gMarkerMetadata)
     {

@@ -25,17 +25,12 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class EditProfileFragment extends Fragment
 {
-    private final SuccessCallback successCallback;
-    private final FieldEmptyCallback fieldEmptyCallback;
+    private final SuccessCallback successCallback = () -> requireActivity().getSupportFragmentManager()
+                                                                           .popBackStack();
+    private final FieldEmptyCallback fieldEmptyCallback = () -> Snackbar.make(requireView(),
+            R.string.field_is_necessary, Snackbar.LENGTH_LONG).show();
     private FragmentEditProfileBinding binding;
     private EditProfileFragmentViewModel viewModel;
-
-    protected EditProfileFragment()
-    {
-        successCallback = () -> requireActivity().getSupportFragmentManager().popBackStack();
-        fieldEmptyCallback = () -> Snackbar.make(requireView(), R.string.field_is_necessary,
-                Snackbar.LENGTH_LONG).show();
-    }
 
     @NonNull
     public static EditProfileFragment newInstance()

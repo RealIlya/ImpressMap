@@ -27,10 +27,6 @@ public class AddressesFragment extends Fragment
     private FragmentAddressesBinding binding;
     private AddressesFragmentViewModel viewModel;
 
-    protected AddressesFragment()
-    {
-    }
-
     @NonNull
     public static AddressesFragment newInstance()
     {

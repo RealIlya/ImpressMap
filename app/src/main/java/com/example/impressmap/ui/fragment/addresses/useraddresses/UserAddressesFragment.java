@@ -1,6 +1,6 @@
 package com.example.impressmap.ui.fragment.addresses.useraddresses;
 
-import static com.example.impressmap.ui.fragment.main.MainFragment.ADDING_MODE;
+import static com.example.impressmap.ui.fragment.map.MapFragment.ADDING_MODE;
 
 import android.os.Bundle;
 import android.transition.TransitionInflater;
@@ -36,10 +36,6 @@ public class UserAddressesFragment extends Fragment
 {
     private FragmentUserAddressesBinding binding;
     private UserAddressesFragmentViewModel viewModel;
-
-    protected UserAddressesFragment()
-    {
-    }
 
     @NonNull
     public static UserAddressesFragment newInstance()

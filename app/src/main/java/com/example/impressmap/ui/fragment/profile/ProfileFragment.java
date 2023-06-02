@@ -25,10 +25,6 @@ public class ProfileFragment extends Fragment
     private FragmentProfileBinding binding;
     private ProfileFragmentViewModel viewModel;
 
-    protected ProfileFragment()
-    {
-    }
-
     @NonNull
     public static ProfileFragment newInstance()
     {

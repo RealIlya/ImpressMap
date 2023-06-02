@@ -19,10 +19,6 @@ public class CreatorCommonMarkerPreFragment extends Fragment
 {
     private FragmentCreatorCommonMarkerPreBinding binding;
 
-    protected CreatorCommonMarkerPreFragment()
-    {
-    }
-
     @NonNull
     public static CreatorCommonMarkerPreFragment newInstance()
     {
