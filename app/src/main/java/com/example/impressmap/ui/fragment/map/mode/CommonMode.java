@@ -53,7 +53,7 @@ public class CommonMode extends Mode
     @Override
     public void switchOn(GMapAdapter gMapAdapter)
     {
-        navigationDrawer = new NavigationDrawer(activity, binding.navigationView,
+        navigationDrawer = new NavigationDrawer(fragment, binding.navigationView,
                 binding.drawerLayout, activity.getSupportFragmentManager());
 
         postsSheetBehavior = new PostsBottomSheetBehavior<>(

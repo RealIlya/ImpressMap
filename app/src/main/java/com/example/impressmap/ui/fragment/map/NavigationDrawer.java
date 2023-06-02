@@ -1,21 +1,23 @@
 package com.example.impressmap.ui.fragment.map;
 
-import android.content.Context;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.impressmap.R;
+import com.example.impressmap.databinding.NavHeaderMainBinding;
 import com.example.impressmap.model.MenuItemMeta;
 import com.example.impressmap.ui.fragment.addresses.AddressesFragment;
 import com.example.impressmap.ui.fragment.addresses.useraddresses.UserAddressesFragment;
 import com.example.impressmap.ui.fragment.profile.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.theme.overlay.MaterialThemeOverlay;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,22 +26,29 @@ public class NavigationDrawer implements NavigationView.OnNavigationItemSelected
 {
     private final int PROFILE_GROUP = 0;
     private final int SETTINGS_GROUP = 1;
-    private final Context context;
+    private final MapFragment fragment;
     private final NavigationView navigationView;
     private final DrawerLayout drawerLayout;
     private final FragmentManager fragmentManager;
     private final Map<Integer, MenuItemMeta> menuItemMeta = new HashMap<>();
 
-    public NavigationDrawer(Context context,
+    public NavigationDrawer(MapFragment fragment,
                             NavigationView navigationView,
                             DrawerLayout drawerLayout,
                             FragmentManager fragmentManager)
     {
-        this.context = context;
+        this.fragment = fragment;
         this.navigationView = navigationView;
         this.drawerLayout = drawerLayout;
         this.fragmentManager = fragmentManager;
 
+
+        NavHeaderMainBinding navHeaderMainBinding = NavHeaderMainBinding.bind(
+                navigationView.getHeaderView(0));
+        navHeaderMainBinding.dayNightFab.setOnClickListener(v ->
+        {
+
+        });
         initNavigationMenu();
         navigationView.setNavigationItemSelectedListener(this);
     }
@@ -106,7 +115,7 @@ public class NavigationDrawer implements NavigationView.OnNavigationItemSelected
                                        MenuItemMeta menuItemMeta,
                                        @DrawableRes int icon)
     {
-        addNavigationMenuItem(menu, groupId, order, context.getString(title), menuItemMeta, icon);
+        addNavigationMenuItem(menu, groupId, order, fragment.getString(title), menuItemMeta, icon);
     }
 
     private void addNavigationMenuItem(Menu menu,

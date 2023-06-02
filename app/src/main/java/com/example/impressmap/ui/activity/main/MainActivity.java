@@ -1,6 +1,7 @@
 package com.example.impressmap.ui.activity.main;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.core.view.WindowCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -22,11 +23,10 @@ public class MainActivity extends FragmentActivity
         setTheme(R.style.Theme_ImpressMap);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
         super.onCreate(savedInstanceState);
-
         ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
 
-/*        binding.container.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);*/
+        binding.container.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_VISIBLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
         setContentView(binding.getRoot());
 
