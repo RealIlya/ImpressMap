@@ -53,9 +53,6 @@ public class AddressesFragment extends Fragment
                 v -> requireActivity().getSupportFragmentManager().popBackStack());
         binding.toolbar.setTitle(R.string.addresses);
 
-        MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
-                MainViewModel.class);
-
         RecyclerView recyclerView = binding.addressesRecyclerView;
         AddressesAdapter addressesAdapter = new AddressesAdapter(requireContext(),
                 requireActivity());

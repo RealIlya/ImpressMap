@@ -37,7 +37,7 @@
                     android:layout_height="?attr/actionBarSize"
                     app:navigationIcon="@drawable/ic_arrow"
                     app:popupTheme="@style/Theme.ImpressMap.PopupOverlay"
-                    app:subtitle="@{viewModel.selectedAddressesCount + @string/selected_addresses_count}"
+                    app:subtitle="@{@string/selected_addresses_count(viewModel.selectedAddressesCount)}"
                     app:title="@{@string/addresses_count + ' ' + viewModel.addressesCount}" />
             </com.google.android.material.appbar.AppBarLayout>
 

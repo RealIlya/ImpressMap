@@ -47,7 +47,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         holder.binding.textView.setText(comment.getText());
         holder.binding.fullNameView.setText(comment.getOwnerUser().getFullName());
         String dateString = DateFormat.getDateInstance(DateFormat.DATE_FIELD)
-                                      .format(comment.getDate());
+                                      .format(comment.getDateTime());
         holder.binding.dateView.setText(dateString);
 
         holder.binding.showCommentsButton.setOnClickListener(v ->

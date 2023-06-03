@@ -7,13 +7,22 @@
     <string name="max_addresses_count">Max addresses count!</string>
     <string name="not_stated">Not stated</string>
     <string name="addresses_count">"Addresses"</string>
-    <string name="selected_addresses_count">" selected"</string>
+    <string name="selected_addresses_count">"%1$d selected"</string>
     <string name="comments">Comments</string>
     <string name="edit_profile">Edit profile</string>
     <string name="edit_phone_number">Edit phone number</string>
     <string name="addresses">Addresses</string>
     <string name="comment">Comment</string>
     <string name="phone_number_hint">Phone number</string>
+    <string name="location_permission">Geolocation is disabled. Permission required Location in settings</string>
+    <string name="location_loading">Loading…</string>
+    <string name="today">Today</string>
+
+    <plurals name="days">
+        <item quantity="one">%1$d day</item>
+        <item quantity="many">%1$d days</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
 
     <!--  creator address fragment -->
     <string name="create_address">Create address</string>

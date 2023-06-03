@@ -8,6 +8,7 @@ import androidx.annotation.RequiresPermission;
 
 import com.example.impressmap.model.data.GCircleMeta;
 import com.example.impressmap.model.data.GMarkerMetadata;
+import com.example.impressmap.util.FailCallback;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -181,11 +182,12 @@ public abstract class MapAdapter
         googleMap.setMyLocationEnabled(enabled);
     }
 
-    public void animateZoomToMyLocation()
+    public void animateZoomToMyLocation(FailCallback failCallback)
     {
         Location myLocation = googleMap.getMyLocation();
         if (myLocation == null)
         {
+            failCallback.onFail();
             return;
         }
         double latitude = myLocation.getLatitude();

@@ -92,7 +92,7 @@ public class CommentsFragment extends Fragment
         binding.fullNameView.setText(post.getOwnerUser().getFullName());
         binding.textView.setText(post.getText());
         binding.dateView.setText(
-                DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(post.getDate()));
+                DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(post.getDateTime()));
 
         RecyclerView commentsRecyclerView = binding.commentsRecyclerView;
         CommentsAdapter commentsAdapter = new CommentsAdapter(requireActivity());

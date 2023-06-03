@@ -11,9 +11,11 @@ import android.os.Parcel;
 
 import androidx.annotation.Nullable;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class Post implements TransferableToDatabase, Owner
 {
@@ -33,7 +35,7 @@ public class Post implements TransferableToDatabase, Owner
     };
     private String id = "";
     private OwnerUser ownerUser = new OwnerUser();
-    private Date date = new Date();
+    private LocalDateTime dateTime = LocalDateTime.now(TimeZone.getTimeZone("GMT0:00").toZoneId());
     private String title = "";
     private String text = "";
     private String gMarkerId = "";
@@ -59,7 +61,7 @@ public class Post implements TransferableToDatabase, Owner
 
         data.put(CHILD_ID_NODE, id);
         data.put(OWNER_ID_NODE, ownerUser.getId());
-        data.put(DATE_NODE, date.getTime());
+        data.put(DATE_NODE, dateTime.toEpochSecond(OffsetDateTime.now().getOffset()));
         data.put(TITLE_NODE, title);
         data.put(TEXT_NODE, text);
         data.put(GMARKER_ID, gMarkerId);
@@ -87,19 +89,19 @@ public class Post implements TransferableToDatabase, Owner
         this.ownerUser = ownerUser;
     }
 
-    public Date getDate()
+    public LocalDateTime getDateTime()
     {
-        return date;
+        return dateTime;
     }
 
-    public void setDate(Date date)
+    public void setDateTime(LocalDateTime dateTime)
     {
-        this.date = date;
+        this.dateTime = dateTime;
     }
 
-    public void setDate(long date)
+    public void setDateTime(long date)
     {
-        this.date = new Date(date);
+        this.dateTime = LocalDateTime.ofEpochSecond(date, 0, OffsetDateTime.now().getOffset());
     }
 
     public String getTitle()

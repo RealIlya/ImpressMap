@@ -4,7 +4,7 @@ public class CommentDatabase
 {
     private String id = "";
     private String ownerId = "";
-    private long date = 0;
+    private long dateTime = 0;
     private String text = "";
 
     public String getId()
@@ -27,14 +27,14 @@ public class CommentDatabase
         this.ownerId = ownerId;
     }
 
-    public long getDate()
+    public long getDateTime()
     {
-        return date;
+        return dateTime;
     }
 
-    public void setDate(long date)
+    public void setDateTime(long dateTime)
     {
-        this.date = date;
+        this.dateTime = dateTime;
     }
 
     public String getText()

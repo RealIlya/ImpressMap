@@ -14,8 +14,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -29,6 +27,7 @@ import com.example.impressmap.ui.fragment.map.mode.Mode;
 import com.example.impressmap.util.SwitchableMode;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.material.snackbar.Snackbar;
 
 public class MapFragment extends Fragment implements SwitchableMode, ActivityResultCallback<Boolean>
 {
@@ -75,8 +74,7 @@ public class MapFragment extends Fragment implements SwitchableMode, ActivityRes
                 gMapAdapter = new GMapAdapter(getContext(), googleMap, requireActivity());
                 gMapAdapter.removeListeners();
 
-                permission.launch(Manifest.permission.ACCESS_FINE_LOCATION,
-                        ActivityOptionsCompat.makeBasic());
+                permission.launch(Manifest.permission.ACCESS_FINE_LOCATION);
 
                 int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
                 switch (currentNightMode)
@@ -128,12 +126,17 @@ public class MapFragment extends Fragment implements SwitchableMode, ActivityRes
         if (result)
         {
             gMapAdapter.setMyLocationEnabled(true);
-            binding.myLocationFab.setOnClickListener(v -> gMapAdapter.animateZoomToMyLocation());
+            binding.myLocationFab.setOnClickListener(v -> gMapAdapter.animateZoomToMyLocation(() ->
+            {
+                Snackbar.make(v, R.string.location_loading, Snackbar.LENGTH_SHORT)
+                        .show();
+            }));
         }
         else
         {
             binding.myLocationFab.setOnClickListener(
-                    v -> permission.launch(Manifest.permission.ACCESS_FINE_LOCATION));
+                    v -> Snackbar.make(v, R.string.location_permission,
+                            Snackbar.LENGTH_LONG).show());
         }
     }
 

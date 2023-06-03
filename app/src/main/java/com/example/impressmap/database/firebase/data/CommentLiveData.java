@@ -15,8 +15,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Date;
-
 public class CommentLiveData extends LiveData<Comment>
 {
     private final DatabaseReference commentRef;
@@ -48,7 +46,7 @@ public class CommentLiveData extends LiveData<Comment>
                             ownerUser.setId(user.getId());
                             ownerUser.setFullName(user.getFullName());
                             comment.setOwnerUser(ownerUser);
-                            comment.setDate(new Date(value.getDate()));
+                            comment.setDateTime(value.getDateTime());
                             comment.setText(value.getText());
 
                             setValue(comment);

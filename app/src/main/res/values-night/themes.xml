@@ -1,10 +1,11 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.ImpressMap" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
         <item name="android:statusBarColor">@color/blue_100_alpha_5</item>
         <item name="android:navigationBarColor">?backgroundPrimaryWindow</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
 
         <item name="android:colorEdgeEffect">?colorAccent</item>
 
@@ -54,5 +55,6 @@
     <style name="Theme.ImpressMap.SplashScreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowBackground">@color/dim_gray</item>
         <item name="android:windowFullscreen">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
     </style>
 </resources>

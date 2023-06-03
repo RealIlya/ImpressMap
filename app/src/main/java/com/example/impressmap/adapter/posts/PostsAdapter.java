@@ -1,5 +1,6 @@
 package com.example.impressmap.adapter.posts;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,20 +13,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.databinding.ItemPostBinding;
 import com.example.impressmap.model.data.Post;
+import com.example.impressmap.util.DateStrings;
 
-import java.text.DateFormat;
 import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHolder>
         implements OnCommentsButtonClickListener
 {
+    private final Context context;
     private final PostsAdapterViewModel viewModel;
 
 
     private OnCommentsButtonClickListener onCommentsButtonClickListener;
 
-    public PostsAdapter(ViewModelStoreOwner viewModelStoreOwner)
+    public PostsAdapter(Context context,
+                        ViewModelStoreOwner viewModelStoreOwner)
     {
+        this.context = context;
         viewModel = new ViewModelProvider(viewModelStoreOwner).get(PostsAdapterViewModel.class);
         clear();
     }
@@ -47,8 +51,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
 
         holder.binding.textView.setText(post.getText());
         holder.binding.fullNameView.setText(post.getOwnerUser().getFullName());
-        String dateString = DateFormat.getDateInstance(DateFormat.DATE_FIELD)
-                                      .format(post.getDate());
+        String dateString = DateStrings.getDateString(context.getResources(), post.getDateTime());
         holder.binding.dateView.setText(dateString);
 
         /*holder.binding.showReactionsButton.setOnClickListener(v ->

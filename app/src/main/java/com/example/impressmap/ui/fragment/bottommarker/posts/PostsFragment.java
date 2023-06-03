@@ -73,7 +73,7 @@ public class PostsFragment extends Fragment
 
         GMarkerMetadata gMarkerMetadata = requireArguments().getParcelable(METADATA_KEY);
 
-        PostsAdapter postsAdapter = new PostsAdapter(requireActivity());
+        PostsAdapter postsAdapter = new PostsAdapter(requireContext(), requireActivity());
 
         RecyclerView recyclerView = binding.postsRecyclerView;
         recyclerView.setAdapter(postsAdapter);

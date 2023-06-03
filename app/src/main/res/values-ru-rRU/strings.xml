@@ -6,7 +6,8 @@
     <string name="max_addresses_count">Максимальное количество адресов!</string>
     <string name="not_stated">Не указано</string>
     <string name="addresses_count">Адреса</string>
-    <string name="selected_addresses_count">" выбрано"</string>
+    <string name="selected_addresses_count">%1$d выбрано</string>
+    <string name="location_permission">Геолокация отключена. Требуется разрешение Местоположение в настройках</string>
     <string name="create_address">Создать адрес</string>
     <string name="addresses_in_this_location">Адреса в этом месте</string>
     <string name="no_address_selected">Ни один адрес не выбран</string>
@@ -22,7 +23,7 @@
     <string name="marker_title_hint">Заголовок</string>
     <string name="marker_text_hint">Текст</string>
     <string name="address_desc_hint">Описание</string>
-    <string name="write_some_words">Сообщение…</string>
+    <string name="write_some_words">Текст сообщения</string>
     <string name="show_comments_branch">Раскрыть ветку комментариев</string>
     <string name="message_is_empty">Сообщение пустое</string>
     <string name="phone_number_sub">Номер телефона</string>
@@ -42,4 +43,13 @@
     <string name="menu_join_address">Присоединиться к адресу</string>
     <string name="edit_phone_number">Изменить номер телефона</string>
     <string name="phone_number_hint">Номер телефона</string>
+    <string name="location_loading">Загрузка…</string>
+
+    <plurals name="days">
+        <item quantity="one">%1$d день</item>
+        <item quantity="few">%1$d дня</item>
+        <item quantity="many">%1$d дней</item>
+        <item quantity="other">%1$d дней</item>
+    </plurals>
+    <string name="today">Сегодня</string>
 </resources>

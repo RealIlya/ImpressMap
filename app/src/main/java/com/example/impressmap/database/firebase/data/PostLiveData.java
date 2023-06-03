@@ -46,7 +46,7 @@ public class PostLiveData extends LiveData<Post>
                             ownerUser.setId(user.getId());
                             ownerUser.setFullName(user.getFullName());
                             post.setOwnerUser(ownerUser);
-                            post.setDate(value.getDate());
+                            post.setDateTime(value.getDateTime());
                             post.setTitle(value.getTitle());
                             post.setText(value.getText());
 

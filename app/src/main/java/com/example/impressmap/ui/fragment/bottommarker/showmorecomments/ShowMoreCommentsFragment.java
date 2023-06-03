@@ -91,7 +91,7 @@ public class ShowMoreCommentsFragment extends Fragment
         binding.fullNameView.setText(comment.getOwnerUser().getFullName());
         binding.textView.setText(comment.getText());
         binding.dateView.setText(
-                DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(comment.getDate()));
+                DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(comment.getDateTime()));
 
         LiveData<List<String>> commentIdsLiveData = viewModel.getIdsByOwner(comment);
 
