@@ -26,7 +26,7 @@ public class AddressesRepo implements DatabaseRepo<Address>
 
     public AddressesRepo()
     {
-        addressesRef = DATABASE_REF.child(ADDRESSES_NODE);
+        addressesRef = DATABASE_REF.child(ADDRESSES_NODE); // всегда лучше передавать зависимости в конструкторе
         userAddressesRef = DATABASE_REF.child(MAIN_LIST_NODE)
                                        .child(USERS_NODE)
                                        .child(UID)
@@ -59,6 +59,11 @@ public class AddressesRepo implements DatabaseRepo<Address>
                                                                             unused1 -> successCallback.onSuccess()));
     }
 
+    /*
+        Наверное не стоит делать функции которые не будут реализовываться.
+        Если такое часто происходит, вероятнее всего, интерфейс спроектирован не оптимально или
+        используется не по назначению.
+     */
     @Override
     public void update(Address address,
                        SuccessCallback successCallback)
@@ -66,6 +71,11 @@ public class AddressesRepo implements DatabaseRepo<Address>
 
     }
 
+    /*
+        Наверное не стоит делать функции которые не будут реализовываться.
+        Если такое часто происходит, вероятнее всего, интерфейс спроектирован не оптимально или
+        используется не по назначению.
+     */
     @Override
     public void delete(Address address,
                        SuccessCallback successCallback)

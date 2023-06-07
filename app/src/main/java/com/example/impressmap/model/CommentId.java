@@ -12,5 +12,6 @@ public class CommentId
     public void setId(String id)
     {
         this.id = id;
-    }
+    } // если сеттер нигде не используется, то можно его удалить, а переменную сделать final.
+      // Иммутабельность это всегда хорошо
 }

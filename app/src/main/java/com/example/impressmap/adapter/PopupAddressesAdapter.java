@@ -43,10 +43,20 @@ public class PopupAddressesAdapter
     public void onBindViewHolder(@NonNull AddressViewHolder holder,
                                  int position)
     {
+        /*
+         * Удобнее всего добавить в холдер фунцию bind внутри которой будет располагаться логика
+         * отображения данных, тогда тут надо будет просто вызвать эту функцию, а сама логика
+         * установки данных будет находиться в холдере
+         */
         Address address = addresses.get(position);
 
         Location location = Locations.getOneFromLatLng(context, address.getPosition());
 
+        /*
+         * При работе с ресайлером всегда нужно обрабатывать обе ветки ветвления из-за того что вью
+         * переиспользуются. когда придет айтем с location == null у тебя не сотруться старые данные
+         * и будут отображаться не верно
+         */
         if (location != null)
         {
             holder.binding.addressPrimaryView.setText(
