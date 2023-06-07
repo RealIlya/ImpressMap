@@ -25,7 +25,7 @@ import java.util.Map;
 public class NavigationDrawer implements NavigationView.OnNavigationItemSelectedListener
 {
     private final int PROFILE_GROUP = 0;
-    private final int SETTINGS_GROUP = 1;
+    private final int SETTINGS_GROUP = 1; // не испльзуется
     private final MapFragment fragment;
     private final NavigationView navigationView;
     private final DrawerLayout drawerLayout;
@@ -56,6 +56,11 @@ public class NavigationDrawer implements NavigationView.OnNavigationItemSelected
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item)
     {
+        /*
+         * 1. Тут может быть NPE, нужно проверять что значение не null
+         * 2. Мне кажется такая реализация излишняя, можно тут поставить просто обычных switch
+         * и по R.id.menu_* определять на что кликнули и обрабатывать.
+         */
         menuItemMeta.get(item.getItemId()).onClick();
         close();
 

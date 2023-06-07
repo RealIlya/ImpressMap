@@ -13,6 +13,8 @@ public class Constants
 
     static
     {
+        // не уверен что это можно назвать константой. Лучше бы положить в какой-то DbHolder или что-то в этом роде
+        // Вообще такой подход с синглтонами не лучшая идея в целом. Лучше обрабатывать предоставление ссылки на БД через DI фреймворк
         DATABASE_REF = FirebaseDatabase.getInstance(
                                                "https://impressmap-939c5-default-rtdb.europe-west1.firebasedatabase.app")
                                        .getReference();

@@ -17,6 +17,16 @@ public class AllAddressesLiveData extends LiveData<List<Address>>
 {
     private DatabaseReference addressesRef;
 
+    /*
+        Это все выглядит странно. Зачем делать специальную реализацию LiveData внутри которой
+        будет располагться какая то логика работы с данными. Сама по себе LiveData это просто
+        реализация паттерна Observable и она должна выполнять какую то одну задачу, а не лазить внутри себя в БД
+
+        По идее такая логика должна находится в Storage внутри дата слоя, но никак ни в LiveData.
+        А уже этот Storage будет возвразать класическую LiveData в которую будет передавать данные.
+
+        Относится ко всем файлам в этом пакете.
+     */
     private final ValueEventListener listener = new ValueEventListener()
     {
         @Override

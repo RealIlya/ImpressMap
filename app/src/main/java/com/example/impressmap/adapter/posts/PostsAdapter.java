@@ -21,6 +21,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
         implements OnCommentsButtonClickListener
 {
     private final Context context;
+    /*
+     Лучше так не делать. в идеале в адаптерах должно быть минимум логики
+     он просто получает данные (список) из фрагмента и отображает
+     */
     private final PostsAdapterViewModel viewModel;
 
 

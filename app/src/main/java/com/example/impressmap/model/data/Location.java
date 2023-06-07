@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+// Думаю есть смысл разбить полный адрес на составляющие в конструкторе и потом их отдавать, а не каждый раз преобразовывать данные при запросе
 public class Location extends Address
 {
     private String fullAddress = "";
