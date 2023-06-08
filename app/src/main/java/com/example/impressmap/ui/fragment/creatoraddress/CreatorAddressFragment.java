@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -50,6 +51,8 @@ public class CreatorAddressFragment extends Fragment
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState)
     {
+        new WindowInsetsControllerCompat(requireActivity().getWindow(),
+                requireActivity().getWindow().getDecorView()).setAppearanceLightStatusBars(false);
         binding = FragmentCreatorAddressBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }

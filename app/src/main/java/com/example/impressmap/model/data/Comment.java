@@ -1,7 +1,7 @@
 package com.example.impressmap.model.data;
 
 import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
-import static com.example.impressmap.util.Constants.Keys.DATE_NODE;
+import static com.example.impressmap.util.Constants.Keys.DATE_TIME_NODE;
 import static com.example.impressmap.util.Constants.Keys.OWNER_ID_NODE;
 import static com.example.impressmap.util.Constants.Keys.TEXT_NODE;
 
@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
@@ -57,7 +56,7 @@ public class Comment implements TransferableToDatabase, Owner
 
         data.put(CHILD_ID_NODE, id);
         data.put(OWNER_ID_NODE, ownerUser.getId());
-        data.put(DATE_NODE, dateTime.toEpochSecond(OffsetDateTime.now().getOffset()));
+        data.put(DATE_TIME_NODE, dateTime.toEpochSecond(OffsetDateTime.now().getOffset()));
         data.put(TEXT_NODE, text);
 
         return data;

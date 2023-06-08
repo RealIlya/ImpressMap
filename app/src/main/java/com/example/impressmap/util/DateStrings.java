@@ -4,7 +4,6 @@ import android.content.res.Resources;
 
 import com.example.impressmap.R;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
@@ -19,7 +18,7 @@ public class DateStrings
     public static String getDateString(Resources resources,
                                        LocalDateTime dateTime)
     {
-        LocalDateTime nowDateTime = LocalDateTime.now(TimeZone.getTimeZone("GMT0:00").toZoneId());
+        LocalDateTime nowDateTime = LocalDateTime.now(TimeZone.getTimeZone("UTC").toZoneId());
 
         if (nowDateTime.getYear() == dateTime.getYear())
         {

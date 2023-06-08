@@ -1,31 +1,34 @@
 package com.example.impressmap.adapter.comments;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.databinding.ItemCommentBinding;
 import com.example.impressmap.model.data.Comment;
+import com.example.impressmap.util.DateStrings;
 
-import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>
         implements OnCommentsButtonClickListener, OnReplyButtonClickListener
 {
-    private final CommentsAdapterViewModel viewModel;
+
+    private final Context context;
+    private final List<Comment> commentList;
 
     private OnCommentsButtonClickListener onCommentsButtonClickListener;
     private OnReplyButtonClickListener onReplyButtonClickListener;
 
-    public CommentsAdapter(ViewModelStoreOwner viewModelStoreOwner)
+    public CommentsAdapter(Context context)
     {
-        viewModel = new ViewModelProvider(viewModelStoreOwner).get(CommentsAdapterViewModel.class);
-        clear();
+        this.context = context;
+        commentList = new ArrayList<>();
     }
 
     @NonNull
@@ -42,12 +45,13 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     public void onBindViewHolder(@NonNull CommentsViewHolder holder,
                                  int position)
     {
-        Comment comment = viewModel.getComment(position);
+        Comment comment = commentList.get(position);
 
         holder.binding.textView.setText(comment.getText());
         holder.binding.fullNameView.setText(comment.getOwnerUser().getFullName());
-        String dateString = DateFormat.getDateInstance(DateFormat.DATE_FIELD)
-                                      .format(comment.getDateTime());
+        String dateString = DateStrings.getDateString(context.getResources(),
+                comment.getDateTime());
+
         holder.binding.dateView.setText(dateString);
 
         holder.binding.showCommentsButton.setOnClickListener(v ->
@@ -65,20 +69,13 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     @Override
     public int getItemCount()
     {
-        return viewModel.getCommentsCount();
+        return commentList.size();
     }
 
     public void addComment(Comment comment)
     {
-        viewModel.addComment(comment);
+        commentList.add(comment);
         notifyItemInserted(getItemCount());
-    }
-
-    public void clear()
-    {
-        int size = getItemCount();
-        viewModel.clearCache();
-        notifyItemRangeRemoved(0, size);
     }
 
     public void setOnCommentsButtonClickListener(OnCommentsButtonClickListener listener)

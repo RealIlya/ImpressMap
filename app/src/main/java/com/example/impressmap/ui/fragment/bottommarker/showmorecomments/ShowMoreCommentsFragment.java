@@ -24,15 +24,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.R;
+import com.example.impressmap.adapter.comments.CommentsAdapter;
 import com.example.impressmap.adapter.comments.OnCommentsButtonClickListener;
 import com.example.impressmap.adapter.comments.OnReplyButtonClickListener;
-import com.example.impressmap.adapter.comments.SubCommentsAdapter;
 import com.example.impressmap.databinding.FragmentShowMoreCommentsBinding;
 import com.example.impressmap.model.data.Comment;
 import com.example.impressmap.model.data.OwnerUser;
+import com.example.impressmap.util.DateStrings;
 import com.example.impressmap.util.MessageViewTextWatcher;
 
-import java.text.DateFormat;
 import java.util.List;
 
 public class ShowMoreCommentsFragment extends Fragment
@@ -90,34 +90,32 @@ public class ShowMoreCommentsFragment extends Fragment
 
         binding.fullNameView.setText(comment.getOwnerUser().getFullName());
         binding.textView.setText(comment.getText());
-        binding.dateView.setText(
-                DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(comment.getDateTime()));
+        binding.dateView.setText(DateStrings.getDateString(getResources(), comment.getDateTime()));
 
         LiveData<List<String>> commentIdsLiveData = viewModel.getIdsByOwner(comment);
 
         RecyclerView commentsRecyclerView = binding.commentsRecyclerView;
-        SubCommentsAdapter subCommentsAdapter = new SubCommentsAdapter();
-        commentsRecyclerView.setAdapter(subCommentsAdapter);
-        commentsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        CommentsAdapter commentsAdapter = new CommentsAdapter(requireContext());
+        commentsRecyclerView.setAdapter(commentsAdapter);
+        commentsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         if (!commentIdsLiveData.hasActiveObservers())
         {
             commentIdsLiveData.observe(getViewLifecycleOwner(), ids ->
             {
-                subCommentsAdapter.clear();
                 for (String id : ids)
                 {
                     LiveData<Comment> byId = viewModel.getById(id);
                     if (!byId.hasActiveObservers())
                     {
-                        byId.observeForever(subCommentsAdapter::addComment);
+                        byId.observeForever(commentsAdapter::addComment);
                     }
                 }
             });
         }
 
-        subCommentsAdapter.setOnCommentsButtonClickListener(this);
-        subCommentsAdapter.setOnReplyButtonClickListener(this);
+        commentsAdapter.setOnCommentsButtonClickListener(this);
+        commentsAdapter.setOnReplyButtonClickListener(this);
 
         binding.messageText.addTextChangedListener(new MessageViewTextWatcher(
                 binding.senderToolbar.getMenu().findItem(R.id.menu_send)));
@@ -150,8 +148,7 @@ public class ShowMoreCommentsFragment extends Fragment
                         InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(
                                 Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                        commentsRecyclerView.smoothScrollToPosition(
-                                subCommentsAdapter.getItemCount());
+                        commentsRecyclerView.smoothScrollToPosition(commentsAdapter.getItemCount());
                     }, () ->
                     {
                     });

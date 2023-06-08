@@ -14,6 +14,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -50,6 +51,11 @@ public class MapFragment extends Fragment implements SwitchableMode, ActivityRes
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState)
     {
+
+        int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        new WindowInsetsControllerCompat(requireActivity().getWindow(),
+                requireActivity().getWindow().getDecorView()).setAppearanceLightStatusBars(
+                currentNightMode == Configuration.UI_MODE_NIGHT_NO);
         binding = FragmentMapBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -128,15 +134,14 @@ public class MapFragment extends Fragment implements SwitchableMode, ActivityRes
             gMapAdapter.setMyLocationEnabled(true);
             binding.myLocationFab.setOnClickListener(v -> gMapAdapter.animateZoomToMyLocation(() ->
             {
-                Snackbar.make(v, R.string.location_loading, Snackbar.LENGTH_SHORT)
-                        .show();
+                Snackbar.make(v, R.string.location_loading, Snackbar.LENGTH_SHORT).show();
             }));
         }
         else
         {
             binding.myLocationFab.setOnClickListener(
-                    v -> Snackbar.make(v, R.string.location_permission,
-                            Snackbar.LENGTH_LONG).show());
+                    v -> Snackbar.make(v, R.string.location_permission, Snackbar.LENGTH_LONG)
+                                 .show());
         }
     }
 

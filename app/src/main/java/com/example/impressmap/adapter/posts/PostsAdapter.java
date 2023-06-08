@@ -6,32 +6,27 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.databinding.ItemPostBinding;
 import com.example.impressmap.model.data.Post;
 import com.example.impressmap.util.DateStrings;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHolder>
         implements OnCommentsButtonClickListener
 {
     private final Context context;
-    private final PostsAdapterViewModel viewModel;
-
+    private final List<Post> postList;
 
     private OnCommentsButtonClickListener onCommentsButtonClickListener;
 
-    public PostsAdapter(Context context,
-                        ViewModelStoreOwner viewModelStoreOwner)
+    public PostsAdapter(Context context)
     {
         this.context = context;
-        viewModel = new ViewModelProvider(viewModelStoreOwner).get(PostsAdapterViewModel.class);
-        clear();
+        postList = new ArrayList<>();
     }
 
     @NonNull
@@ -47,7 +42,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
     public void onBindViewHolder(@NonNull PostViewHolder holder,
                                  int position)
     {
-        Post post = viewModel.getPost(position);
+        Post post = postList.get(position);
 
         holder.binding.textView.setText(post.getText());
         holder.binding.fullNameView.setText(post.getOwnerUser().getFullName());
@@ -64,34 +59,18 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
             holder.binding.getRoot().setTransitionName(post.getId());
             onCommentClick(holder.binding.getRoot(), post);
         });
-
-        LiveData<List<String>> ownerId = viewModel.getIdsByOwner(post);
-        if (!ownerId.hasActiveObservers())
-        {
-            ownerId.observeForever(ids ->
-            {
-                holder.binding.showCommentsButton.setText(String.valueOf(ids.size()));
-            });
-        }
     }
 
     @Override
     public int getItemCount()
     {
-        return viewModel.getPostsCount();
+        return postList.size();
     }
 
     public void addPost(Post post)
     {
-        viewModel.addPost(post);
+        postList.add(post);
         notifyItemInserted(getItemCount());
-    }
-
-    public void clear()
-    {
-        int count = getItemCount();
-        viewModel.clearCache();
-        notifyItemRangeRemoved(0, count);
     }
 
     public void setOnCommentsButtonClickListener(OnCommentsButtonClickListener listener)

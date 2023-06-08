@@ -65,9 +65,9 @@
                 android:layout_marginEnd="@dimen/fab_margin"
                 android:layout_marginBottom="@dimen/fab_margin"
                 android:importantForAccessibility="no"
-                app:backgroundTint="?backgroundSecondaryFab"
+                app:backgroundTint="?backgroundPrimaryFab"
                 app:srcCompat="@drawable/ic_other_addresses"
-                app:tint="?colorSecondaryFabIcon" />
+                app:tint="?colorPrimaryFabIcon" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/my_location_fab"
@@ -78,9 +78,9 @@
                 android:layout_marginStart="@dimen/fab_margin"
                 android:layout_marginBottom="@dimen/fab_margin"
                 android:importantForAccessibility="no"
-                app:backgroundTint="?backgroundSecondaryFab"
+                app:backgroundTint="?backgroundPrimaryFab"
                 app:srcCompat="@drawable/ic_my_location"
-                app:tint="?colorSecondaryFabIcon" />
+                app:tint="?colorPrimaryFabIcon" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout

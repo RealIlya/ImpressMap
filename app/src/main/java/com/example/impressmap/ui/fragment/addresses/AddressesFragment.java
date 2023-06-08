@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -39,6 +40,8 @@ public class AddressesFragment extends Fragment
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState)
     {
+        new WindowInsetsControllerCompat(requireActivity().getWindow(),
+                requireActivity().getWindow().getDecorView()).setAppearanceLightStatusBars(false);
         binding = FragmentAddressesBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }

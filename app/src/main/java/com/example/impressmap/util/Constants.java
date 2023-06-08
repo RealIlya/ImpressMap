@@ -28,7 +28,7 @@ public class Constants
         public static final String USERS_NODE = "users";
         public static final String OWNERS_NODE = "owners";
         public static final String CHILD_ID_NODE = "id";
-        public static final String DATE_NODE = "date";
+        public static final String DATE_TIME_NODE = "dateTime";
         public static final String TITLE_NODE = "title";
         public static final String TEXT_NODE = "text";
         public static final String FULL_ADDRESS_NODE = "fullAddress";

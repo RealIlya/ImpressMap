@@ -1,7 +1,7 @@
 package com.example.impressmap.model.data;
 
 import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
-import static com.example.impressmap.util.Constants.Keys.DATE_NODE;
+import static com.example.impressmap.util.Constants.Keys.DATE_TIME_NODE;
 import static com.example.impressmap.util.Constants.Keys.GMARKER_ID;
 import static com.example.impressmap.util.Constants.Keys.OWNER_ID_NODE;
 import static com.example.impressmap.util.Constants.Keys.TEXT_NODE;
@@ -11,8 +11,10 @@ import android.os.Parcel;
 
 import androidx.annotation.Nullable;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
@@ -35,7 +37,7 @@ public class Post implements TransferableToDatabase, Owner
     };
     private String id = "";
     private OwnerUser ownerUser = new OwnerUser();
-    private LocalDateTime dateTime = LocalDateTime.now(TimeZone.getTimeZone("GMT0:00").toZoneId());
+    private LocalDateTime dateTime = LocalDateTime.now(TimeZone.getTimeZone("UTC").toZoneId());
     private String title = "";
     private String text = "";
     private String gMarkerId = "";
@@ -61,7 +63,7 @@ public class Post implements TransferableToDatabase, Owner
 
         data.put(CHILD_ID_NODE, id);
         data.put(OWNER_ID_NODE, ownerUser.getId());
-        data.put(DATE_NODE, dateTime.toEpochSecond(OffsetDateTime.now().getOffset()));
+        data.put(DATE_TIME_NODE, dateTime.toEpochSecond(ZoneOffset.UTC));
         data.put(TITLE_NODE, title);
         data.put(TEXT_NODE, text);
         data.put(GMARKER_ID, gMarkerId);
@@ -101,7 +103,9 @@ public class Post implements TransferableToDatabase, Owner
 
     public void setDateTime(long date)
     {
-        this.dateTime = LocalDateTime.ofEpochSecond(date, 0, OffsetDateTime.now().getOffset());
+//        this.dateTime = LocalDateTime.ofEpochSecond(date, 0, ZoneOffset.ofHours(7));
+        this.dateTime = LocalDateTime.ofEpochSecond(date, 0,
+                ZoneOffset.from(OffsetDateTime.now(Clock.systemDefaultZone())));
     }
 
     public String getTitle()

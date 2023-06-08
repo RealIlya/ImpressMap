@@ -33,9 +33,9 @@ import com.example.impressmap.model.data.Comment;
 import com.example.impressmap.model.data.OwnerUser;
 import com.example.impressmap.model.data.Post;
 import com.example.impressmap.ui.fragment.bottommarker.showmorecomments.ShowMoreCommentsFragment;
+import com.example.impressmap.util.DateStrings;
 import com.example.impressmap.util.MessageViewTextWatcher;
 
-import java.text.DateFormat;
 import java.util.List;
 
 public class CommentsFragment extends Fragment
@@ -91,20 +91,18 @@ public class CommentsFragment extends Fragment
 
         binding.fullNameView.setText(post.getOwnerUser().getFullName());
         binding.textView.setText(post.getText());
-        binding.dateView.setText(
-                DateFormat.getDateInstance(DateFormat.DATE_FIELD).format(post.getDateTime()));
+        binding.dateView.setText(DateStrings.getDateString(getResources(), post.getDateTime()));
 
         RecyclerView commentsRecyclerView = binding.commentsRecyclerView;
-        CommentsAdapter commentsAdapter = new CommentsAdapter(requireActivity());
+        CommentsAdapter commentsAdapter = new CommentsAdapter(requireContext());
         commentsRecyclerView.setAdapter(commentsAdapter);
-        commentsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        commentsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         LiveData<List<String>> idsByOwnerId = viewModel.getIdsByOwner(post);
         if (!idsByOwnerId.hasActiveObservers())
         {
             idsByOwnerId.observe(getViewLifecycleOwner(), ids ->
             {
-                commentsAdapter.clear();
                 for (String id : ids)
                 {
                     LiveData<Comment> byId = viewModel.getById(id);

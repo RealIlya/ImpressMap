@@ -17,15 +17,8 @@ public class EditProfileFragmentViewModel extends ViewModel
     }
 
     public void update(User user,
-                       SuccessCallback successCallback,
-                       FieldEmptyCallback fieldEmptyCallback)
+                       SuccessCallback successCallback)
     {
-        if (user.getName().isEmpty() || user.getSurname().isEmpty())
-        {
-            fieldEmptyCallback.onEmpty();
-            return;
-        }
-
         userCase.update(user, successCallback);
     }
 }

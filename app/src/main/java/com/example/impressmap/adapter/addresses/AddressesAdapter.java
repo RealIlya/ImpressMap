@@ -51,13 +51,11 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
 
         Location location = Locations.getOneFromLatLng(context, address.getPosition());
 
-        if (location != null)
-        {
-            holder.binding.addressPrimaryView.setText(
-                    String.format("%s %s", location.getCountry(), location.getCity()));
-            holder.binding.addressSecondaryView.setText(
-                    String.format("%s %s", location.getStreet(), location.getHouse()));
-        }
+        holder.binding.addressPrimaryView.setText(
+                String.format("%s %s", location.getCountry(), location.getCity()));
+        holder.binding.addressSecondaryView.setText(
+                String.format("%s %s", location.getStreet(), location.getHouse()));
+
 
         if (address.isSelected())
         {
