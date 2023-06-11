@@ -34,25 +34,18 @@
 
                 <TextView
                     android:id="@+id/fullName_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                    tools:text="@tools:sample/full_names" />
-
-                <TextView
-                    android:id="@+id/address_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                    tools:text="@tools:sample/cities" />
+                    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                    android:textColor="?colorToolbarTitle"
+                    tools:text="@tools:sample/full_names" />
             </LinearLayout>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/day_night_fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
                 app:elevation="2dp"
                 app:layout_constraintBottom_toBottomOf="@+id/linearLayout3"
                 app:layout_constraintEnd_toEndOf="parent"

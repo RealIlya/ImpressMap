@@ -33,7 +33,7 @@ import com.google.android.material.snackbar.Snackbar;
 public class MapFragment extends Fragment implements SwitchableMode, ActivityResultCallback<Boolean>
 {
     public static final int COMMON_MODE = 0, ADDING_MODE = 1;
-    private final ActivityResultLauncher<String> permission = registerForActivityResult(
+    private final ActivityResultLauncher<String> permissionLauncher = registerForActivityResult(
             new ActivityResultContracts.RequestPermission(), this);
     private FragmentMapBinding binding;
     private GMapAdapter gMapAdapter;
@@ -67,8 +67,7 @@ public class MapFragment extends Fragment implements SwitchableMode, ActivityRes
         viewModel = new ViewModelProvider(this).get(MapFragmentViewModel.class);
 
         requireActivity().getOnBackPressedDispatcher()
-                         .addCallback(getViewLifecycleOwner(),
-                                 new MapFragmentOnBackPressedCallback(this));
+                         .addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(this));
 
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(
                 R.id.map);
@@ -80,7 +79,7 @@ public class MapFragment extends Fragment implements SwitchableMode, ActivityRes
                 gMapAdapter = new GMapAdapter(getContext(), googleMap, requireActivity());
                 gMapAdapter.removeListeners();
 
-                permission.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+                permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
 
                 int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
                 switch (currentNightMode)
@@ -132,10 +131,9 @@ public class MapFragment extends Fragment implements SwitchableMode, ActivityRes
         if (result)
         {
             gMapAdapter.setMyLocationEnabled(true);
-            binding.myLocationFab.setOnClickListener(v -> gMapAdapter.animateZoomToMyLocation(() ->
-            {
-                Snackbar.make(v, R.string.location_loading, Snackbar.LENGTH_SHORT).show();
-            }));
+            binding.myLocationFab.setOnClickListener(v -> gMapAdapter.animateZoomToMyLocation(
+                    () -> Snackbar.make(v, R.string.location_loading, Snackbar.LENGTH_SHORT)
+                                  .show()));
         }
         else
         {

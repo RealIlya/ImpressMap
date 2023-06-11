@@ -44,100 +44,71 @@ public class GMapAdapter extends MapAdapter
             zoomTo(lastCameraPosition);
         }
 
-        googleMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener()
+        googleMap.setOnCameraMoveListener(() ->
         {
-            @Override
-            public void onCameraMove()
+            if (googleMap.getCameraPosition().zoom < MIN_VISIBLE)
             {
-                if (googleMap.getCameraPosition().zoom < MIN_VISIBLE)
-                {
-                    viewModel.hideMarkers();
-                }
-                else
-                {
-                    viewModel.showMarkers();
-                }
-
-                onCameraMoved();
+                viewModel.hideMarkers();
             }
+            else
+            {
+                viewModel.showMarkers();
+            }
+
+            onCameraMoved();
         });
 
-        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener()
+        googleMap.setOnMapClickListener(latLng ->
         {
-            @Override
-            public void onMapClick(@NonNull LatLng latLng)
+            viewModel.deselectLastGMarker();
+
+            onMapClicked(latLng);
+        });
+
+        googleMap.setOnMapLongClickListener(this::onMapLongClicked);
+
+        googleMap.setOnMarkerClickListener(marker ->
+        {
+            Object markerTag = marker.getTag();
+            if (markerTag == null)
+            {
+                return false;
+            }
+
+            GMarker gMarker = (GMarker) markerTag;
+
+            if (gMarker.isClickable())
             {
                 viewModel.deselectLastGMarker();
+                gMarker.setSelected(true);
+                viewModel.setLastSelectedGMarker(gMarker);
 
-                onMapClicked(latLng);
+                animateZoomTo(marker.getPosition());
+
+                return onMarkerClicked(marker);
             }
+
+            return true;
         });
 
-        googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener()
+        googleMap.setOnCircleClickListener(circle ->
         {
-            @Override
-            public void onMapLongClick(@NonNull LatLng latLng)
+            Object circleTag = circle.getTag();
+            if (circleTag == null)
             {
-                onMapLongClicked(latLng);
+                return;
             }
+
+            GCircle gCircle = (GCircle) circleTag;
+            viewModel.deselectLastGCircle();
+            gCircle.setSelected(true);
+            viewModel.setLastSelectedGCircle(gCircle);
+
+            onCircleClicked(circle);
         });
 
-        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener()
-        {
-            @Override
-            public boolean onMarkerClick(@NonNull Marker marker)
-            {
-                Object markerTag = marker.getTag();
-                if (markerTag == null)
-                {
-                    return false;
-                }
-
-                GMarker gMarker = (GMarker) markerTag;
-
-                if (gMarker.isClickable())
-                {
-                    viewModel.deselectLastGMarker();
-                    gMarker.setSelected(true);
-                    viewModel.setLastSelectedGMarker(gMarker);
-
-                    animateZoomTo(marker.getPosition());
-
-                    return onMarkerClicked(marker);
-                }
-
-                return true;
-            }
-        });
-
-        googleMap.setOnCircleClickListener(new GoogleMap.OnCircleClickListener()
-        {
-            @Override
-            public void onCircleClick(@NonNull Circle circle)
-            {
-                Object circleTag = circle.getTag();
-                if (circleTag == null)
-                {
-                    return;
-                }
-
-                GCircle gCircle = (GCircle) circleTag;
-                viewModel.deselectLastGCircle();
-                gCircle.setSelected(true);
-                viewModel.setLastSelectedGCircle(gCircle);
-
-                onCircleClicked(circle);
-            }
-        });
-
-        googleMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener()
-        {
-            @Override
-            public void onCameraIdle()
-            {
-                viewModel.setLastCameraPosition(googleMap.getCameraPosition());
-            }
-        });
+        googleMap.setOnCameraIdleListener(
+                () -> viewModel.setLastCameraPosition(googleMap.getCameraPosition()));
     }
 
     public void addZone(@NonNull List<GMarkerMetadata> gMarkerMetadataList)
@@ -166,7 +137,7 @@ public class GMapAdapter extends MapAdapter
             }
 
             GMarker gMarker = (GMarker) addMarker(gMarkerMetadata).getTag();
-            if (gCircle != null)
+            if (gMarker != null)
             {
                 gMarker.setClickable(true);
             }
@@ -246,16 +217,16 @@ public class GMapAdapter extends MapAdapter
     @Nullable
     public LatLng getGCircleLatLng(Address address)
     {
-        return viewModel.getGCircle(address).getGCircleMeta().getCenter();
-    }
-
-    public void animateZoomTo(Address address)
-    {
-        animateZoomTo(getGCircleLatLng(address));
+        GCircle gCircle = viewModel.getGCircle(address);
+        if (gCircle != null)
+        {
+            return gCircle.getGCircleMeta().getCenter();
+        }
+        return null;
     }
 
     public void animateZoomTo(Address address,
-                              OnFinishCallback callback)
+                              GoogleMap.CancelableCallback callback)
     {
         animateZoomTo(getGCircleLatLng(address), callback);
     }

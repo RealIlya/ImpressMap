@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.impressmap.R;
 import com.example.impressmap.databinding.ItemUserAddressBinding;
-import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.Location;
 import com.example.impressmap.util.Converter;
 
@@ -19,12 +18,12 @@ import java.util.List;
 public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.LocationViewHolder>
 {
     private final Context context;
-    private final List<Location> addresses;
+    private final List<Location> locationList;
 
     public LocationsAdapter(Context context)
     {
         this.context = context;
-        addresses = new ArrayList<>();
+        locationList = new ArrayList<>();
     }
 
     @NonNull
@@ -34,68 +33,31 @@ public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.Loca
     {
         return new LocationViewHolder(
                 ItemUserAddressBinding.inflate(LayoutInflater.from(parent.getContext()), parent,
-                        false));
+                        false), this);
     }
 
     @Override
     public void onBindViewHolder(@NonNull LocationViewHolder holder,
                                  int position)
     {
-        Location location = addresses.get(position);
-
-        holder.binding.addressPrimaryView.setText(
-                String.format("%s %s", location.getCountry(), location.getCity()));
-        holder.binding.addressSecondaryView.setText(
-                String.format("%s %s", location.getStreet(), location.getHouse()));
-
-        if (location.isSelected())
-        {
-            holder.binding.getRoot()
-                          .setBackgroundColor(Converter.getAttributeColor(context,
-                                  R.attr.backgroundSelectedItem));
-        }
-        else
-        {
-            holder.binding.getRoot()
-                          .setBackground(Converter.getDrawable(context, R.drawable.ripple_effect));
-        }
-
-        holder.binding.getRoot().setOnClickListener(v ->
-        {
-            boolean addressDeselected = !location.isSelected();
-            if (addressDeselected)
-            {
-                for (int i = 0; i < addresses.size(); i++)
-                {
-                    if (addresses.get(i).isSelected())
-                    {
-                        addresses.get(i).setSelected(false);
-                        notifyItemChanged(i);
-                        break;
-                    }
-                }
-            }
-
-            location.setSelected(addressDeselected);
-            notifyItemChanged(holder.getAdapterPosition());
-        });
+        holder.bind();
     }
 
     @Override
     public int getItemCount()
     {
-        return addresses.size();
+        return locationList.size();
     }
 
-    public void setAddresses(List<Location> addresses)
+    public void setLocationList(List<Location> locationList)
     {
-        this.addresses.addAll(addresses);
+        this.locationList.addAll(locationList);
         notifyItemRangeInserted(0, getItemCount());
     }
 
     public Location getSelectedAddress()
     {
-        for (Location address : addresses)
+        for (Location address : locationList)
         {
             if (address.isSelected())
             {
@@ -106,14 +68,65 @@ public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.Loca
         return null;
     }
 
+    public void deselectAddress()
+    {
+        for (int i = 0; i < locationList.size(); i++)
+        {
+            if (locationList.get(i).isSelected())
+            {
+                locationList.get(i).setSelected(false);
+                notifyItemChanged(i);
+                break;
+            }
+        }
+    }
+
     protected static class LocationViewHolder extends RecyclerView.ViewHolder
     {
         private final ItemUserAddressBinding binding;
+        private final LocationsAdapter adapter;
 
-        public LocationViewHolder(@NonNull ItemUserAddressBinding addressBinding)
+        public LocationViewHolder(@NonNull ItemUserAddressBinding binding,
+                                  @NonNull LocationsAdapter adapter)
         {
-            super(addressBinding.getRoot());
-            binding = addressBinding;
+            super(binding.getRoot());
+            this.binding = binding;
+            this.adapter = adapter;
+        }
+
+        public void bind()
+        {
+            Location location = adapter.locationList.get(getAdapterPosition());
+
+            binding.addressPrimaryView.setText(
+                    String.format("%s %s", location.getCountry(), location.getCity()));
+            binding.addressSecondaryView.setText(
+                    String.format("%s %s", location.getStreet(), location.getHouse()));
+
+            if (location.isSelected())
+            {
+                binding.getRoot()
+                       .setBackgroundColor(Converter.getAttributeColor(adapter.context,
+                               R.attr.backgroundSelectedItem));
+            }
+            else
+            {
+                binding.getRoot()
+                       .setBackground(
+                               Converter.getDrawable(adapter.context, R.drawable.ripple_effect));
+            }
+
+            binding.getRoot().setOnClickListener(v ->
+            {
+                boolean addressDeselected = !location.isSelected();
+                if (addressDeselected)
+                {
+                    adapter.deselectAddress();
+                }
+
+                location.setSelected(addressDeselected);
+                adapter.notifyItemChanged(getAdapterPosition());
+            });
         }
     }
 }

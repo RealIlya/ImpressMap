@@ -75,7 +75,7 @@ public class CreatorAddressFragment extends Fragment
         List<Location> locations = Locations.getFromLatLng(getContext(), latLng);
         if (locations != null)
         {
-            locationsAdapter.setAddresses(locations);
+            locationsAdapter.setLocationList(locations);
             RecyclerView recyclerView = binding.addressesRecyclerView;
             recyclerView.setAdapter(locationsAdapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));

@@ -17,10 +17,10 @@ import com.example.impressmap.util.Converter;
 import com.example.impressmap.util.Locations;
 
 import java.util.List;
+import java.util.Objects;
 
 public class UserAddressesAdapter
         extends RecyclerView.Adapter<UserAddressesAdapter.UserAddressViewHolder>
-        implements UserAddressCallback
 {
     private final Context context;
     private final UserAddressesAdapterViewModel viewModel;
@@ -41,47 +41,14 @@ public class UserAddressesAdapter
     {
         return new UserAddressViewHolder(
                 ItemUserAddressBinding.inflate(LayoutInflater.from(parent.getContext()), parent,
-                        false));
+                        false), this);
     }
 
     @Override
     public void onBindViewHolder(@NonNull UserAddressViewHolder holder,
                                  int position)
     {
-        Address address = viewModel.getAddress(position);
-
-        Location location = Locations.getOneFromLatLng(context, address.getPosition());
-
-        holder.binding.addressPrimaryView.setText(
-                String.format("%s %s", location.getCountry(), location.getCity()));
-        holder.binding.addressSecondaryView.setText(
-                String.format("%s %s", location.getStreet(), location.getHouse()));
-
-        if (address.isSelected())
-        {
-            holder.binding.getRoot()
-                          .setBackgroundColor(Converter.getAttributeColor(context,
-                                  R.attr.backgroundSelectedItem));
-        }
-        else
-        {
-            holder.binding.getRoot()
-                          .setBackground(Converter.getDrawable(context, R.drawable.ripple_effect));
-        }
-
-        holder.binding.getRoot().setOnClickListener(v ->
-        {
-            if (viewModel.getSelectedAddresses().size() < 5 || address.isSelected())
-            {
-                address.setSelected(!address.isSelected());
-                onAddressClick(address);
-                notifyItemChanged(holder.getAdapterPosition());
-            }
-            else
-            {
-                onMaxAddresses();
-            }
-        });
+        holder.bind();
     }
 
     public void setAddresses(@NonNull List<Address> addresses)
@@ -114,26 +81,77 @@ public class UserAddressesAdapter
         userAddressCallback = listener;
     }
 
-    @Override
-    public void onAddressClick(Address address)
-    {
-        userAddressCallback.onAddressClick(address);
-    }
-
-    @Override
-    public void onMaxAddresses()
-    {
-        userAddressCallback.onMaxAddresses();
-    }
-
     protected static class UserAddressViewHolder extends RecyclerView.ViewHolder
+            implements UserAddressCallback
     {
         private final ItemUserAddressBinding binding;
+        private final UserAddressesAdapter adapter;
 
-        public UserAddressViewHolder(@NonNull ItemUserAddressBinding addressBinding)
+        public UserAddressViewHolder(@NonNull ItemUserAddressBinding binding,
+                                     @NonNull UserAddressesAdapter adapter)
         {
-            super(addressBinding.getRoot());
-            binding = addressBinding;
+            super(binding.getRoot());
+            this.binding = binding;
+            this.adapter = adapter;
+        }
+
+        public void bind()
+        {
+            Address address = adapter.viewModel.getAddress(getAdapterPosition());
+
+            Location location = Objects.requireNonNull(
+                    Locations.getOneFromLatLng(adapter.context, address.getPosition()));
+
+            binding.addressPrimaryView.setText(
+                    String.format("%s %s", location.getCountry(), location.getCity()));
+            binding.addressSecondaryView.setText(
+                    String.format("%s %s", location.getStreet(), location.getHouse()));
+
+            if (address.isSelected())
+            {
+                binding.getRoot()
+                       .setBackgroundColor(Converter.getAttributeColor(adapter.context,
+                               R.attr.backgroundSelectedItem));
+            }
+            else
+            {
+                binding.getRoot()
+                       .setBackground(
+                               Converter.getDrawable(adapter.context, R.drawable.ripple_effect));
+            }
+
+            binding.getRoot().setOnClickListener(v ->
+            {
+                if (adapter.viewModel.getSelectedAddresses().size() < 5 || address.isSelected())
+                {
+                    address.setSelected(!address.isSelected());
+                    onAddressClick(address);
+                    adapter.notifyItemChanged(getAdapterPosition());
+                }
+                else
+                {
+                    onMaxAddresses();
+                }
+            });
+        }
+
+
+        @Override
+        public void onAddressClick(Address address)
+        {
+            if (adapter.userAddressCallback != null)
+            {
+                adapter.userAddressCallback.onAddressClick(address);
+            }
+        }
+
+        @Override
+        public void onMaxAddresses()
+        {
+            if (adapter.userAddressCallback != null)
+            {
+                adapter.userAddressCallback.onMaxAddresses();
+            }
         }
     }
 }

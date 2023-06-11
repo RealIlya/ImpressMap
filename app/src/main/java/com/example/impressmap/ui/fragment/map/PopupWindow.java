@@ -11,15 +11,15 @@ import com.example.impressmap.adapter.PopupAddressesAdapter;
 import com.example.impressmap.databinding.PopupAddressesBinding;
 import com.example.impressmap.ui.activity.main.MainViewModel;
 
-public class MapFragmentPopupWindow extends android.widget.PopupWindow
+public class PopupWindow extends android.widget.PopupWindow
 {
-    private final PopupAddressesAdapter popupAddressesAdapter;
+    private final PopupAddressesAdapter adapter;
 
-    public MapFragmentPopupWindow(MapFragment fragment)
+    public PopupWindow(MapFragment fragment)
     {
-        PopupAddressesBinding popupAddressesBinding = PopupAddressesBinding.inflate(
+        PopupAddressesBinding binding = PopupAddressesBinding.inflate(
                 LayoutInflater.from(fragment.requireContext()));
-        setContentView(popupAddressesBinding.getRoot());
+        setContentView(binding.getRoot());
         setWidth(450);
         setHeight(450);
         setFocusable(true);
@@ -28,20 +28,19 @@ public class MapFragmentPopupWindow extends android.widget.PopupWindow
         MainViewModel mainViewModel = new ViewModelProvider(fragment.requireActivity()).get(
                 MainViewModel.class);
 
-        RecyclerView recyclerView = popupAddressesBinding.addressesRecyclerView;
-        popupAddressesAdapter = new PopupAddressesAdapter(fragment.requireContext(),
+        RecyclerView recyclerView = binding.addressesRecyclerView;
+        adapter = new PopupAddressesAdapter(fragment.requireContext(),
                 mainViewModel.getSelectedAddresses().getValue());
 
-        recyclerView.setAdapter(popupAddressesAdapter);
+        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(fragment.requireContext()));
     }
 
     public void setOnAddressClickListener(OnAddressClickListener listener)
     {
-        if (popupAddressesAdapter == null)
+        if (adapter != null)
         {
-            return;
+            adapter.setOnAddressClickListener(listener);
         }
-        popupAddressesAdapter.setOnAddressClickListener(listener);
     }
 }

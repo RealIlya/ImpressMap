@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHolder>
-        implements OnCommentsButtonClickListener
 {
     private final Context context;
     private final List<Post> postList;
@@ -35,30 +34,15 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
                                              int viewType)
     {
         return new PostViewHolder(
-                ItemPostBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+                ItemPostBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false),
+                this);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder,
                                  int position)
     {
-        Post post = postList.get(position);
-
-        holder.binding.textView.setText(post.getText());
-        holder.binding.fullNameView.setText(post.getOwnerUser().getFullName());
-        String dateString = DateStrings.getDateString(context.getResources(), post.getDateTime());
-        holder.binding.dateView.setText(dateString);
-
-        /*holder.binding.showReactionsButton.setOnClickListener(v ->
-        {
-
-        });*/
-
-        holder.binding.showCommentsButton.setOnClickListener(v ->
-        {
-            holder.binding.getRoot().setTransitionName(post.getId());
-            onCommentClick(holder.binding.getRoot(), post);
-        });
+        holder.bind();
     }
 
     @Override
@@ -78,24 +62,51 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
         this.onCommentsButtonClickListener = listener;
     }
 
-    @Override
-    public void onCommentClick(View view,
-                               Post post)
-    {
-        if (onCommentsButtonClickListener != null)
-        {
-            onCommentsButtonClickListener.onCommentClick(view, post);
-        }
-    }
-
     protected static class PostViewHolder extends RecyclerView.ViewHolder
+            implements OnCommentsButtonClickListener
+
     {
         private final ItemPostBinding binding;
+        private final PostsAdapter adapter;
 
-        public PostViewHolder(@NonNull ItemPostBinding itemPostBinding)
+        public PostViewHolder(@NonNull ItemPostBinding binding,
+                              @NonNull PostsAdapter adapter)
         {
-            super(itemPostBinding.getRoot());
-            binding = itemPostBinding;
+            super(binding.getRoot());
+            this.binding = binding;
+            this.adapter = adapter;
+        }
+
+        public void bind()
+        {
+            Post post = adapter.postList.get(getAdapterPosition());
+
+            binding.textView.setText(post.getText());
+            binding.fullNameView.setText(post.getOwnerUser().getFullName());
+            String dateString = DateStrings.getDateString(adapter.context.getResources(),
+                    post.getDateTime());
+            binding.dateView.setText(dateString);
+
+        /*binding.showReactionsButton.setOnClickListener(v ->
+        {
+
+        });*/
+
+            binding.showCommentsButton.setOnClickListener(v ->
+            {
+                binding.getRoot().setTransitionName(post.getId());
+                onCommentClick(binding.getRoot(), post);
+            });
+        }
+
+        @Override
+        public void onCommentClick(View view,
+                                   Post post)
+        {
+            if (adapter.onCommentsButtonClickListener != null)
+            {
+                adapter.onCommentsButtonClickListener.onCommentClick(view, post);
+            }
         }
     }
 }

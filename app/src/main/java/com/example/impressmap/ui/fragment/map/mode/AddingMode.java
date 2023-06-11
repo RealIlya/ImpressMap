@@ -51,7 +51,6 @@ public class AddingMode extends Mode
 
         binding.toolbar.setNavigationIcon(R.drawable.ic_arrow);
         binding.toolbar.setNavigationOnClickListener(v -> mainViewModel.setMode(COMMON_MODE));
-        binding.toolbar.getMenu().clear();
 
         binding.bottomView.setVisibility(View.INVISIBLE);
     }

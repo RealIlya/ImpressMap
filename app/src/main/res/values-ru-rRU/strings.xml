@@ -51,5 +51,6 @@
         <item quantity="many">%1$d дней</item>
         <item quantity="other">%1$d дней</item>
     </plurals>
-    <string name="today">Сегодня</string>
+    <string name="today">Сегодня в %1$s</string>
+    <string name="ago">%1$s назад</string>
 </resources>

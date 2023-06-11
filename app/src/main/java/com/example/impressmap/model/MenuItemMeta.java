@@ -2,18 +2,18 @@ package com.example.impressmap.model;
 
 public class MenuItemMeta
 {
-    private OnClickListener clickListener;
+    private final OnClickListener listener;
 
-    public MenuItemMeta(OnClickListener clickListener)
+    public MenuItemMeta(OnClickListener listener)
     {
-        this.clickListener = clickListener;
+        this.listener = listener;
     }
 
     public void onClick()
     {
-        if (clickListener != null)
+        if (listener != null)
         {
-            clickListener.onClick();
+            listener.onClick();
         }
     }
 

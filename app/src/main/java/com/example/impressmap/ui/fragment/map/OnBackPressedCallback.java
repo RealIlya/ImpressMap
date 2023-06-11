@@ -3,17 +3,16 @@ package com.example.impressmap.ui.fragment.map;
 import static com.example.impressmap.ui.fragment.map.MapFragment.ADDING_MODE;
 import static com.example.impressmap.ui.fragment.map.MapFragment.COMMON_MODE;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.impressmap.ui.activity.main.MainViewModel;
 
-public class MapFragmentOnBackPressedCallback extends OnBackPressedCallback
+public class OnBackPressedCallback extends androidx.activity.OnBackPressedCallback
 {
     private final MapFragment fragment;
 
-    public MapFragmentOnBackPressedCallback(MapFragment fragment)
+    public OnBackPressedCallback(MapFragment fragment)
     {
         super(true);
 

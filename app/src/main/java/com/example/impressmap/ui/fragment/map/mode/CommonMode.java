@@ -25,9 +25,10 @@ import com.example.impressmap.ui.fragment.bottommap.mapinfo.MapInfoFragment;
 import com.example.impressmap.ui.fragment.bottommarker.behavior.PostsBottomSheetBehavior;
 import com.example.impressmap.ui.fragment.bottommarker.posts.PostsFragment;
 import com.example.impressmap.ui.fragment.map.MapFragment;
-import com.example.impressmap.ui.fragment.map.MapFragmentPopupWindow;
+import com.example.impressmap.ui.fragment.map.PopupWindow;
 import com.example.impressmap.ui.fragment.map.MapFragmentViewModel;
 import com.example.impressmap.ui.fragment.map.NavigationDrawer;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.card.MaterialCardView;
 
@@ -39,7 +40,7 @@ public class CommonMode extends Mode
     private final FragmentActivity activity;
     private final MainViewModel mainViewModel;
     private NavigationDrawer navigationDrawer;
-    private PostsBottomSheetBehavior<MaterialCardView> postsSheetBehavior;
+    private PostsBottomSheetBehavior<MaterialCardView> sheetBehavior;
 
     public CommonMode(MapFragment fragment,
                       MapFragmentViewModel viewModel,
@@ -56,7 +57,7 @@ public class CommonMode extends Mode
         navigationDrawer = new NavigationDrawer(fragment, binding.navigationView,
                 binding.drawerLayout, activity.getSupportFragmentManager());
 
-        postsSheetBehavior = new PostsBottomSheetBehavior<>(
+        sheetBehavior = new PostsBottomSheetBehavior<>(
                 BottomSheetBehavior.from(binding.bottomView), activity);
 
         activity.getOnBackPressedDispatcher()
@@ -121,10 +122,10 @@ public class CommonMode extends Mode
                     () -> mapInfoFragment.show(activity.getSupportFragmentManager(), name));
         });
 
-        gMapAdapter.setOnMapClickListener(latLng -> postsSheetBehavior.hide());
+        gMapAdapter.setOnMapClickListener(latLng -> sheetBehavior.hide());
         gMapAdapter.setOnMarkerClickListener(marker ->
         {
-            postsSheetBehavior.showHalf();
+            sheetBehavior.showHalf();
             GMarker markerTag = (GMarker) marker.getTag();
             if (markerTag == null)
             {
@@ -162,13 +163,13 @@ public class CommonMode extends Mode
             }
 
             postsFragment.setOnDeselectItemClickListener(
-                    view -> postsSheetBehavior.hide(gMapAdapter::deselectGMarker));
+                    view -> sheetBehavior.hide(gMapAdapter::deselectGMarker));
             postsFragment.setOnBackPressedCallback(new OnBackPressedCallback(true)
             {
                 @Override
                 public void handleOnBackPressed()
                 {
-                    postsSheetBehavior.hide(gMapAdapter::deselectGMarker);
+                    sheetBehavior.hide(gMapAdapter::deselectGMarker);
                     setEnabled(false);
                 }
             });
@@ -187,7 +188,7 @@ public class CommonMode extends Mode
                 return;
             }
             GCircleMeta gCircleMeta = circleTag.getGCircleMeta();
-            postsSheetBehavior.hide(
+            sheetBehavior.hide(
                     () -> mainViewModel.setSelectedAddressId(gCircleMeta.getAddressId()));
         });
 
@@ -195,9 +196,10 @@ public class CommonMode extends Mode
         toolbar.setNavigationOnClickListener(v -> navigationDrawer.open());
         toolbar.inflateMenu(R.menu.menu_map);
 
+        toolbar.getMenu().findItem(R.id.deselect_circle_item).setVisible(false);
         toolbar.getMenu().findItem(R.id.deselect_circle_item).setOnMenuItemClickListener(item ->
         {
-            postsSheetBehavior.hide(() -> mainViewModel.setSelectedAddressId(""));
+            sheetBehavior.hide(() -> mainViewModel.setSelectedAddressId(""));
             return true;
         });
 
@@ -205,13 +207,25 @@ public class CommonMode extends Mode
         {
             if (mainViewModel.getSelectedAddressesCount() > 0)
             {
-                MapFragmentPopupWindow popupWindow = new MapFragmentPopupWindow(fragment);
+                PopupWindow popupWindow = new PopupWindow(fragment);
                 popupWindow.setOnAddressClickListener(address ->
                 {
-                    binding.selectedAddressesFab.setEnabled(false);
+                    v.setEnabled(false);
                     popupWindow.dismiss();
-                    gMapAdapter.animateZoomTo(address,
-                            () -> binding.selectedAddressesFab.setEnabled(true));
+                    gMapAdapter.animateZoomTo(address, new GoogleMap.CancelableCallback()
+                    {
+                        @Override
+                        public void onCancel()
+                        {
+                            v.setEnabled(true);
+                        }
+
+                        @Override
+                        public void onFinish()
+                        {
+                            v.setEnabled(true);
+                        }
+                    });
                 });
                 popupWindow.showAsDropDown(v, -200, -20);
             }
@@ -226,7 +240,7 @@ public class CommonMode extends Mode
             }
         });
 
-        postsSheetBehavior.setAnimation(new PostsBottomSheetBehavior.Animation()
+        sheetBehavior.setAnimation(new PostsBottomSheetBehavior.Animation()
         {
             @Override
             public void onStateChanged(int newState)

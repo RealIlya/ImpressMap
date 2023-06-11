@@ -17,9 +17,9 @@ import com.example.impressmap.util.Converter;
 import com.example.impressmap.util.Locations;
 
 import java.util.List;
+import java.util.Objects;
 
 public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.AddressViewHolder>
-        implements OnJoinToAddressButtonClickListener
 {
     private final Context context;
     private final AddressesAdapterViewModel viewModel;
@@ -39,50 +39,15 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
                                                 int viewType)
     {
         return new AddressViewHolder(
-                ItemAddressBinding.inflate(LayoutInflater.from(parent.getContext()), parent,
-                        false));
+                ItemAddressBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false),
+                this);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AddressViewHolder holder,
                                  int position)
     {
-        Address address = viewModel.getAddress(position);
-
-        Location location = Locations.getOneFromLatLng(context, address.getPosition());
-
-        holder.binding.addressPrimaryView.setText(
-                String.format("%s %s", location.getCountry(), location.getCity()));
-        holder.binding.addressSecondaryView.setText(
-                String.format("%s %s", location.getStreet(), location.getHouse()));
-
-
-        if (address.isSelected())
-        {
-            holder.binding.joinAddressButton.setImageDrawable(
-                    Converter.getDrawable(context, R.drawable.ic_check));
-            holder.binding.joinAddressButton.getDrawable()
-                                            .setTint(context.getColor(R.color.positive));
-        }
-        else
-        {
-            holder.binding.joinAddressButton.setImageDrawable(
-                    Converter.getDrawable(context, R.drawable.ic_add_group));
-        }
-
-        holder.binding.joinAddressButton.setOnClickListener(v ->
-        {
-            if (address.isSelected())
-            {
-                address.setSelected(false);
-            }
-            else
-            {
-                address.setSelected(true);
-                onJoinToAddressClick(address);
-            }
-            notifyItemChanged(holder.getAdapterPosition());
-        });
+        holder.bind();
     }
 
     public void setAddresses(@NonNull List<Address> addresses)
@@ -105,23 +70,68 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
         this.onJoinToAddressButtonClickListener = listener;
     }
 
-    @Override
-    public void onJoinToAddressClick(Address address)
-    {
-        if (onJoinToAddressButtonClickListener != null)
-        {
-            onJoinToAddressButtonClickListener.onJoinToAddressClick(address);
-        }
-    }
-
     protected static class AddressViewHolder extends RecyclerView.ViewHolder
+            implements OnJoinToAddressButtonClickListener
     {
         private final ItemAddressBinding binding;
+        private final AddressesAdapter adapter;
 
-        public AddressViewHolder(@NonNull ItemAddressBinding addressBinding)
+        public AddressViewHolder(@NonNull ItemAddressBinding binding,
+                                 @NonNull AddressesAdapter adapter)
         {
-            super(addressBinding.getRoot());
-            binding = addressBinding;
+            super(binding.getRoot());
+            this.binding = binding;
+            this.adapter = adapter;
+        }
+
+        public void bind()
+        {
+            Address address = adapter.viewModel.getAddress(getAdapterPosition());
+
+            Location location = Objects.requireNonNull(
+                    Locations.getOneFromLatLng(adapter.context, address.getPosition()));
+
+            binding.addressPrimaryView.setText(
+                    String.format("%s %s", location.getCountry(), location.getCity()));
+            binding.addressSecondaryView.setText(
+                    String.format("%s %s", location.getStreet(), location.getHouse()));
+
+
+            if (address.isSelected())
+            {
+                binding.joinAddressButton.setImageDrawable(
+                        Converter.getDrawable(adapter.context, R.drawable.ic_check));
+                binding.joinAddressButton.getDrawable()
+                                         .setTint(adapter.context.getColor(R.color.positive));
+            }
+            else
+            {
+                binding.joinAddressButton.setImageDrawable(
+                        Converter.getDrawable(adapter.context, R.drawable.ic_add_group));
+            }
+
+            binding.joinAddressButton.setOnClickListener(v ->
+            {
+                if (address.isSelected())
+                {
+                    address.setSelected(false);
+                }
+                else
+                {
+                    address.setSelected(true);
+                    onJoinToAddressClick(address);
+                }
+                adapter.notifyItemChanged(getAdapterPosition());
+            });
+        }
+
+        @Override
+        public void onJoinToAddressClick(Address address)
+        {
+            if (adapter.onJoinToAddressButtonClickListener != null)
+            {
+                adapter.onJoinToAddressButtonClickListener.onJoinToAddressClick(address);
+            }
         }
     }
 }

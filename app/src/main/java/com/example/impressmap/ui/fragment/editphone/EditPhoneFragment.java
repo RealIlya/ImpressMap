@@ -24,6 +24,8 @@ import com.example.impressmap.util.FieldEmptyCallback;
 import com.example.impressmap.util.SuccessCallback;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class EditPhoneFragment extends Fragment
 {
     private final SuccessCallback successCallback = () -> requireActivity().getSupportFragmentManager()
@@ -31,7 +33,6 @@ public class EditPhoneFragment extends Fragment
     private final FieldEmptyCallback fieldEmptyCallback = () -> Snackbar.make(requireView(),
             R.string.field_is_necessary, Snackbar.LENGTH_LONG).show();
     private FragmentEditPhoneBinding binding;
-    private EditPhoneFragmentViewModel viewModel;
 
     @NonNull
     public static EditPhoneFragment newInstance()
@@ -55,8 +56,6 @@ public class EditPhoneFragment extends Fragment
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState)
     {
-        viewModel = new ViewModelProvider(this).get(EditPhoneFragmentViewModel.class);
-
         binding.toolbar.setNavigationOnClickListener(
                 v -> requireActivity().getSupportFragmentManager().popBackStack());
         binding.toolbar.setTitle(R.string.edit_phone_number);
@@ -64,8 +63,12 @@ public class EditPhoneFragment extends Fragment
         MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
                 MainViewModel.class);
 
-        User user = mainViewModel.getUser();
-        binding.phoneView.setText(user.getPhoneNumber());
+        AtomicReference<User> userAtomic = new AtomicReference<>();
+        mainViewModel.getUser().observe(getViewLifecycleOwner(), user ->
+        {
+            userAtomic.set(user);
+            binding.phoneView.setText(userAtomic.get().getPhoneNumber());
+        });
 
         binding.toolbar.addMenuProvider(new MenuProvider()
         {
@@ -83,8 +86,15 @@ public class EditPhoneFragment extends Fragment
 
                 if (menuItem.getItemId() == R.id.menu_create)
                 {
-                    user.setPhoneNumber(phoneText);
-                    viewModel.update(user, successCallback, fieldEmptyCallback);
+                    if (phoneText.isEmpty())
+                    {
+                        fieldEmptyCallback.onEmpty();
+                    }
+                    else
+                    {
+                        userAtomic.get().setPhoneNumber(phoneText);
+                        mainViewModel.setUser(userAtomic.get(), successCallback);
+                    }
                     return true;
                 }
 

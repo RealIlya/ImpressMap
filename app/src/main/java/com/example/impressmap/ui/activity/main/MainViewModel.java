@@ -1,26 +1,28 @@
 package com.example.impressmap.ui.activity.main;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.impressmap.database.firebase.cases.UserCase;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.User;
+import com.example.impressmap.util.SuccessCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainViewModel extends ViewModel
 {
+    private final UserCase userCase;
     private MutableLiveData<Integer> mode;
     private MutableLiveData<List<Address>> selectedAddresses;
     private MutableLiveData<String> selectedAddressId;
-    private User user;
 
     public MainViewModel()
     {
         clearCache();
+        userCase = new UserCase();
     }
 
     public LiveData<Integer> getMode()
@@ -63,17 +65,15 @@ public class MainViewModel extends ViewModel
         selectedAddressId.setValue(addressId);
     }
 
-    public User getUser()
+    public LiveData<User> getUser()
     {
-        return user;
+        return userCase.getUser();
     }
 
-    public void setUser(@NonNull User user)
+    public void setUser(User user,
+                        SuccessCallback successCallback)
     {
-        if (!user.equals(this.user))
-        {
-            this.user = user;
-        }
+        userCase.update(user, successCallback);
     }
 
     public void clearCache()
@@ -81,6 +81,5 @@ public class MainViewModel extends ViewModel
         mode = new MutableLiveData<>(-1);
         selectedAddresses = new MutableLiveData<>(new ArrayList<>());
         selectedAddressId = new MutableLiveData<>("");
-        user = new User();
     }
 }

@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>
-        implements OnCommentsButtonClickListener, OnReplyButtonClickListener
 {
 
     private final Context context;
@@ -37,33 +36,15 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
                                                  int viewType)
     {
         return new CommentsViewHolder(
-                ItemCommentBinding.inflate(LayoutInflater.from(parent.getContext()), parent,
-                        false));
+                ItemCommentBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false),
+                this);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CommentsViewHolder holder,
                                  int position)
     {
-        Comment comment = commentList.get(position);
-
-        holder.binding.textView.setText(comment.getText());
-        holder.binding.fullNameView.setText(comment.getOwnerUser().getFullName());
-        String dateString = DateStrings.getDateString(context.getResources(),
-                comment.getDateTime());
-
-        holder.binding.dateView.setText(dateString);
-
-        holder.binding.showCommentsButton.setOnClickListener(v ->
-        {
-            onCommentClick(v, comment);
-        });
-
-        holder.binding.replyView.setOnClickListener(v ->
-        {
-            onReplyClick(v, comment);
-        });
-
+        holder.bind();
     }
 
     @Override
@@ -88,34 +69,54 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         onReplyButtonClickListener = listener;
     }
 
-    @Override
-    public void onCommentClick(View view,
-                               Comment comment)
-    {
-        if (onCommentsButtonClickListener != null)
-        {
-            onCommentsButtonClickListener.onCommentClick(view, comment);
-        }
-    }
-
-    @Override
-    public void onReplyClick(View view,
-                             Comment comment)
-    {
-        if (onReplyButtonClickListener != null)
-        {
-            onReplyButtonClickListener.onReplyClick(view, comment);
-        }
-    }
-
     protected static class CommentsViewHolder extends RecyclerView.ViewHolder
+            implements OnCommentsButtonClickListener, OnReplyButtonClickListener
     {
         private final ItemCommentBinding binding;
+        private final CommentsAdapter adapter;
 
-        public CommentsViewHolder(ItemCommentBinding binding)
+        public CommentsViewHolder(@NonNull ItemCommentBinding binding,
+                                  @NonNull CommentsAdapter adapter)
         {
             super(binding.getRoot());
             this.binding = binding;
+            this.adapter = adapter;
+        }
+
+        public void bind()
+        {
+            Comment comment = adapter.commentList.get(getAdapterPosition());
+
+            binding.textView.setText(comment.getText());
+            binding.fullNameView.setText(comment.getOwnerUser().getFullName());
+            String dateString = DateStrings.getDateString(adapter.context.getResources(),
+                    comment.getDateTime());
+
+            binding.dateView.setText(dateString);
+
+            binding.showCommentsButton.setOnClickListener(v -> onCommentClick(v, comment));
+
+            binding.replyView.setOnClickListener(v -> onReplyClick(v, comment));
+        }
+
+        @Override
+        public void onCommentClick(View view,
+                                   Comment comment)
+        {
+            if (adapter.onCommentsButtonClickListener != null)
+            {
+                adapter.onCommentsButtonClickListener.onCommentClick(view, comment);
+            }
+        }
+
+        @Override
+        public void onReplyClick(View view,
+                                 Comment comment)
+        {
+            if (adapter.onReplyButtonClickListener != null)
+            {
+                adapter.onReplyButtonClickListener.onReplyClick(view, comment);
+            }
         }
     }
 }

@@ -24,6 +24,8 @@ import com.example.impressmap.util.FieldEmptyCallback;
 import com.example.impressmap.util.SuccessCallback;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class EditProfileFragment extends Fragment
 {
     private final SuccessCallback successCallback = () -> requireActivity().getSupportFragmentManager()
@@ -31,7 +33,6 @@ public class EditProfileFragment extends Fragment
     private final FieldEmptyCallback fieldEmptyCallback = () -> Snackbar.make(requireView(),
             R.string.field_is_necessary, Snackbar.LENGTH_LONG).show();
     private FragmentEditProfileBinding binding;
-    private EditProfileFragmentViewModel viewModel;
 
     @NonNull
     public static EditProfileFragment newInstance()
@@ -55,8 +56,6 @@ public class EditProfileFragment extends Fragment
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState)
     {
-        viewModel = new ViewModelProvider(this).get(EditProfileFragmentViewModel.class);
-
         binding.toolbar.setNavigationOnClickListener(
                 v -> requireActivity().getSupportFragmentManager().popBackStack());
         binding.toolbar.setTitle(R.string.edit_profile);
@@ -64,9 +63,13 @@ public class EditProfileFragment extends Fragment
         MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
                 MainViewModel.class);
 
-        User user = mainViewModel.getUser();
-        binding.nameView.setText(user.getName());
-        binding.surnameView.setText(user.getSurname());
+        AtomicReference<User> userAtomic = new AtomicReference<>();
+        mainViewModel.getUser().observe(getViewLifecycleOwner(), user ->
+        {
+            userAtomic.set(user);
+            binding.nameView.setText(userAtomic.get().getName());
+            binding.surnameView.setText(userAtomic.get().getSurname());
+        });
 
         binding.toolbar.addMenuProvider(new MenuProvider()
         {
@@ -91,8 +94,8 @@ public class EditProfileFragment extends Fragment
                     }
                     else
                     {
-                        user.setFullName(nameText + " " + surnameText);
-                        viewModel.update(user, successCallback);
+                        userAtomic.get().setFullName(nameText + " " + surnameText);
+                        mainViewModel.setUser(userAtomic.get(), successCallback);
                     }
                     return true;
                 }
