@@ -49,6 +49,9 @@ public class LocationsAdapter extends RecyclerView.Adapter<LocationsAdapter.Loca
         return locationList.size();
     }
 
+    /**
+     * <p>Sets a new locations list in adapter</p>
+     */
     public void setLocationList(List<Location> locationList)
     {
         this.locationList.addAll(locationList);

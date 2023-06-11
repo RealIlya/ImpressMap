@@ -23,7 +23,7 @@
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/join_address_button"
+            android:id="@+id/join_to_address_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="center_vertical|end"

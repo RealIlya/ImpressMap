@@ -1,10 +1,5 @@
 package com.example.impressmap.model.data;
 
-import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
-import static com.example.impressmap.util.Constants.Keys.POSITION_NODE;
-import static com.example.impressmap.util.Constants.Keys.TITLE_NODE;
-import static com.example.impressmap.util.Constants.Keys.TYPE_NODE;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -12,10 +7,7 @@ import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class GMarkerMetadata implements TransferableToDatabase, Parcelable
+public class GMarkerMetadata implements Parcelable
 {
     public static final int ADDRESS_MARKER = 0, COMMON_MARKER = 1;
     public static final Creator<GMarkerMetadata> CREATOR = new Creator<GMarkerMetadata>()
@@ -49,18 +41,6 @@ public class GMarkerMetadata implements TransferableToDatabase, Parcelable
         type = in.readInt();
     }
 
-    public Map<String, Object> prepareToTransferToDatabase()
-    {
-        Map<String, Object> data = new HashMap<>();
-
-        data.put(CHILD_ID_NODE, id);
-        data.put(TITLE_NODE, title);
-        data.put(POSITION_NODE, position);
-        data.put(TYPE_NODE, type);
-
-        return data;
-    }
-
     public String getId()
     {
         return id;
@@ -81,10 +61,9 @@ public class GMarkerMetadata implements TransferableToDatabase, Parcelable
         this.title = title;
     }
 
-    public LatLng getPosition()
+    public String getPosition()
     {
-        String[] pos = position.split(" ");
-        return new LatLng(Double.parseDouble(pos[0]), Double.parseDouble(pos[1]));
+        return position;
     }
 
     public void setPosition(String position)
@@ -92,9 +71,15 @@ public class GMarkerMetadata implements TransferableToDatabase, Parcelable
         this.position = position;
     }
 
-    public void setPositionLatLng(LatLng position)
+    public LatLng getPositionLatLng()
     {
-        this.position = String.format("%s %s", position.latitude, position.longitude);
+        String[] pos = position.split(" ");
+        return new LatLng(Double.parseDouble(pos[0]), Double.parseDouble(pos[1]));
+    }
+
+    public void setPositionLatLng(LatLng latLng)
+    {
+        this.position = String.format("%s %s", latLng.latitude, latLng.longitude);
     }
 
     public int getType()

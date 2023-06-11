@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,11 +23,15 @@ import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.Location;
 import com.example.impressmap.ui.activity.main.MainViewModel;
 import com.example.impressmap.util.Locations;
+import com.example.impressmap.util.WindowStatusBar;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
+/**
+ * Fragment to create new address
+ */
 public class CreatorAddressFragment extends Fragment
 {
     private FragmentCreatorAddressBinding binding;
@@ -51,8 +54,7 @@ public class CreatorAddressFragment extends Fragment
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState)
     {
-        new WindowInsetsControllerCompat(requireActivity().getWindow(),
-                requireActivity().getWindow().getDecorView()).setAppearanceLightStatusBars(false);
+        WindowStatusBar.setLight(requireActivity().getWindow(), false);
         binding = FragmentCreatorAddressBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }

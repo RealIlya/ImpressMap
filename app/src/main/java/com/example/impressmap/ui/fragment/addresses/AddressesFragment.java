@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,7 +18,7 @@ import com.example.impressmap.R;
 import com.example.impressmap.adapter.addresses.AddressesAdapter;
 import com.example.impressmap.databinding.FragmentAddressesBinding;
 import com.example.impressmap.model.data.Address;
-import com.example.impressmap.ui.activity.main.MainViewModel;
+import com.example.impressmap.util.WindowStatusBar;
 
 import java.util.List;
 
@@ -40,8 +39,7 @@ public class AddressesFragment extends Fragment
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState)
     {
-        new WindowInsetsControllerCompat(requireActivity().getWindow(),
-                requireActivity().getWindow().getDecorView()).setAppearanceLightStatusBars(false);
+        WindowStatusBar.setLight(requireActivity().getWindow(), false);
         binding = FragmentAddressesBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -72,10 +70,7 @@ public class AddressesFragment extends Fragment
         LiveData<List<Address>> addresses = viewModel.getAll();
         if (!addresses.hasActiveObservers())
         {
-            addresses.observeForever(addressList ->
-            {
-                addressesAdapter.setAddresses(addressList);
-            });
+            addresses.observeForever(addressesAdapter::setAddressList);
         }
     }
 

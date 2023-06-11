@@ -59,10 +59,4 @@ public class UserAddressesRepo implements DatabaseRepo<Address>
 
     }
 
-    @Override
-    public void delete(Address address,
-                       SuccessCallback successCallback)
-    {
-
-    }
 }

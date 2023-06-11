@@ -17,9 +17,9 @@ public class AddressesAdapterViewModel extends ViewModel
         this.addressesCache = new ArrayList<>();
     }
 
-    public boolean setAddresses(@NonNull List<Address> addresses)
+    public boolean setAddressList(@NonNull List<Address> addressList)
     {
-        if (addresses.equals(addressesCache))
+        if (addressList.equals(addressesCache))
         {
             return false;
         }
@@ -28,7 +28,7 @@ public class AddressesAdapterViewModel extends ViewModel
         {
             List<Address> buf = new ArrayList<>();
 
-            for (Address address : addresses)
+            for (Address address : addressList)
             {
                 boolean added = false;
                 for (Address addressCache : addressesCache)
@@ -52,7 +52,7 @@ public class AddressesAdapterViewModel extends ViewModel
         }
         else
         {
-            addressesCache.addAll(addresses);
+            addressesCache.addAll(addressList);
         }
 
         return true;

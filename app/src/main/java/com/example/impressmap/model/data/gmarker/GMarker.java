@@ -6,12 +6,11 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 
 import com.example.impressmap.model.data.GMarkerMetadata;
-import com.example.impressmap.model.data.GObject;
 import com.example.impressmap.util.Converter;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Marker;
 
-public abstract class GMarker implements GObject
+public abstract class GMarker
 {
     private final Context context;
     private final Marker marker;
@@ -22,11 +21,9 @@ public abstract class GMarker implements GObject
     private final int deselectedStateResId;
     private boolean selected;
 
-    private boolean clickable;
-
     public GMarker(Context context,
                    @NonNull Marker marker,
-                   GMarkerMetadata gMarkerMetadata,
+                   @NonNull GMarkerMetadata gMarkerMetadata,
                    @DrawableRes int selectedStateResId,
                    @DrawableRes int deselectedStateResId)
     {
@@ -39,17 +36,11 @@ public abstract class GMarker implements GObject
         marker.setIcon(BitmapDescriptorFactory.fromBitmap(
                 Converter.drawableIdToBitmap(context, deselectedStateResId)));
         selected = false;
-        clickable = false;
-    }
-
-    public boolean isSelected()
-    {
-        return selected;
     }
 
     public void setSelected(boolean selected)
     {
-        if (!clickable || this.selected == selected)
+        if (this.selected == selected)
         {
             return;
         }
@@ -73,16 +64,6 @@ public abstract class GMarker implements GObject
     public GMarkerMetadata getGMarkerMetadata()
     {
         return gMarkerMetadata;
-    }
-
-    public boolean isClickable()
-    {
-        return clickable;
-    }
-
-    public void setClickable(boolean clickable)
-    {
-        this.clickable = clickable;
     }
 
     public void hide()

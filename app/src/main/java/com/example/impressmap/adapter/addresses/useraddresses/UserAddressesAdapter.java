@@ -51,12 +51,15 @@ public class UserAddressesAdapter
         holder.bind();
     }
 
-    public void setAddresses(@NonNull List<Address> addresses)
+    /**
+     * <p>Sets a new address list in adapter</p>
+     */
+    public void setAddressList(@NonNull List<Address> addressList)
     {
-        if (viewModel.setAddresses(addresses))
+        if (viewModel.setAddressList(addressList))
         {
             notifyItemRangeRemoved(0, viewModel.getAddressesCount());
-            notifyItemRangeInserted(0, addresses.size());
+            notifyItemRangeInserted(0, addressList.size());
         }
     }
 
@@ -100,7 +103,7 @@ public class UserAddressesAdapter
             Address address = adapter.viewModel.getAddress(getAdapterPosition());
 
             Location location = Objects.requireNonNull(
-                    Locations.getOneFromLatLng(adapter.context, address.getPosition()));
+                    Locations.getOneFromLatLng(adapter.context, address.getPositionLatLng()));
 
             binding.addressPrimaryView.setText(
                     String.format("%s %s", location.getCountry(), location.getCity()));

@@ -6,7 +6,7 @@ import android.view.MenuItem;
 
 public class MessageViewTextWatcher implements TextWatcher
 {
-    private MenuItem sendButton;
+    private final MenuItem sendButton;
 
     public MessageViewTextWatcher(MenuItem sendButton)
     {
@@ -28,14 +28,7 @@ public class MessageViewTextWatcher implements TextWatcher
                               int before,
                               int count)
     {
-        if (s.length() == 0)
-        {
-            sendButton.setEnabled(false);
-        }
-        else
-        {
-            sendButton.setEnabled(true);
-        }
+        sendButton.setEnabled(s.length() != 0);
     }
 
     @Override
@@ -43,5 +36,4 @@ public class MessageViewTextWatcher implements TextWatcher
     {
 
     }
-
 }

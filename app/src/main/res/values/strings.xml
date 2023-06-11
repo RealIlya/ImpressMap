@@ -14,7 +14,7 @@
     <string name="addresses">Addresses</string>
     <string name="comment">Comment</string>
     <string name="phone_number_hint">Phone number</string>
-    <string name="location_permission">Geolocation is disabled. Permission required Location in settings</string>
+    <string name="location_permission">Geolocation is disabled. Location permission required is enabled in settings</string>
     <string name="location_loading">Loading…</string>
     <string name="today">Today at %1$s</string>
     <string name="ago">%1$s ago</string>

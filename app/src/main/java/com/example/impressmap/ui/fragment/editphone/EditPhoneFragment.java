@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
-import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -22,10 +21,14 @@ import com.example.impressmap.model.data.User;
 import com.example.impressmap.ui.activity.main.MainViewModel;
 import com.example.impressmap.util.FieldEmptyCallback;
 import com.example.impressmap.util.SuccessCallback;
+import com.example.impressmap.util.WindowStatusBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * Fragment to edit user's phone
+ */
 public class EditPhoneFragment extends Fragment
 {
     private final SuccessCallback successCallback = () -> requireActivity().getSupportFragmentManager()
@@ -46,8 +49,7 @@ public class EditPhoneFragment extends Fragment
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState)
     {
-        new WindowInsetsControllerCompat(requireActivity().getWindow(),
-                requireActivity().getWindow().getDecorView()).setAppearanceLightStatusBars(false);
+        WindowStatusBar.setLight(requireActivity().getWindow(), false);
         binding = FragmentEditPhoneBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }

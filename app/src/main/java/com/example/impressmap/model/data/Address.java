@@ -1,18 +1,13 @@
 package com.example.impressmap.model.data;
 
-import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
-import static com.example.impressmap.util.Constants.Keys.DESC_NODE;
-import static com.example.impressmap.util.Constants.Keys.OWNER_ID_NODE;
-import static com.example.impressmap.util.Constants.Keys.POSITION_NODE;
-
 import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class Address implements TransferableToDatabase
+/**
+ * Data class for store data about address
+ */
+public class Address
 {
     protected String id = "";
     protected String desc = "";
@@ -24,18 +19,6 @@ public class Address implements TransferableToDatabase
     public Address()
     {
         selected = false;
-    }
-
-    public Map<String, Object> prepareToTransferToDatabase()
-    {
-        Map<String, Object> data = new HashMap<>();
-
-        data.put(CHILD_ID_NODE, id);
-        data.put(DESC_NODE, desc);
-        data.put(OWNER_ID_NODE, ownerId);
-        data.put(POSITION_NODE, position);
-
-        return data;
     }
 
     public String getId()
@@ -68,15 +51,20 @@ public class Address implements TransferableToDatabase
         this.ownerId = ownerId;
     }
 
-    public LatLng getPosition()
+    public String getPosition()
     {
-        String[] pos = position.split(" ");
-        return new LatLng(Double.parseDouble(pos[0]), Double.parseDouble(pos[1]));
+        return position;
     }
 
     public void setPosition(String position)
     {
         this.position = position;
+    }
+
+    public LatLng getPositionLatLng()
+    {
+        String[] pos = position.split(" ");
+        return new LatLng(Double.parseDouble(pos[0]), Double.parseDouble(pos[1]));
     }
 
     public void setPositionLatLng(LatLng position)

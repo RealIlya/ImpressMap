@@ -55,10 +55,4 @@ public class CommentIdsRepo implements DatabaseRepo<String>
 
     }
 
-    @Override
-    public void delete(String id,
-                       SuccessCallback successCallback)
-    {
-
-    }
 }

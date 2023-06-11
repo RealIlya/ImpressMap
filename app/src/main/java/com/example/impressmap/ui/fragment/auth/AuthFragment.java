@@ -2,6 +2,7 @@ package com.example.impressmap.ui.fragment.auth;
 
 import static com.example.impressmap.ui.fragment.map.MapFragment.COMMON_MODE;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ import com.example.impressmap.ui.activity.main.MainViewModel;
 import com.example.impressmap.ui.fragment.map.MapFragment;
 import com.example.impressmap.util.FieldEmptyCallback;
 import com.example.impressmap.util.SuccessCallback;
+import com.example.impressmap.util.ViewVisibility;
+import com.example.impressmap.util.WindowStatusBar;
 import com.google.android.material.snackbar.Snackbar;
 
 public class AuthFragment extends Fragment
@@ -52,6 +55,9 @@ public class AuthFragment extends Fragment
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState)
     {
+        int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        WindowStatusBar.setLight(requireActivity().getWindow(),
+                currentNightMode == Configuration.UI_MODE_NIGHT_NO);
         binding = FragmentAuthBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -88,18 +94,9 @@ public class AuthFragment extends Fragment
 
         binding.signUpCheckBox.setOnCheckedChangeListener((compoundButton, checked) ->
         {
-            if (checked)
-            {
-                binding.registerView.setVisibility(View.VISIBLE);
-                binding.nextButton.setVisibility(View.GONE);
-                binding.signUpButton.setVisibility(View.VISIBLE);
-            }
-            else
-            {
-                binding.registerView.setVisibility(View.GONE);
-                binding.nextButton.setVisibility(View.VISIBLE);
-                binding.signUpButton.setVisibility(View.GONE);
-            }
+            binding.registerView.setVisibility(ViewVisibility.show(checked));
+            binding.nextButton.setVisibility(ViewVisibility.show(!checked));
+            binding.signUpButton.setVisibility(ViewVisibility.show(checked));
         });
     }
 }

@@ -77,7 +77,7 @@ public class GMapAdapter extends MapAdapter
 
             GMarker gMarker = (GMarker) markerTag;
 
-            if (gMarker.isClickable())
+            if (inSelectedGCircle(gMarker.getGMarkerMetadata().getPositionLatLng()))
             {
                 viewModel.deselectLastGMarker();
                 gMarker.setSelected(true);
@@ -127,7 +127,7 @@ public class GMapAdapter extends MapAdapter
                 if (gCircle == null)
                 {
                     gCircleMeta.setAddressId(gMarkerMetadata.getId());
-                    gCircleMeta.setCenter(gMarkerMetadata.getPosition());
+                    gCircleMeta.setCenter(gMarkerMetadata.getPositionLatLng());
                 }
             }
 
@@ -137,10 +137,6 @@ public class GMapAdapter extends MapAdapter
             }
 
             GMarker gMarker = (GMarker) addMarker(gMarkerMetadata).getTag();
-            if (gMarker != null)
-            {
-                gMarker.setClickable(true);
-            }
             gMarkers.add(gMarker);
         }
 
@@ -209,9 +205,22 @@ public class GMapAdapter extends MapAdapter
     }
 
     @Nullable
-    public List<GMarker> getSelectedGCircleGMarkers()
+    public List<GMarkerMetadata> getSelectedGCircleGMarkerMetadata()
     {
-        return viewModel.getLastSelectedGCircleGMarkers();
+        List<GMarkerMetadata> gMarkerMetadataList = new ArrayList<>();
+
+        List<GMarker> lastSelectedGCircleGMarkers = viewModel.getLastSelectedGCircleGMarkers();
+        if (lastSelectedGCircleGMarkers == null)
+        {
+            return null;
+        }
+
+        for (GMarker gMarker : lastSelectedGCircleGMarkers)
+        {
+            gMarkerMetadataList.add(gMarker.getGMarkerMetadata());
+        }
+
+        return gMarkerMetadataList;
     }
 
     @Nullable

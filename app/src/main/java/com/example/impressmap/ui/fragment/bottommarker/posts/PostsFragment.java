@@ -1,6 +1,7 @@
 package com.example.impressmap.ui.fragment.bottommarker.posts;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,25 +20,40 @@ import com.example.impressmap.R;
 import com.example.impressmap.adapter.posts.PostsAdapter;
 import com.example.impressmap.databinding.FragmentPostsBinding;
 import com.example.impressmap.model.data.GMarkerMetadata;
-import com.example.impressmap.model.data.GMarkerWithChildrenMetadata;
 import com.example.impressmap.model.data.Post;
 import com.example.impressmap.ui.fragment.bottommarker.comments.CommentsFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostsFragment extends Fragment
 {
     private static final String METADATA_KEY = "METADATA_KEY";
+    private static final String LIST_KEY = "LIST_KEY";
     private FragmentPostsBinding binding;
     private PostsFragmentViewModel viewModel;
     private View.OnClickListener onDeselectItemClickListener;
     private OnBackPressedCallback onBackPressedCallback;
 
     @NonNull
-    public static PostsFragment newInstance(GMarkerMetadata gMarkerMetadata)
+    public static PostsFragment newInstance(@NonNull GMarkerMetadata gMarkerMetadata)
     {
         Bundle arguments = new Bundle();
         arguments.putParcelable(METADATA_KEY, gMarkerMetadata);
+
+        PostsFragment postsFragment = new PostsFragment();
+        postsFragment.setArguments(arguments);
+        return postsFragment;
+    }
+
+    @NonNull
+    public static PostsFragment newInstance(@NonNull GMarkerMetadata gMarkerMetadata,
+                                            @NonNull List<GMarkerMetadata> gMarkerMetadataList)
+    {
+        Bundle arguments = new Bundle();
+        arguments.putParcelable(METADATA_KEY, gMarkerMetadata);
+        arguments.putParcelableArrayList(LIST_KEY,
+                (ArrayList<? extends Parcelable>) gMarkerMetadataList);
 
         PostsFragment postsFragment = new PostsFragment();
         postsFragment.setArguments(arguments);
@@ -102,19 +118,15 @@ public class PostsFragment extends Fragment
         }
         else if (gMarkerMetadata.getType() == GMarkerMetadata.ADDRESS_MARKER)
         {
-            if (gMarkerMetadata instanceof GMarkerWithChildrenMetadata)
+            List<GMarkerMetadata> gMarkerMetadataList = requireArguments().getParcelableArrayList(
+                    LIST_KEY);
+
+            for (GMarkerMetadata metadata : gMarkerMetadataList)
             {
-                List<GMarkerMetadata> gMarkerMetadataList = ((GMarkerWithChildrenMetadata) gMarkerMetadata).getGMarkerMetadata();
-                if (gMarkerMetadataList != null)
+                LiveData<Post> postByGMarker = viewModel.getPostByGMarker(metadata);
+                if (!postByGMarker.hasActiveObservers())
                 {
-                    for (GMarkerMetadata metadata : gMarkerMetadataList)
-                    {
-                        LiveData<Post> postByGMarker = viewModel.getPostByGMarker(metadata);
-                        if (!postByGMarker.hasActiveObservers())
-                        {
-                            postByGMarker.observeForever(postsAdapter::addPost);
-                        }
-                    }
+                    postByGMarker.observeForever(postsAdapter::addPost);
                 }
             }
         }

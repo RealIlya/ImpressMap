@@ -13,7 +13,7 @@ public class CommonGCircle extends GCircle
                          Circle circle,
                          GCircleMeta gCircleMeta)
     {
-        super(context, circle, gCircleMeta,
+        super(circle, gCircleMeta,
                 Converter.getAttributeColor(context, R.attr.backgroundSelectedMarker),
                 Converter.getAttributeColor(context, R.attr.backgroundDeselectedMarker),
                 Converter.getAttributeColor(context, R.attr.backgroundToolbar));

@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -19,6 +18,7 @@ import com.example.impressmap.ui.fragment.addresses.useraddresses.UserAddressesF
 import com.example.impressmap.ui.fragment.auth.AuthFragment;
 import com.example.impressmap.ui.fragment.editphone.EditPhoneFragment;
 import com.example.impressmap.ui.fragment.editprofile.EditProfileFragment;
+import com.example.impressmap.util.WindowStatusBar;
 
 public class ProfileFragment extends Fragment
 {
@@ -37,8 +37,7 @@ public class ProfileFragment extends Fragment
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState)
     {
-        new WindowInsetsControllerCompat(requireActivity().getWindow(),
-                requireActivity().getWindow().getDecorView()).setAppearanceLightStatusBars(false);
+        WindowStatusBar.setLight(requireActivity().getWindow(), false);
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -54,7 +53,7 @@ public class ProfileFragment extends Fragment
 
         MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
                 MainViewModel.class);
-        binding.toolbar.getMenu().findItem(R.id.logout_item).setOnMenuItemClickListener(menuItem ->
+        binding.toolbar.getMenu().findItem(R.id.menu_logout).setOnMenuItemClickListener(menuItem ->
         {
             viewModel.signOut(() ->
             {

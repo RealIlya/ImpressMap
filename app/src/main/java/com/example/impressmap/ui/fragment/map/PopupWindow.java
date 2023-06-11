@@ -11,6 +11,9 @@ import com.example.impressmap.adapter.PopupAddressesAdapter;
 import com.example.impressmap.databinding.PopupAddressesBinding;
 import com.example.impressmap.ui.activity.main.MainViewModel;
 
+/**
+ * <p>MapFragment's popup window helper</p>
+ */
 public class PopupWindow extends android.widget.PopupWindow
 {
     private final PopupAddressesAdapter adapter;

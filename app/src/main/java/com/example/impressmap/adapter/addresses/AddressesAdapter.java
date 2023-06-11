@@ -24,7 +24,7 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
     private final Context context;
     private final AddressesAdapterViewModel viewModel;
 
-    private OnJoinToAddressButtonClickListener onJoinToAddressButtonClickListener;
+    private OnJoinToAddressClickListener onJoinToAddressClickListener;
 
     public AddressesAdapter(Context context,
                             ViewModelStoreOwner viewModelStoreOwner)
@@ -50,12 +50,15 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
         holder.bind();
     }
 
-    public void setAddresses(@NonNull List<Address> addresses)
+    /**
+     * <p>Sets a new address list in adapter</p>
+     */
+    public void setAddressList(@NonNull List<Address> addressList)
     {
-        if (viewModel.setAddresses(addresses))
+        if (viewModel.setAddressList(addressList))
         {
             notifyItemRangeRemoved(0, viewModel.getAddressesCount());
-            notifyItemRangeInserted(0, addresses.size());
+            notifyItemRangeInserted(0, addressList.size());
         }
     }
 
@@ -65,13 +68,13 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
         return viewModel.getAddressesCount();
     }
 
-    public void setOnJoinToAddressButtonClickListener(OnJoinToAddressButtonClickListener listener)
+    public void setOnJoinToAddressButtonClickListener(OnJoinToAddressClickListener listener)
     {
-        this.onJoinToAddressButtonClickListener = listener;
+        this.onJoinToAddressClickListener = listener;
     }
 
     protected static class AddressViewHolder extends RecyclerView.ViewHolder
-            implements OnJoinToAddressButtonClickListener
+            implements OnJoinToAddressClickListener
     {
         private final ItemAddressBinding binding;
         private final AddressesAdapter adapter;
@@ -89,7 +92,7 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
             Address address = adapter.viewModel.getAddress(getAdapterPosition());
 
             Location location = Objects.requireNonNull(
-                    Locations.getOneFromLatLng(adapter.context, address.getPosition()));
+                    Locations.getOneFromLatLng(adapter.context, address.getPositionLatLng()));
 
             binding.addressPrimaryView.setText(
                     String.format("%s %s", location.getCountry(), location.getCity()));
@@ -99,18 +102,18 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
 
             if (address.isSelected())
             {
-                binding.joinAddressButton.setImageDrawable(
+                binding.joinToAddressButton.setImageDrawable(
                         Converter.getDrawable(adapter.context, R.drawable.ic_check));
-                binding.joinAddressButton.getDrawable()
-                                         .setTint(adapter.context.getColor(R.color.positive));
+                binding.joinToAddressButton.getDrawable()
+                                           .setTint(adapter.context.getColor(R.color.positive));
             }
             else
             {
-                binding.joinAddressButton.setImageDrawable(
+                binding.joinToAddressButton.setImageDrawable(
                         Converter.getDrawable(adapter.context, R.drawable.ic_add_group));
             }
 
-            binding.joinAddressButton.setOnClickListener(v ->
+            binding.joinToAddressButton.setOnClickListener(v ->
             {
                 if (address.isSelected())
                 {
@@ -128,9 +131,9 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.Addr
         @Override
         public void onJoinToAddressClick(Address address)
         {
-            if (adapter.onJoinToAddressButtonClickListener != null)
+            if (adapter.onJoinToAddressClickListener != null)
             {
-                adapter.onJoinToAddressButtonClickListener.onJoinToAddressClick(address);
+                adapter.onJoinToAddressClickListener.onJoinToAddressClick(address);
             }
         }
     }

@@ -17,7 +17,6 @@ import java.util.List;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>
 {
-
     private final Context context;
     private final List<Comment> commentList;
 
@@ -53,10 +52,20 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         return commentList.size();
     }
 
+    /**
+     * <p>Adds new comment in adapter</p>
+     */
     public void addComment(Comment comment)
     {
         commentList.add(comment);
         notifyItemInserted(getItemCount());
+    }
+
+    public void clear()
+    {
+        int count = getItemCount();
+        commentList.clear();
+        notifyItemRangeRemoved(0, count);
     }
 
     public void setOnCommentsButtonClickListener(OnCommentsButtonClickListener listener)
@@ -91,7 +100,6 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
             binding.fullNameView.setText(comment.getOwnerUser().getFullName());
             String dateString = DateStrings.getDateString(adapter.context.getResources(),
                     comment.getDateTime());
-
             binding.dateView.setText(dateString);
 
             binding.showCommentsButton.setOnClickListener(v -> onCommentClick(v, comment));

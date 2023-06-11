@@ -15,7 +15,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 
-public class Converter
+public abstract class Converter
 {
     public static Bitmap drawableIdToBitmap(Context context,
                                             @DrawableRes int drawableId)
@@ -24,7 +24,6 @@ public class Converter
         Drawable drawable = ResourcesCompat.getDrawable(resources, drawableId, context.getTheme());
         return drawableToBitmap(drawable);
     }
-
 
     public static Bitmap drawableToBitmap(Drawable drawable)
     {

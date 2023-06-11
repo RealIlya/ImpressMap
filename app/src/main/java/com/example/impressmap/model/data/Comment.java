@@ -1,22 +1,20 @@
 package com.example.impressmap.model.data;
 
-import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
-import static com.example.impressmap.util.Constants.Keys.DATE_TIME_NODE;
-import static com.example.impressmap.util.Constants.Keys.OWNER_ID_NODE;
-import static com.example.impressmap.util.Constants.Keys.TEXT_NODE;
-
 import android.os.Parcel;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.ZoneOffset;
 import java.util.TimeZone;
 
-public class Comment implements TransferableToDatabase, Owner
+/**
+ * Data class for store data about comment
+ */
+public class Comment implements Owner
 {
     public static final Creator<Comment> CREATOR = new Creator<Comment>()
     {
@@ -34,7 +32,7 @@ public class Comment implements TransferableToDatabase, Owner
     };
     private String id = "";
     private OwnerUser ownerUser = new OwnerUser();
-    private LocalDateTime dateTime = LocalDateTime.now(TimeZone.getTimeZone("GMT0:00").toZoneId());
+    private LocalDateTime dateTime = LocalDateTime.now(TimeZone.getTimeZone("UTC").toZoneId());
     private String text = "";
 
     public Comment()
@@ -47,19 +45,6 @@ public class Comment implements TransferableToDatabase, Owner
         ownerUser.setId(in.readString());
         ownerUser.setFullName(in.readString());
         text = in.readString();
-    }
-
-    @Override
-    public Map<String, Object> prepareToTransferToDatabase()
-    {
-        Map<String, Object> data = new HashMap<>();
-
-        data.put(CHILD_ID_NODE, id);
-        data.put(OWNER_ID_NODE, ownerUser.getId());
-        data.put(DATE_TIME_NODE, dateTime.toEpochSecond(OffsetDateTime.now().getOffset()));
-        data.put(TEXT_NODE, text);
-
-        return data;
     }
 
     public String getId()
@@ -87,14 +72,10 @@ public class Comment implements TransferableToDatabase, Owner
         return dateTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime)
-    {
-        this.dateTime = dateTime;
-    }
-
     public void setDateTime(long date)
     {
-        this.dateTime = LocalDateTime.ofEpochSecond(date, 0, OffsetDateTime.now().getOffset());
+        this.dateTime = LocalDateTime.ofEpochSecond(date, 0,
+                ZoneOffset.from(OffsetDateTime.now(Clock.systemDefaultZone())));
     }
 
     public String getText()

@@ -2,6 +2,8 @@ package com.example.impressmap.util;
 
 import android.content.res.Resources;
 
+import androidx.annotation.NonNull;
+
 import com.example.impressmap.R;
 
 import java.time.LocalDateTime;
@@ -13,10 +15,17 @@ import java.time.temporal.ChronoField;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class DateStrings
+public abstract class DateStrings
 {
+    /**
+     * <b>Returns formatted dateTime string</b>
+     * <p>If dateTime equals now dateTime returns "Today at {time}"</p>
+     * <p>If difference between datetime and now dateTime <= 7 returns "{days} ago"</p>
+     * <p>If dateTime's year equals now dateTime's year returns "{month's number} {month}"</p>
+     * <p>In other cases returns dateTime in dd.MM.yyyy format depends on Device's locale</p>
+     */
     public static String getDateString(Resources resources,
-                                       LocalDateTime dateTime)
+                                       @NonNull LocalDateTime dateTime)
     {
         LocalDateTime nowDateTime = LocalDateTime.now(TimeZone.getTimeZone("UTC").toZoneId());
 
@@ -28,10 +37,12 @@ public class DateStrings
             {
                 if (diff == 0)
                 {
-                    return resources.getString(R.string.today);
+                    return resources.getString(R.string.today,
+                            dateTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)));
                 }
 
-                return resources.getQuantityString(R.plurals.days, (int) diff, diff);
+                return resources.getString(R.string.ago,
+                        resources.getQuantityString(R.plurals.days, (int) diff, diff));
             }
 
             Month month = dateTime.getMonth();

@@ -124,6 +124,7 @@
             app:itemIconTint="?colorNavigationItemIcon"
             app:itemTextAppearance="@style/subtitleTextAppearance"
             app:itemTextColor="?colorNavigationItemText"
+            app:menu="@menu/menu_navigation_view"
             app:subheaderTextAppearance="@style/navItemHeaderStyle" />
     </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

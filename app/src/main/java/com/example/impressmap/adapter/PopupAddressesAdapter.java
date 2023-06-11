@@ -16,17 +16,16 @@ import java.util.List;
 
 public class PopupAddressesAdapter
         extends RecyclerView.Adapter<PopupAddressesAdapter.AddressViewHolder>
-        implements OnAddressClickListener
 {
     private final Context context;
-    private final List<Address> addresses;
+    private final List<Address> addressList;
     private OnAddressClickListener onAddressClickListener;
 
     public PopupAddressesAdapter(Context context,
-                                 List<Address> addresses)
+                                 List<Address> addressList)
     {
         this.context = context;
-        this.addresses = addresses;
+        this.addressList = addressList;
     }
 
     @NonNull
@@ -36,32 +35,20 @@ public class PopupAddressesAdapter
     {
         return new PopupAddressesAdapter.AddressViewHolder(
                 ItemUserAddressBinding.inflate(LayoutInflater.from(parent.getContext()), parent,
-                        false));
+                        false), this);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AddressViewHolder holder,
                                  int position)
     {
-        Address address = addresses.get(position);
-
-        Location location = Locations.getOneFromLatLng(context, address.getPosition());
-
-        if (location != null)
-        {
-            holder.binding.addressPrimaryView.setText(
-                    String.format("%s %s", location.getCountry(), location.getCity()));
-            holder.binding.addressSecondaryView.setText(
-                    String.format("%s %s", location.getStreet(), location.getHouse()));
-        }
-
-        holder.binding.getRoot().setOnClickListener(v -> onAddressClick(address));
+        holder.bind();
     }
 
     @Override
     public int getItemCount()
     {
-        return addresses.size();
+        return addressList.size();
     }
 
     public void setOnAddressClickListener(OnAddressClickListener listener)
@@ -69,23 +56,44 @@ public class PopupAddressesAdapter
         onAddressClickListener = listener;
     }
 
-    @Override
-    public void onAddressClick(Address address)
-    {
-        if (onAddressClickListener != null)
-        {
-            onAddressClickListener.onAddressClick(address);
-        }
-    }
-
     protected static class AddressViewHolder extends RecyclerView.ViewHolder
+            implements OnAddressClickListener
     {
         private final ItemUserAddressBinding binding;
+        private final PopupAddressesAdapter adapter;
 
-        public AddressViewHolder(@NonNull ItemUserAddressBinding addressBinding)
+        public AddressViewHolder(@NonNull ItemUserAddressBinding binding,
+                                 PopupAddressesAdapter adapter)
         {
-            super(addressBinding.getRoot());
-            binding = addressBinding;
+            super(binding.getRoot());
+            this.binding = binding;
+            this.adapter = adapter;
+        }
+
+        public void bind()
+        {
+            Address address = adapter.addressList.get(getAdapterPosition());
+
+            Location location = Locations.getOneFromLatLng(adapter.context, address.getPositionLatLng());
+
+            if (location != null)
+            {
+                binding.addressPrimaryView.setText(
+                        String.format("%s %s", location.getCountry(), location.getCity()));
+                binding.addressSecondaryView.setText(
+                        String.format("%s %s", location.getStreet(), location.getHouse()));
+            }
+
+            binding.getRoot().setOnClickListener(v -> onAddressClick(address));
+        }
+
+        @Override
+        public void onAddressClick(Address address)
+        {
+            if (adapter.onAddressClickListener != null)
+            {
+                adapter.onAddressClickListener.onAddressClick(address);
+            }
         }
     }
 }

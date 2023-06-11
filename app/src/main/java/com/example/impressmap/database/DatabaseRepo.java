@@ -16,6 +16,4 @@ public interface DatabaseRepo<T>
     void update(T t,
                 SuccessCallback successCallback);
 
-    void delete(T t,
-                SuccessCallback successCallback);
 }

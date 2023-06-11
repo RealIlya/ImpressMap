@@ -8,7 +8,6 @@ import androidx.lifecycle.AndroidViewModel;
 
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GMarkerMetadata;
-import com.example.impressmap.model.data.GObject;
 import com.example.impressmap.model.data.gcircle.GCircle;
 import com.example.impressmap.model.data.gmarker.GMarker;
 import com.example.impressmap.preference.PositionPreferences;
@@ -41,7 +40,7 @@ public class GMapAdapterViewModel extends AndroidViewModel
     {
         if (lastSelectedGMarker.get() != null)
         {
-            deselectObject(lastSelectedGMarker.get());
+            lastSelectedGMarker.get().setSelected(false);
             lastSelectedGMarker = new WeakReference<>(null);
         }
     }
@@ -50,7 +49,7 @@ public class GMapAdapterViewModel extends AndroidViewModel
     {
         if (lastSelectedGCircle.get() != null)
         {
-            deselectObject(lastSelectedGCircle.get());
+            lastSelectedGCircle.get().setSelected(false);
             lastSelectedGCircle = new WeakReference<>(null);
         }
     }
@@ -89,11 +88,6 @@ public class GMapAdapterViewModel extends AndroidViewModel
             }
         }
         return null;
-    }
-
-    private void deselectObject(@NonNull GObject gObject)
-    {
-        gObject.setSelected(false);
     }
 
     public void setLastSelectedGMarker(GMarker lastSelectedGMarker)

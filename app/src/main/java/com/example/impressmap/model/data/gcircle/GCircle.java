@@ -1,51 +1,40 @@
 package com.example.impressmap.model.data.gcircle;
 
-import android.content.Context;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.impressmap.model.data.GCircleMeta;
-import com.example.impressmap.model.data.GObject;
 import com.example.impressmap.model.data.gmarker.GMarker;
 import com.example.impressmap.util.Locations;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 
-public abstract class GCircle implements GObject
+public abstract class GCircle
 {
-    private final Context context;
+    public final float STROKE_WIDTH = 3;
+    public final double RADIUS = 20;
     private final Circle circle;
     private final GCircleMeta gCircleMeta;
-    private final float strokeWidth;
-    private final int strokeColor;
     @ColorInt
     private final int selectedStateColor;
     @ColorInt
     private final int deselectedStateColor;
-    private double radius;
     private boolean selected;
 
-    public GCircle(Context context,
-                   @NonNull Circle circle,
+    public GCircle(@NonNull Circle circle,
                    GCircleMeta gCircleMeta,
                    @ColorInt int selectedStateColor,
                    @ColorInt int deselectedStateColor,
                    @ColorInt int strokeColor)
     {
-        this.context = context;
         this.circle = circle;
         this.gCircleMeta = gCircleMeta;
         this.selectedStateColor = selectedStateColor;
         this.deselectedStateColor = deselectedStateColor;
-        this.strokeColor = strokeColor;
 
-        radius = 20;
-        strokeWidth = 3;
-
-        circle.setRadius(radius);
-        circle.setStrokeWidth(strokeWidth);
+        circle.setRadius(RADIUS);
+        circle.setStrokeWidth(STROKE_WIDTH);
         circle.setFillColor(deselectedStateColor);
         circle.setStrokeColor(strokeColor);
         circle.setClickable(true);
@@ -79,31 +68,12 @@ public abstract class GCircle implements GObject
         radius = max;
     }*/
 
-    public void enableGMarkersClickable()
-    {
-        setGMarkersClickable(true);
-    }
-
-    public void disableGMarkersClickable()
-    {
-        setGMarkersClickable(false);
-    }
-
-    private void setGMarkersClickable(boolean clickable)
+    private void setGMarkerSelected(boolean selected)
     {
         for (GMarker gMarker : gCircleMeta.getGMarkers())
         {
-            if (!clickable)
-            {
-                gMarker.setSelected(false);
-            }
-            gMarker.setClickable(clickable);
+            gMarker.setSelected(selected);
         }
-    }
-
-    public boolean isSelected()
-    {
-        return selected;
     }
 
     public void setSelected(boolean selected)
@@ -116,12 +86,11 @@ public abstract class GCircle implements GObject
         if (selected)
         {
             circle.setFillColor(selectedStateColor);
-            enableGMarkersClickable();
         }
         else
         {
             circle.setFillColor(deselectedStateColor);
-            disableGMarkersClickable();
+            setGMarkerSelected(false);
         }
 
         this.selected = selected;
@@ -136,7 +105,7 @@ public abstract class GCircle implements GObject
         double endLongitude = center.longitude;
         float distance = Locations.getDistance(startLatitude, startLongitude, endLatitude,
                 endLongitude);
-        return distance <= radius;
+        return distance <= RADIUS;
     }
 
     @Override

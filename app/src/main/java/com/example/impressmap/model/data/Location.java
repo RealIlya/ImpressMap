@@ -7,6 +7,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Data class for store data about location
+ * <p>Extends by address data class</p>
+ */
 public class Location extends Address
 {
     private String fullAddress = "";
@@ -74,7 +78,7 @@ public class Location extends Address
         return fullAddress.split("\\|")[4];
     }
 
-    public LatLng getPosition()
+    public LatLng getPositionLatLng()
     {
         String[] pos = position.split(" ");
         return new LatLng(Double.parseDouble(pos[0]), Double.parseDouble(pos[1]));

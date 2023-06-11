@@ -1,16 +1,11 @@
 package com.example.impressmap.model.data;
 
-import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
-import static com.example.impressmap.util.Constants.Keys.EMAIL_NODE;
-import static com.example.impressmap.util.Constants.Keys.FULL_NAME_NODE;
-import static com.example.impressmap.util.Constants.Keys.PHONE_NUMBER_NODE;
-
 import androidx.annotation.NonNull;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class User implements TransferableToDatabase
+/**
+ * Data class for store data about user
+ */
+public class User
 {
     private String id = "";
     private String fullName = "";
@@ -27,19 +22,6 @@ public class User implements TransferableToDatabase
         user.phoneNumber = "";
 
         return user;
-    }
-
-    @Override
-    public Map<String, Object> prepareToTransferToDatabase()
-    {
-        Map<String, Object> data = new HashMap<>();
-
-        data.put(CHILD_ID_NODE, id);
-        data.put(FULL_NAME_NODE, fullName);
-        data.put(EMAIL_NODE, email);
-        data.put(PHONE_NUMBER_NODE, phoneNumber);
-
-        return data;
     }
 
     public String getId()

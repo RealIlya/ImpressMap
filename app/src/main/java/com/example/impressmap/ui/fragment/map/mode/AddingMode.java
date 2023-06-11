@@ -15,6 +15,10 @@ import com.example.impressmap.ui.fragment.creatoraddress.CreatorAddressFragment;
 import com.example.impressmap.ui.fragment.map.MapFragment;
 import com.example.impressmap.ui.fragment.map.MapFragmentViewModel;
 
+/**
+ * <p>Mode for MapFragment</p>
+ * <p>Works when user is adding new address</p>
+ */
 public class AddingMode extends Mode
 {
     private final FragmentActivity activity;

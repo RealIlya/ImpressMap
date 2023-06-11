@@ -42,7 +42,7 @@ public abstract class MapAdapter
     public Marker addMarker(@NonNull GMarkerMetadata gMarkerMetadata)
     {
         return googleMap.addMarker(new MarkerOptions().title(gMarkerMetadata.getTitle())
-                                                      .position(gMarkerMetadata.getPosition()));
+                                                      .position(gMarkerMetadata.getPositionLatLng()));
     }
 
     public Circle addCircle(@NonNull GCircleMeta GCircleMeta)
@@ -91,11 +91,6 @@ public abstract class MapAdapter
                 Math.max(googleMap.getCameraPosition().zoom, MIN_ZOOM)), callback);
     }
 
-    public void animateZoomTo(CameraPosition cameraPosition)
-    {
-        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-    }
-
     public void zoomTo(CameraPosition cameraPosition)
     {
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -125,17 +120,6 @@ public abstract class MapAdapter
     protected void onCircleClicked(Circle circle)
     {
         onCircleClickListener.onCircleClick(circle);
-    }
-
-    @NonNull
-    public CameraPosition getCameraPosition()
-    {
-        return googleMap.getCameraPosition();
-    }
-
-    public void setOnCameraMoveListener(GoogleMap.OnCameraMoveListener listener)
-    {
-        this.onCameraMoveListener = listener;
     }
 
     public void setOnMapClickListener(@Nullable GoogleMap.OnMapClickListener listener)

@@ -14,7 +14,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -26,11 +25,15 @@ import com.example.impressmap.ui.fragment.map.mode.AddingMode;
 import com.example.impressmap.ui.fragment.map.mode.CommonMode;
 import com.example.impressmap.ui.fragment.map.mode.Mode;
 import com.example.impressmap.util.SwitchableMode;
+import com.example.impressmap.util.WindowStatusBar;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.material.snackbar.Snackbar;
 
-public class MapFragment extends Fragment implements SwitchableMode, ActivityResultCallback<Boolean>
+public class MapFragment extends Fragment
+        implements SwitchableMode, ActivityResultCallback<Boolean>, OnMapReadyCallback
 {
     public static final int COMMON_MODE = 0, ADDING_MODE = 1;
     private final ActivityResultLauncher<String> permissionLauncher = registerForActivityResult(
@@ -51,10 +54,8 @@ public class MapFragment extends Fragment implements SwitchableMode, ActivityRes
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState)
     {
-
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        new WindowInsetsControllerCompat(requireActivity().getWindow(),
-                requireActivity().getWindow().getDecorView()).setAppearanceLightStatusBars(
+        WindowStatusBar.setLight(requireActivity().getWindow(),
                 currentNightMode == Configuration.UI_MODE_NIGHT_NO);
         binding = FragmentMapBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -74,30 +75,7 @@ public class MapFragment extends Fragment implements SwitchableMode, ActivityRes
 
         if (supportMapFragment != null)
         {
-            supportMapFragment.getMapAsync(googleMap ->
-            {
-                gMapAdapter = new GMapAdapter(getContext(), googleMap, requireActivity());
-                gMapAdapter.removeListeners();
-
-                permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
-
-                int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-                switch (currentNightMode)
-                {
-                    case Configuration.UI_MODE_NIGHT_NO:
-                        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(),
-                                R.raw.map_day));
-                        break;
-                    case Configuration.UI_MODE_NIGHT_YES:
-                        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(requireContext(),
-                                R.raw.map_night));
-                        break;
-                }
-
-                MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
-                        MainViewModel.class);
-                mainViewModel.getMode().observe(getViewLifecycleOwner(), this::switchMode);
-            });
+            supportMapFragment.getMapAsync(this);
         }
     }
 
@@ -149,5 +127,31 @@ public class MapFragment extends Fragment implements SwitchableMode, ActivityRes
     {
         return TransitionInflater.from(requireContext())
                                  .inflateTransition(android.R.transition.fade);
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap)
+    {
+        gMapAdapter = new GMapAdapter(requireContext(), googleMap, requireActivity());
+        gMapAdapter.removeListeners();
+
+        permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+
+        int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        switch (currentNightMode)
+        {
+            case Configuration.UI_MODE_NIGHT_NO:
+                googleMap.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.map_day));
+                break;
+            case Configuration.UI_MODE_NIGHT_YES:
+                googleMap.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(requireContext(), R.raw.map_night));
+                break;
+        }
+
+        MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
+                MainViewModel.class);
+        mainViewModel.getMode().observe(getViewLifecycleOwner(), this::switchMode);
     }
 }

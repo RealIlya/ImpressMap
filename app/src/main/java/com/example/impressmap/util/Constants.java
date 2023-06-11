@@ -4,7 +4,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class Constants
+public abstract class Constants
 {
     public static final FirebaseAuth AUTH = FirebaseAuth.getInstance();
     public static final DatabaseReference DATABASE_REF;
@@ -18,6 +18,9 @@ public class Constants
                                        .getReference();
     }
 
+    /**
+     * <p>Keys for Firebase access</p>
+     */
     public static class Keys
     {
         public static final String MAIN_LIST_NODE = "mainList";
@@ -31,7 +34,6 @@ public class Constants
         public static final String DATE_TIME_NODE = "dateTime";
         public static final String TITLE_NODE = "title";
         public static final String TEXT_NODE = "text";
-        public static final String FULL_ADDRESS_NODE = "fullAddress";
         public static final String FULL_NAME_NODE = "fullName";
         public static final String POSITION_NODE = "position";
         public static final String PHONE_NUMBER_NODE = "phoneNumber";

@@ -17,6 +17,9 @@ import java.util.Locale;
 
 public class Locations
 {
+    /**
+     * <p>Returns distance between two points</p>
+     */
     public static float getDistance(double startLatitude,
                                     double startLongitude,
                                     double endLatitude,
@@ -29,6 +32,9 @@ public class Locations
         return distance[0];
     }
 
+    /**
+     * <p>Converts gms' location to Application's package location</p>
+     */
     @Nullable
     private static Location convertLocation(@NonNull android.location.Address location)
     {
@@ -48,6 +54,9 @@ public class Locations
         return null;
     }
 
+    /**
+     * <p>Returns a fit location by latLng</p>
+     */
     @Nullable
     public static Location getOneFromLatLng(Context context,
                                             @NonNull LatLng latLng)
@@ -74,6 +83,9 @@ public class Locations
         }
     }
 
+    /**
+     * <p>Returns a locations list by latLng</p>
+     */
     @Nullable
     public static List<Location> getFromLatLng(Context context,
                                                @NonNull LatLng latLng)

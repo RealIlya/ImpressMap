@@ -103,6 +103,7 @@ public class ShowMoreCommentsFragment extends Fragment
         {
             commentIdsLiveData.observe(getViewLifecycleOwner(), ids ->
             {
+                commentsAdapter.clear();
                 for (String id : ids)
                 {
                     LiveData<Comment> byId = viewModel.getById(id);

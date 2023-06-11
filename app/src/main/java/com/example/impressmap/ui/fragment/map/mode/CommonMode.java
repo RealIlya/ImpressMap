@@ -1,10 +1,11 @@
 package com.example.impressmap.ui.fragment.map.mode;
 
+import android.annotation.SuppressLint;
 import android.view.MenuItem;
 import android.view.View;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
@@ -13,34 +14,39 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.impressmap.R;
 import com.example.impressmap.adapter.gmap.GMapAdapter;
 import com.example.impressmap.databinding.FragmentMapBinding;
+import com.example.impressmap.databinding.NavHeaderMainBinding;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GCircleMeta;
 import com.example.impressmap.model.data.GMarkerMetadata;
-import com.example.impressmap.model.data.GMarkerWithChildrenMetadata;
 import com.example.impressmap.model.data.gcircle.GCircle;
 import com.example.impressmap.model.data.gmarker.GMarker;
 import com.example.impressmap.ui.activity.main.MainViewModel;
+import com.example.impressmap.ui.fragment.addresses.AddressesFragment;
 import com.example.impressmap.ui.fragment.addresses.useraddresses.UserAddressesFragment;
 import com.example.impressmap.ui.fragment.bottommap.mapinfo.MapInfoFragment;
 import com.example.impressmap.ui.fragment.bottommarker.behavior.PostsBottomSheetBehavior;
 import com.example.impressmap.ui.fragment.bottommarker.posts.PostsFragment;
 import com.example.impressmap.ui.fragment.map.MapFragment;
-import com.example.impressmap.ui.fragment.map.PopupWindow;
 import com.example.impressmap.ui.fragment.map.MapFragmentViewModel;
-import com.example.impressmap.ui.fragment.map.NavigationDrawer;
+import com.example.impressmap.ui.fragment.map.PopupWindow;
+import com.example.impressmap.ui.fragment.profile.ProfileFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.navigation.NavigationView;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class CommonMode extends Mode
+/**
+ * <p>Mode for MapFragment</p>
+ * <p>Works when user is using a map</p>
+ */
+public class CommonMode extends Mode implements NavigationView.OnNavigationItemSelectedListener
 {
     private final FragmentActivity activity;
     private final MainViewModel mainViewModel;
-    private NavigationDrawer navigationDrawer;
     private PostsBottomSheetBehavior<MaterialCardView> sheetBehavior;
+    private OnBackPressedCallback onBackPressedCallback;
 
     public CommonMode(MapFragment fragment,
                       MapFragmentViewModel viewModel,
@@ -54,26 +60,23 @@ public class CommonMode extends Mode
     @Override
     public void switchOn(GMapAdapter gMapAdapter)
     {
-        navigationDrawer = new NavigationDrawer(fragment, binding.navigationView,
-                binding.drawerLayout, activity.getSupportFragmentManager());
+        sheetBehavior = new PostsBottomSheetBehavior<>(BottomSheetBehavior.from(binding.bottomView),
+                activity);
 
-        sheetBehavior = new PostsBottomSheetBehavior<>(
-                BottomSheetBehavior.from(binding.bottomView), activity);
-
-        activity.getOnBackPressedDispatcher()
-                .addCallback(fragment.getViewLifecycleOwner(), new OnBackPressedCallback(true)
+        onBackPressedCallback = new OnBackPressedCallback(false)
+        {
+            @Override
+            public void handleOnBackPressed()
+            {
+                if (binding.drawerLayout.isOpen())
                 {
-                    @Override
-                    public void handleOnBackPressed()
-                    {
-                        if (navigationDrawer.isOpen())
-                        {
-                            navigationDrawer.close();
-                        }
-                    }
-                });
-
-        Toolbar toolbar = binding.toolbar;
+                    binding.drawerLayout.close();
+                }
+            }
+        };
+        initNavigationDrawer();
+        activity.getOnBackPressedDispatcher()
+                .addCallback(fragment.getViewLifecycleOwner(), onBackPressedCallback);
 
         LiveData<List<Address>> addressesLiveData = mainViewModel.getSelectedAddresses();
         if (!addressesLiveData.hasActiveObservers())
@@ -94,7 +97,7 @@ public class CommonMode extends Mode
 
         mainViewModel.getSelectedAddressId().observe(fragment.getViewLifecycleOwner(), addressId ->
         {
-            MenuItem item = toolbar.getMenu().findItem(R.id.deselect_circle_item);
+            MenuItem item = binding.toolbar.getMenu().findItem(R.id.deselect_circle_item);
 
             if (item != null)
             {
@@ -138,24 +141,13 @@ public class CommonMode extends Mode
             PostsFragment postsFragment;
             if (gMarkerMetadata.getType() == GMarkerMetadata.ADDRESS_MARKER)
             {
-                GMarkerWithChildrenMetadata withChildrenMetadata = GMarkerWithChildrenMetadata.convert(
-                        gMarkerMetadata);
-                List<GMarkerMetadata> gMarkerMetadataList = new ArrayList<>();
-
-                List<GMarker> selectedGCircleGMarkers = gMapAdapter.getSelectedGCircleGMarkers();
-                if (selectedGCircleGMarkers == null)
+                List<GMarkerMetadata> selectedGCircleGMarkerMetadata = gMapAdapter.getSelectedGCircleGMarkerMetadata();
+                if (selectedGCircleGMarkerMetadata == null)
                 {
                     return false;
                 }
-
-                for (GMarker gMarker : selectedGCircleGMarkers)
-                {
-                    gMarkerMetadataList.add(gMarker.getGMarkerMetadata());
-                }
-
-                withChildrenMetadata.addGMarkersMetadata(gMarkerMetadataList);
-
-                postsFragment = PostsFragment.newInstance(withChildrenMetadata);
+                postsFragment = PostsFragment.newInstance(gMarkerMetadata,
+                        selectedGCircleGMarkerMetadata);
             }
             else
             {
@@ -192,16 +184,17 @@ public class CommonMode extends Mode
                     () -> mainViewModel.setSelectedAddressId(gCircleMeta.getAddressId()));
         });
 
-        toolbar.setNavigationIcon(R.drawable.ic_menu_drawer);
-        toolbar.setNavigationOnClickListener(v -> navigationDrawer.open());
-        toolbar.inflateMenu(R.menu.menu_map);
+        binding.toolbar.setNavigationIcon(R.drawable.ic_menu_drawer);
+        binding.toolbar.setNavigationOnClickListener(v -> binding.drawerLayout.open());
+        binding.toolbar.inflateMenu(R.menu.menu_map);
 
-        toolbar.getMenu().findItem(R.id.deselect_circle_item).setVisible(false);
-        toolbar.getMenu().findItem(R.id.deselect_circle_item).setOnMenuItemClickListener(item ->
-        {
-            sheetBehavior.hide(() -> mainViewModel.setSelectedAddressId(""));
-            return true;
-        });
+        binding.toolbar.getMenu()
+                       .findItem(R.id.deselect_circle_item)
+                       .setOnMenuItemClickListener(item ->
+                       {
+                           sheetBehavior.hide(() -> mainViewModel.setSelectedAddressId(""));
+                           return true;
+                       });
 
         binding.selectedAddressesFab.setOnClickListener(v ->
         {
@@ -256,5 +249,61 @@ public class CommonMode extends Mode
             {
             }
         });
+    }
+
+    private void initNavigationDrawer()
+    {
+        binding.drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener()
+        {
+            @Override
+            public void onDrawerOpened(View drawerView)
+            {
+                onBackPressedCallback.setEnabled(true);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView)
+            {
+                onBackPressedCallback.setEnabled(false);
+            }
+        });
+        binding.navigationView.setNavigationItemSelectedListener(this);
+
+        NavHeaderMainBinding navHeaderMainBinding = NavHeaderMainBinding.bind(
+                binding.navigationView.getHeaderView(0));
+
+        mainViewModel.getUser()
+                     .observe(fragment.getViewLifecycleOwner(),
+                             user -> navHeaderMainBinding.fullNameView.setText(user.getFullName()));
+    }
+
+    @Override
+    @SuppressLint("NonConstantResourceId")
+    public boolean onNavigationItemSelected(MenuItem item)
+    {
+        FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+        String name;
+        switch (item.getItemId())
+        {
+            case R.id.menu_profile:
+                name = ProfileFragment.class.getSimpleName();
+                transaction.replace(R.id.container, ProfileFragment.newInstance());
+                break;
+            case R.id.menu_addresses:
+                name = UserAddressesFragment.class.getSimpleName();
+                transaction.replace(R.id.container, UserAddressesFragment.newInstance());
+                break;
+            case R.id.menu_join_address:
+                name = AddressesFragment.class.getSimpleName();
+                transaction.replace(R.id.container, AddressesFragment.newInstance());
+                break;
+            default:
+                name = "";
+        }
+
+        transaction.addToBackStack(name).commit();
+        binding.drawerLayout.close();
+
+        return false;
     }
 }

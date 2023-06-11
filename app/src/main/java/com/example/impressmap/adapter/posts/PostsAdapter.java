@@ -51,6 +51,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
         return postList.size();
     }
 
+    /**
+     * <p>Adds a new post in adapter</p>
+     */
     public void addPost(Post post)
     {
         postList.add(post);
@@ -86,11 +89,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
             String dateString = DateStrings.getDateString(adapter.context.getResources(),
                     post.getDateTime());
             binding.dateView.setText(dateString);
-
-        /*binding.showReactionsButton.setOnClickListener(v ->
-        {
-
-        });*/
 
             binding.showCommentsButton.setOnClickListener(v ->
             {
