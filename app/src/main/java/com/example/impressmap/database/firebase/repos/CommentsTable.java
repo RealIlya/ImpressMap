@@ -16,17 +16,16 @@ import com.example.impressmap.model.data.DatabaseTransfer;
 import com.example.impressmap.util.SuccessCallback;
 import com.google.firebase.database.DatabaseReference;
 
-import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CommentsRepo implements DatabaseRepo<Comment>, DatabaseTransfer<Comment>
+public class CommentsTable implements DatabaseRepo<Comment>, DatabaseTransfer<Comment>
 {
     private final DatabaseReference commentsRef;
 
-    public CommentsRepo()
+    public CommentsTable()
     {
         commentsRef = DATABASE_REF.child(COMMENTS_NODE);
     }
@@ -47,6 +46,7 @@ public class CommentsRepo implements DatabaseRepo<Comment>, DatabaseTransfer<Com
                        SuccessCallback successCallback)
     {
         String commentKey = commentsRef.push().getKey();
+//        commentsRef.push()
 
         comment.setId(commentKey);
         Map<String, Object> data = toMap(comment);

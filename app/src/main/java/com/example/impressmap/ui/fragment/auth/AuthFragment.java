@@ -24,8 +24,7 @@ import com.example.impressmap.util.ViewVisibility;
 import com.example.impressmap.util.WindowStatusBar;
 import com.google.android.material.snackbar.Snackbar;
 
-public class AuthFragment extends Fragment
-{
+public class AuthFragment extends Fragment {
     private final SuccessCallback successCallback = () ->
     {
         MainViewModel mainViewModel = new ViewModelProvider(requireActivity()).get(
@@ -34,9 +33,9 @@ public class AuthFragment extends Fragment
 
         MapFragment fragment = MapFragment.newInstance();
         requireActivity().getSupportFragmentManager()
-                         .beginTransaction()
-                         .replace(R.id.container, fragment)
-                         .commit();
+                .beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
     };
     private final FieldEmptyCallback fieldEmptyCallback = () -> Snackbar.make(requireView(),
             R.string.field_is_necessary, Snackbar.LENGTH_LONG).show();
@@ -44,8 +43,7 @@ public class AuthFragment extends Fragment
     private AuthViewModel viewModel;
 
     @NonNull
-    public static AuthFragment newInstance()
-    {
+    public static AuthFragment newInstance() {
         return new AuthFragment();
     }
 
@@ -53,8 +51,7 @@ public class AuthFragment extends Fragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState)
-    {
+                             @Nullable Bundle savedInstanceState) {
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         WindowStatusBar.setLight(requireActivity().getWindow(),
                 currentNightMode == Configuration.UI_MODE_NIGHT_NO);
@@ -64,8 +61,7 @@ public class AuthFragment extends Fragment
 
     @Override
     public void onViewCreated(@NonNull View view,
-                              @Nullable Bundle savedInstanceState)
-    {
+                              @Nullable Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
         binding.signUpButton.setOnClickListener(v ->

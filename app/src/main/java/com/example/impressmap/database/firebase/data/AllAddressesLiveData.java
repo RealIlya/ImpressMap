@@ -13,74 +13,69 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class AllAddressesLiveData extends LiveData<List<Address>>
-{
+public class AllAddressesLiveData extends LiveData<List<Address>> {
     private DatabaseReference addressesRef;
 
-    private final ValueEventListener listener = new ValueEventListener()
-    {
+    private final ValueEventListener listener = new ValueEventListener() {
         @Override
-        public void onDataChange(@NonNull DataSnapshot snapshot)
-        {
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
             List<Address> addressList = new ArrayList<>();
             Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
 
-            if (!iterator.hasNext())
-            {
+            if (!iterator.hasNext()) {
                 setValue(addressList);
             }
 
-            while (iterator.hasNext())
-            {
+            while (iterator.hasNext()) {
                 DataSnapshot dataSnapshot = iterator.next();
                 boolean hasNext = iterator.hasNext();
                 Address value = dataSnapshot.getValue(Address.class);
 
                 addressesRef.child(value.getId())
-                            .addListenerForSingleValueEvent(new ValueEventListener()
-                            {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot)
-                                {
-                                    Address address = snapshot.getValue(Address.class);
-                                    addressList.add(address);
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                Address address = snapshot.getValue(Address.class);
+                                addressList.add(address);
 
-                                    if (!hasNext)
-                                    {
-                                        setValue(addressList);
-                                    }
+                                if (!hasNext) {
+                                    setValue(addressList);
                                 }
+                            }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error)
-                                {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
-                                }
-                            });
+                            }
+                        });
             }
         }
 
         @Override
-        public void onCancelled(@NonNull DatabaseError error)
-        {
+        public void onCancelled(@NonNull DatabaseError error) {
 
         }
     };
 
-    public AllAddressesLiveData(DatabaseReference addressesRef)
-    {
+    public AllAddressesLiveData(DatabaseReference addressesRef) {
         this.addressesRef = addressesRef;
     }
 
     @Override
-    protected void onActive()
-    {
+    protected void setValue(List<Address> value) {
+
+        // adding new elements instead of replacing all list
+
+        super.setValue(value);
+    }
+
+    @Override
+    protected void onActive() {
         addressesRef.addListenerForSingleValueEvent(listener);
     }
 
     @Override
-    protected void onInactive()
-    {
+    protected void onInactive() {
         addressesRef.removeEventListener(listener);
     }
 }

@@ -3,19 +3,17 @@ package com.example.impressmap.database.firebase.cases;
 import static com.example.impressmap.util.Constants.AUTH;
 import static com.example.impressmap.util.Constants.UID;
 
-import com.example.impressmap.database.firebase.repos.UsersRepo;
+import com.example.impressmap.database.DatabaseRepo;
 import com.example.impressmap.model.data.User;
 import com.example.impressmap.util.FailCallback;
 import com.example.impressmap.util.SuccessCallback;
 import com.google.firebase.auth.FirebaseUser;
 
-public class AuthorizationCase
-{
-    private final UsersRepo usersRepo;
+public class AuthorizationCase {
+    private final DatabaseRepo<User> usersRepo;
 
-    public AuthorizationCase()
-    {
-        usersRepo = new UsersRepo();
+    public AuthorizationCase(DatabaseRepo<User> usersRepo) {
+        this.usersRepo = usersRepo;
     }
 
     public void signUp(String name,
@@ -23,8 +21,7 @@ public class AuthorizationCase
                        String email,
                        String password,
                        SuccessCallback successCallback,
-                       FailCallback failCallback)
-    {
+                       FailCallback failCallback) {
         AUTH.createUserWithEmailAndPassword(email, password).addOnSuccessListener(authResult ->
         {
             User user = User.createUser(String.format("%s %s", name, surname), email);
@@ -42,8 +39,7 @@ public class AuthorizationCase
     public void signIn(String email,
                        String password,
                        SuccessCallback successCallback,
-                       FailCallback failCallback)
-    {
+                       FailCallback failCallback) {
         AUTH.signInWithEmailAndPassword(email, password).addOnSuccessListener(authResult ->
         {
             UID = authResult.getUser().getUid();
@@ -53,8 +49,7 @@ public class AuthorizationCase
     }
 
 
-    public void signOut(SuccessCallback successCallback)
-    {
+    public void signOut(SuccessCallback successCallback) {
         AUTH.signOut();
         successCallback.onSuccess();
     }

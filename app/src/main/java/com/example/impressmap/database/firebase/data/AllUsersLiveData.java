@@ -16,18 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 // you don't need to AllUsersLiveData
-public class AllUsersLiveData extends LiveData<List<User>>
-{
+public class AllUsersLiveData extends LiveData<List<User>> {
     private final DatabaseReference usersRef;
 
-    private final ValueEventListener listener = new ValueEventListener()
-    {
+    private final ValueEventListener listener = new ValueEventListener() {
         @Override
-        public void onDataChange(@NonNull DataSnapshot snapshot)
-        {
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
             List<User> users = new ArrayList<>();
-            for (DataSnapshot dataSnapshot : snapshot.getChildren())
-            {
+            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                 User value = dataSnapshot.getValue(User.class);
                 users.add(value);
             }
@@ -35,26 +31,22 @@ public class AllUsersLiveData extends LiveData<List<User>>
         }
 
         @Override
-        public void onCancelled(@NonNull DatabaseError error)
-        {
+        public void onCancelled(@NonNull DatabaseError error) {
 
         }
     };
 
-    public AllUsersLiveData()
-    {
+    public AllUsersLiveData() {
         usersRef = DATABASE_REF.child(USERS_NODE);
     }
 
     @Override
-    protected void onActive()
-    {
+    protected void onActive() {
         usersRef.addValueEventListener(listener);
     }
 
     @Override
-    protected void onInactive()
-    {
+    protected void onInactive() {
         usersRef.removeEventListener(listener);
     }
 }

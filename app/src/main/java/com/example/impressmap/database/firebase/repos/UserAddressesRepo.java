@@ -32,12 +32,6 @@ public class UserAddressesRepo implements DatabaseRepo<Address>
     }
 
     @Override
-    public LiveData<List<Address>> getAll()
-    {
-        return new AllUserAddressesLiveData(userAddressesRef);
-    }
-
-    @Override
     public void insert(Address address,
                        SuccessCallback successCallback)
     {

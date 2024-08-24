@@ -10,43 +10,30 @@ import static com.example.impressmap.util.Constants.Keys.POSITION_NODE;
 import static com.example.impressmap.util.Constants.Keys.USERS_NODE;
 import static com.example.impressmap.util.Constants.UID;
 
-import androidx.lifecycle.LiveData;
-
 import com.example.impressmap.database.DatabaseRepo;
-import com.example.impressmap.database.firebase.data.AllAddressesLiveData;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.DatabaseTransfer;
 import com.example.impressmap.util.SuccessCallback;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class AddressesRepo implements DatabaseRepo<Address>, DatabaseTransfer<Address>
-{
+public class AddressesTable implements DatabaseRepo<Address>, DatabaseTransfer<Address> {
     private final DatabaseReference addressesRef;
     private final DatabaseReference userAddressesRef;
 
-    public AddressesRepo()
-    {
+    public AddressesTable() {
         addressesRef = DATABASE_REF.child(ADDRESSES_NODE);
         userAddressesRef = DATABASE_REF.child(MAIN_LIST_NODE)
-                                       .child(USERS_NODE)
-                                       .child(UID)
-                                       .child(ADDRESSES_NODE);
-    }
-
-    @Override
-    public LiveData<List<Address>> getAll()
-    {
-        return new AllAddressesLiveData(addressesRef);
+                .child(USERS_NODE)
+                .child(UID)
+                .child(ADDRESSES_NODE);
     }
 
     @Override
     public void insert(Address address,
-                       SuccessCallback successCallback)
-    {
+                       SuccessCallback successCallback) {
         String addressKey = userAddressesRef.push().getKey();
 
         address.setId(addressKey);
@@ -56,23 +43,21 @@ public class AddressesRepo implements DatabaseRepo<Address>, DatabaseTransfer<Ad
         Map<String, Object> sData = new HashMap<>();
         sData.put(CHILD_ID_NODE, addressKey);
         addressesRef.child(addressKey)
-                    .updateChildren(data)
-                    .addOnSuccessListener(unused -> userAddressesRef.child(addressKey)
-                                                                    .updateChildren(sData)
-                                                                    .addOnSuccessListener(
-                                                                            unused1 -> successCallback.onSuccess()));
+                .updateChildren(data)
+                .addOnSuccessListener(unused -> userAddressesRef.child(addressKey)
+                        .updateChildren(sData)
+                        .addOnSuccessListener(
+                                unused1 -> successCallback.onSuccess()));
     }
 
     @Override
     public void update(Address address,
-                       SuccessCallback successCallback)
-    {
+                       SuccessCallback successCallback) {
 
     }
 
     @Override
-    public Map<String, Object> toMap(Address address)
-    {
+    public Map<String, Object> toMap(Address address) {
         Map<String, Object> data = new HashMap<>();
 
         data.put(CHILD_ID_NODE, address.getId());

@@ -18,11 +18,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CommentIdsRepo implements DatabaseRepo<String>
+public class CommentIdsTable implements DatabaseRepo<String>
 {
     private final DatabaseReference ownerCommentsRef;
 
-    public CommentIdsRepo(@NonNull Owner owner)
+    public CommentIdsTable(@NonNull Owner owner)
     {
         this.ownerCommentsRef = DATABASE_REF.child(MAIN_LIST_NODE)
                                             .child(OWNERS_NODE)

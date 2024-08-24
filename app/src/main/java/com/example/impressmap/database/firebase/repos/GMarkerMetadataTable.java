@@ -22,14 +22,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GMarkerMetadataRepo
+public class GMarkerMetadataTable
         implements DatabaseRepo<GMarkerMetadata>, DatabaseTransfer<GMarkerMetadata>
 {
     private final DatabaseReference gMarkersRef;
     private final String addressId;
     private final DatabaseReference addressGMarkersRef;
 
-    public GMarkerMetadataRepo(String addressId)
+    public GMarkerMetadataTable(String addressId)
     {
         gMarkersRef = DATABASE_REF.child(GMARKERS_NODE);
         this.addressId = addressId;

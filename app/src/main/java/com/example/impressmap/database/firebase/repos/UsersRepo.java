@@ -22,30 +22,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class UsersRepo implements DatabaseRepo<User>, DatabaseTransfer<User>
-{
+public class UsersRepo implements DatabaseRepo<User>, DatabaseTransfer<User> {
     private final DatabaseReference usersRef;
 
-    public UsersRepo()
-    {
+    public UsersRepo() {
         usersRef = DATABASE_REF.child(USERS_NODE);
     }
 
     @Override
-    public LiveData<List<User>> getAll()
-    {
+    public LiveData<List<User>> getAll() {
         return new AllUsersLiveData();
     }
 
-    public LiveData<User> getUser()
-    {
+    public LiveData<User> getUser() {
         return new UserLiveData(usersRef.child(UID));
     }
 
     @Override
     public void insert(User user,
-                       SuccessCallback successCallback)
-    {
+                       SuccessCallback successCallback) {
         Map<String, Object> data = toMap(user);
         usersRef.child(user.getId())
                 .updateChildren(data)
@@ -54,8 +49,7 @@ public class UsersRepo implements DatabaseRepo<User>, DatabaseTransfer<User>
 
     @Override
     public void update(User user,
-                       SuccessCallback successCallback)
-    {
+                       SuccessCallback successCallback) {
         Map<String, Object> data = toMap(user);
         usersRef.child(user.getId())
                 .updateChildren(data)
@@ -63,8 +57,7 @@ public class UsersRepo implements DatabaseRepo<User>, DatabaseTransfer<User>
     }
 
     @Override
-    public Map<String, Object> toMap(User user)
-    {
+    public Map<String, Object> toMap(User user) {
         Map<String, Object> data = new HashMap<>();
 
         data.put(CHILD_ID_NODE, user.getId());
