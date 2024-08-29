@@ -21,11 +21,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CommentsTable implements DatabaseRepo<Comment>, DatabaseTransfer<Comment>
+public class CommentsRepo implements DatabaseRepo<Comment>, DatabaseTransfer<Comment>
 {
     private final DatabaseReference commentsRef;
 
-    public CommentsTable()
+    public CommentsRepo()
     {
         commentsRef = DATABASE_REF.child(COMMENTS_NODE);
     }

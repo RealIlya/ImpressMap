@@ -19,11 +19,12 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddressesTable implements DatabaseRepo<Address>, DatabaseTransfer<Address> {
+
+public class AddressesRepo implements DatabaseRepo<Address>, DatabaseTransfer<Address> {
     private final DatabaseReference addressesRef;
     private final DatabaseReference userAddressesRef;
 
-    public AddressesTable() {
+    public AddressesRepo() {
         addressesRef = DATABASE_REF.child(ADDRESSES_NODE);
         userAddressesRef = DATABASE_REF.child(MAIN_LIST_NODE)
                 .child(USERS_NODE)
