@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.impressmap.database.firebase.cases.UserCase;
+import com.example.impressmap.database.firebase.mod.cases.UserCase;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.User;
 import com.example.impressmap.util.SuccessCallback;

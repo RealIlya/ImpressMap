@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.impressmap.database.firebase.cases.GMarkerAddressCase;
+import com.example.impressmap.database.firebase.mod.cases.GMarkerAddressCase;
 import com.example.impressmap.model.data.Address;
 
 import java.util.List;

@@ -3,7 +3,7 @@ package com.example.impressmap.ui.fragment.addresses;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.impressmap.database.firebase.cases.AddressesCase;
+import com.example.impressmap.database.firebase.mod.cases.AddressesCase;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.util.SuccessCallback;
 

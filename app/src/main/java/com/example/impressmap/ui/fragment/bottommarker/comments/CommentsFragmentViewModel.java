@@ -3,8 +3,8 @@ package com.example.impressmap.ui.fragment.bottommarker.comments;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.impressmap.database.firebase.cases.CommentOwnerCase;
-import com.example.impressmap.database.firebase.cases.CommentsCase;
+import com.example.impressmap.database.firebase.mod.cases.CommentOwnerCase;
+import com.example.impressmap.database.firebase.mod.cases.CommentsCase;
 import com.example.impressmap.model.data.Comment;
 import com.example.impressmap.model.data.Owner;
 import com.example.impressmap.util.FieldEmptyCallback;

@@ -2,7 +2,7 @@ package com.example.impressmap.ui.fragment.creatoraddress;
 
 import androidx.lifecycle.ViewModel;
 
-import com.example.impressmap.database.firebase.cases.GMarkerAddressCase;
+import com.example.impressmap.database.firebase.mod.cases.GMarkerAddressCase;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.util.SuccessCallback;

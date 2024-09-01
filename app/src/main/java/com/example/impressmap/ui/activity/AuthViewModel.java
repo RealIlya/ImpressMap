@@ -5,8 +5,8 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.example.impressmap.database.firebase.cases.AuthorizationCase;
-import com.example.impressmap.database.firebase.repos.UsersRepo;
+import com.example.impressmap.database.firebase.mod.cases.AuthorizationCase;
+import com.example.impressmap.database.firebase.mod.repos.UsersRepo;
 import com.example.impressmap.preference.SessionPreferences;
 import com.example.impressmap.util.FailCallback;
 import com.example.impressmap.util.FieldEmptyCallback;

@@ -3,7 +3,7 @@ package com.example.impressmap.ui.fragment.bottommarker.posts;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.impressmap.database.firebase.cases.PostGMarkerCase;
+import com.example.impressmap.database.firebase.mod.cases.PostGMarkerCase;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.Post;
 

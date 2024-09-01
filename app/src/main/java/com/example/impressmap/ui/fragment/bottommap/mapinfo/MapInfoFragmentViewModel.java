@@ -2,7 +2,7 @@ package com.example.impressmap.ui.fragment.bottommap.mapinfo;
 
 import androidx.lifecycle.ViewModel;
 
-import com.example.impressmap.database.firebase.cases.GMarkerCommonCase;
+import com.example.impressmap.database.firebase.mod.cases.GMarkerCommonCase;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.Post;
 import com.example.impressmap.util.SuccessCallback;
