@@ -6,16 +6,20 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public abstract class Constants
 {
-    public static final FirebaseAuth AUTH = FirebaseAuth.getInstance();
+    public static final FirebaseAuth AUTH;
     public static final DatabaseReference DATABASE_REF;
     public static final String LAT_LNG_KEY = "LAT_LNG_KEY";
     public static String UID;
 
     static
     {
-        DATABASE_REF = FirebaseDatabase.getInstance(
-                                               "https://impressmap-939c5-default-rtdb.europe-west1.firebasedatabase.app")
-                                       .getReference();
+//        AUTH = FirebaseAuth.getInstance();
+//        DATABASE_REF = FirebaseDatabase.getInstance(
+//                                               "https://impressmap-939c5-default-rtdb.europe-west1.firebasedatabase.app")
+//                                       .getReference();
+
+        AUTH = null;
+        DATABASE_REF = null;
     }
 
     /**
@@ -34,9 +38,11 @@ public abstract class Constants
         public static final String DATE_TIME_NODE = "dateTime";
         public static final String TITLE_NODE = "title";
         public static final String TEXT_NODE = "text";
-        public static final String FULL_NAME_NODE = "fullName";
+        public static final String NAME_NODE = "name";
+        public static final String SURNAME_NODE = "surname";
         public static final String POSITION_NODE = "position";
         public static final String PHONE_NUMBER_NODE = "phoneNumber";
+        public static final String AVATAR_ID_NODE = "avatarId";
         public static final String EMAIL_NODE = "email";
         public static final String OWNER_ID_NODE = "ownerId";
         public static final String DESC_NODE = "desc";
