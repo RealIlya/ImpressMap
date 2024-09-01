@@ -1,10 +1,10 @@
-package com.example.impressmap.database.firebase.cases;
+package com.example.impressmap.database.firebase.mod.cases;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.impressmap.database.firebase.repos.AddressesRepo;
-import com.example.impressmap.database.firebase.repos.GMarkerMetadataRepo;
-import com.example.impressmap.database.firebase.repos.UserAddressesRepo;
+import com.example.impressmap.database.firebase.mod.repos.AddressesRepo;
+import com.example.impressmap.database.firebase.mod.repos.GMarkerMetadataRepo;
+import com.example.impressmap.database.firebase.mod.repos.UserAddressesRepo;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.util.SuccessCallback;
 

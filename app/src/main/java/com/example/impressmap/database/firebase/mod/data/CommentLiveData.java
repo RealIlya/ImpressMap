@@ -1,4 +1,4 @@
-package com.example.impressmap.database.firebase.data;
+package com.example.impressmap.database.firebase.mod.data;
 
 import static com.example.impressmap.util.Constants.DATABASE_REF;
 import static com.example.impressmap.util.Constants.Keys.USERS_NODE;
@@ -15,29 +15,23 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-public class CommentLiveData extends LiveData<Comment>
-{
+public class CommentLiveData extends LiveData<Comment> {
     private final DatabaseReference commentRef;
     private final DatabaseReference usersRef;
 
-    private final ValueEventListener listener = new ValueEventListener()
-    {
+    private final ValueEventListener listener = new ValueEventListener() {
         @Override
-        public void onDataChange(@NonNull DataSnapshot snapshot)
-        {
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
             CommentDatabase value = snapshot.getValue(CommentDatabase.class);
 
-            if (value == null)
-            {
+            if (value == null) {
                 return;
             }
 
             usersRef.child(value.getOwnerId())
-                    .addListenerForSingleValueEvent(new ValueEventListener()
-                    {
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot)
-                        {
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
                             User user = snapshot.getValue(User.class);
 
                             Comment comment = new Comment();
@@ -53,35 +47,30 @@ public class CommentLiveData extends LiveData<Comment>
                         }
 
                         @Override
-                        public void onCancelled(@NonNull DatabaseError error)
-                        {
+                        public void onCancelled(@NonNull DatabaseError error) {
 
                         }
                     });
         }
 
         @Override
-        public void onCancelled(@NonNull DatabaseError error)
-        {
+        public void onCancelled(@NonNull DatabaseError error) {
 
         }
     };
 
-    public CommentLiveData(DatabaseReference commentRef)
-    {
+    public CommentLiveData(DatabaseReference commentRef) {
         this.commentRef = commentRef;
         usersRef = DATABASE_REF.child(USERS_NODE);
     }
 
     @Override
-    protected void onActive()
-    {
+    protected void onActive() {
         commentRef.addValueEventListener(listener);
     }
 
     @Override
-    protected void onInactive()
-    {
+    protected void onInactive() {
         commentRef.removeEventListener(listener);
     }
 }

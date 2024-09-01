@@ -1,8 +1,8 @@
-package com.example.impressmap.database.firebase.cases;
+package com.example.impressmap.database.firebase.mod.cases;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.impressmap.database.firebase.repos.UsersRepo;
+import com.example.impressmap.database.firebase.mod.repos.UsersRepo;
 import com.example.impressmap.model.data.User;
 import com.example.impressmap.util.SuccessCallback;
 

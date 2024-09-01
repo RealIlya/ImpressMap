@@ -1,4 +1,4 @@
-package com.example.impressmap.database.firebase.repos;
+package com.example.impressmap.database.firebase.mod.repos;
 
 import static com.example.impressmap.util.Constants.DATABASE_REF;
 import static com.example.impressmap.util.Constants.Keys.CHILD_ID_NODE;
@@ -9,8 +9,8 @@ import static com.example.impressmap.util.Constants.Keys.TEXT_NODE;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.impressmap.database.DatabaseRepo;
-import com.example.impressmap.database.firebase.data.CommentLiveData;
+import com.example.impressmap.database.firebase.mod.DatabaseRepo;
+import com.example.impressmap.database.firebase.mod.data.CommentLiveData;
 import com.example.impressmap.model.data.Comment;
 import com.example.impressmap.model.data.DatabaseTransfer;
 import com.example.impressmap.util.SuccessCallback;
@@ -21,30 +21,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CommentsRepo implements DatabaseRepo<Comment>, DatabaseTransfer<Comment>
-{
+public class CommentsRepo implements DatabaseRepo<Comment>, DatabaseTransfer<Comment> {
     private final DatabaseReference commentsRef;
 
-    public CommentsRepo()
-    {
+    public CommentsRepo() {
         commentsRef = DATABASE_REF.child(COMMENTS_NODE);
     }
 
     @Override
-    public LiveData<List<Comment>> getAll()
-    {
+    public LiveData<List<Comment>> getAll() {
         throw new RuntimeException("Stub!");
     }
 
-    public LiveData<Comment> getComment(String commentId)
-    {
+    public LiveData<Comment> getComment(String commentId) {
         return new CommentLiveData(commentsRef.child(commentId));
     }
 
     @Override
     public void insert(Comment comment,
-                       SuccessCallback successCallback)
-    {
+                       SuccessCallback successCallback) {
         String commentKey = commentsRef.push().getKey();
 //        commentsRef.push()
 
@@ -52,20 +47,18 @@ public class CommentsRepo implements DatabaseRepo<Comment>, DatabaseTransfer<Com
         Map<String, Object> data = toMap(comment);
 
         commentsRef.child(comment.getId())
-                   .updateChildren(data)
-                   .addOnSuccessListener(unused -> successCallback.onSuccess());
+                .updateChildren(data)
+                .addOnSuccessListener(unused -> successCallback.onSuccess());
     }
 
     @Override
     public void update(Comment comment,
-                       SuccessCallback successCallback)
-    {
+                       SuccessCallback successCallback) {
 
     }
 
     @Override
-    public Map<String, Object> toMap(Comment comment)
-    {
+    public Map<String, Object> toMap(Comment comment) {
         Map<String, Object> data = new HashMap<>();
 
         data.put(CHILD_ID_NODE, comment.getId());

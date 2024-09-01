@@ -1,9 +1,9 @@
-package com.example.impressmap.database.firebase.cases;
+package com.example.impressmap.database.firebase.mod.cases;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
-import com.example.impressmap.database.firebase.repos.PostsRepo;
+import com.example.impressmap.database.firebase.mod.repos.PostsRepo;
 import com.example.impressmap.model.data.GMarkerMetadata;
 import com.example.impressmap.model.data.Post;
 

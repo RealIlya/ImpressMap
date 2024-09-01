@@ -1,4 +1,4 @@
-package com.example.impressmap.database.firebase.repos;
+package com.example.impressmap.database.firebase.mod.repos;
 
 import static com.example.impressmap.util.Constants.DATABASE_REF;
 import static com.example.impressmap.util.Constants.Keys.ADDRESSES_NODE;
@@ -10,13 +10,17 @@ import static com.example.impressmap.util.Constants.Keys.POSITION_NODE;
 import static com.example.impressmap.util.Constants.Keys.USERS_NODE;
 import static com.example.impressmap.util.Constants.UID;
 
-import com.example.impressmap.database.DatabaseRepo;
+import androidx.lifecycle.LiveData;
+
+import com.example.impressmap.database.firebase.mod.DatabaseRepo;
+import com.example.impressmap.database.firebase.mod.data.AllAddressesLiveData;
 import com.example.impressmap.model.data.Address;
 import com.example.impressmap.model.data.DatabaseTransfer;
 import com.example.impressmap.util.SuccessCallback;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -30,6 +34,11 @@ public class AddressesRepo implements DatabaseRepo<Address>, DatabaseTransfer<Ad
                 .child(USERS_NODE)
                 .child(UID)
                 .child(ADDRESSES_NODE);
+    }
+
+    @Override
+    public LiveData<List<Address>> getAll() {
+        return new AllAddressesLiveData(addressesRef);
     }
 
     @Override

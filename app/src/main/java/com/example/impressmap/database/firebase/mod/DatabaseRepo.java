@@ -1,4 +1,4 @@
-package com.example.impressmap.database;
+package com.example.impressmap.database.firebase.mod;
 
 import androidx.lifecycle.LiveData;
 
@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface DatabaseRepo<T>
 {
+    LiveData<List<T>> getAll();
+
     void insert(T t,
                 SuccessCallback successCallback);
 

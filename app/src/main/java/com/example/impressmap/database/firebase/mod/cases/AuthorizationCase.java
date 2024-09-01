@@ -1,9 +1,9 @@
-package com.example.impressmap.database.firebase.cases;
+package com.example.impressmap.database.firebase.mod.cases;
 
 import static com.example.impressmap.util.Constants.AUTH;
 import static com.example.impressmap.util.Constants.UID;
 
-import com.example.impressmap.database.DatabaseRepo;
+import com.example.impressmap.database.firebase.mod.DatabaseRepo;
 import com.example.impressmap.model.data.User;
 import com.example.impressmap.util.FailCallback;
 import com.example.impressmap.util.SuccessCallback;

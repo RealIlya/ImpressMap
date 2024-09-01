@@ -1,4 +1,4 @@
-package com.example.impressmap.database.firebase.data;
+package com.example.impressmap.database.firebase.mod.data;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;

@@ -1,4 +1,4 @@
-package com.example.impressmap.database.firebase.data;
+package com.example.impressmap.database.firebase.mod.data;
 
 import static com.example.impressmap.util.Constants.DATABASE_REF;
 import static com.example.impressmap.util.Constants.Keys.GMARKERS_NODE;
@@ -16,77 +16,64 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class AllAddressGMarkerMetadataLiveData extends LiveData<List<GMarkerMetadata>>
-{
+public class AllAddressGMarkerMetadataLiveData extends LiveData<List<GMarkerMetadata>> {
     private final DatabaseReference userGMarkerRef;
 
-    private final ValueEventListener listener = new ValueEventListener()
-    {
+    private final ValueEventListener listener = new ValueEventListener() {
         @Override
-        public void onDataChange(@NonNull DataSnapshot snapshot)
-        {
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
             DatabaseReference gMarkersRef = DATABASE_REF.child(GMARKERS_NODE);
 
             List<GMarkerMetadata> gMarkerMetadataList = new ArrayList<>();
             Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
 
-            if (!iterator.hasNext())
-            {
+            if (!iterator.hasNext()) {
                 setValue(gMarkerMetadataList);
             }
 
-            while (iterator.hasNext())
-            {
+            while (iterator.hasNext()) {
                 DataSnapshot dataSnapshot = iterator.next();
                 boolean hasNext = iterator.hasNext();
                 GMarkerMetadata value = dataSnapshot.getValue(GMarkerMetadata.class);
 
                 gMarkersRef.child(value.getId())
-                           .addListenerForSingleValueEvent(new ValueEventListener()
-                           {
-                               @Override
-                               public void onDataChange(@NonNull DataSnapshot snapshot)
-                               {
-                                   GMarkerMetadata gMarkerMetadata = snapshot.getValue(
-                                           GMarkerMetadata.class);
-                                   gMarkerMetadataList.add(gMarkerMetadata);
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                GMarkerMetadata gMarkerMetadata = snapshot.getValue(
+                                        GMarkerMetadata.class);
+                                gMarkerMetadataList.add(gMarkerMetadata);
 
-                                   if (!hasNext)
-                                   {
-                                       setValue(gMarkerMetadataList);
-                                   }
-                               }
+                                if (!hasNext) {
+                                    setValue(gMarkerMetadataList);
+                                }
+                            }
 
-                               @Override
-                               public void onCancelled(@NonNull DatabaseError error)
-                               {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
-                               }
-                           });
+                            }
+                        });
             }
         }
 
         @Override
-        public void onCancelled(@NonNull DatabaseError error)
-        {
+        public void onCancelled(@NonNull DatabaseError error) {
 
         }
     };
 
-    public AllAddressGMarkerMetadataLiveData(DatabaseReference userGMarkerRef)
-    {
+    public AllAddressGMarkerMetadataLiveData(DatabaseReference userGMarkerRef) {
         this.userGMarkerRef = userGMarkerRef;
     }
 
     @Override
-    protected void onActive()
-    {
+    protected void onActive() {
         userGMarkerRef.addValueEventListener(listener);
     }
 
     @Override
-    protected void onInactive()
-    {
+    protected void onInactive() {
         userGMarkerRef.removeEventListener(listener);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.impressmap.database.firebase.data;
+package com.example.impressmap.database.firebase.mod.data;
 
 import static com.example.impressmap.util.Constants.DATABASE_REF;
 import static com.example.impressmap.util.Constants.Keys.USERS_NODE;

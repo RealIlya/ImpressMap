@@ -1,4 +1,4 @@
-package com.example.impressmap.database.firebase.data;
+package com.example.impressmap.database.firebase.mod.data;
 
 import static com.example.impressmap.util.Constants.DATABASE_REF;
 import static com.example.impressmap.util.Constants.Keys.ADDRESSES_NODE;
@@ -16,76 +16,63 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class AllUserAddressesLiveData extends LiveData<List<Address>>
-{
+public class AllUserAddressesLiveData extends LiveData<List<Address>> {
     private final DatabaseReference userAddressesRef;
 
-    private final ValueEventListener listener = new ValueEventListener()
-    {
+    private final ValueEventListener listener = new ValueEventListener() {
         @Override
-        public void onDataChange(@NonNull DataSnapshot snapshot)
-        {
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
             DatabaseReference addressesRef = DATABASE_REF.child(ADDRESSES_NODE);
 
             List<Address> addressList = new ArrayList<>();
             Iterator<DataSnapshot> iterator = snapshot.getChildren().iterator();
 
-            if (!iterator.hasNext())
-            {
+            if (!iterator.hasNext()) {
                 setValue(addressList);
             }
 
-            while (iterator.hasNext())
-            {
+            while (iterator.hasNext()) {
                 DataSnapshot dataSnapshot = iterator.next();
                 boolean hasNext = iterator.hasNext();
                 Address value = dataSnapshot.getValue(Address.class);
 
                 addressesRef.child(value.getId())
-                            .addListenerForSingleValueEvent(new ValueEventListener()
-                            {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot)
-                                {
-                                    Address address = snapshot.getValue(Address.class);
-                                    addressList.add(address);
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                Address address = snapshot.getValue(Address.class);
+                                addressList.add(address);
 
-                                    if (!hasNext)
-                                    {
-                                        setValue(addressList);
-                                    }
+                                if (!hasNext) {
+                                    setValue(addressList);
                                 }
+                            }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error)
-                                {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
-                                }
-                            });
+                            }
+                        });
             }
         }
 
         @Override
-        public void onCancelled(@NonNull DatabaseError error)
-        {
+        public void onCancelled(@NonNull DatabaseError error) {
 
         }
     };
 
-    public AllUserAddressesLiveData(DatabaseReference userAddressesRef)
-    {
+    public AllUserAddressesLiveData(DatabaseReference userAddressesRef) {
         this.userAddressesRef = userAddressesRef;
     }
 
     @Override
-    protected void onActive()
-    {
+    protected void onActive() {
         userAddressesRef.addValueEventListener(listener);
     }
 
     @Override
-    protected void onInactive()
-    {
+    protected void onInactive() {
         userAddressesRef.removeEventListener(listener);
     }
 }

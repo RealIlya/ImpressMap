@@ -1,4 +1,4 @@
-package com.example.impressmap.database.firebase.data;
+package com.example.impressmap.database.firebase.mod.data;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -12,19 +12,15 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommentIdsLiveData extends LiveData<List<String>>
-{
+public class CommentIdsLiveData extends LiveData<List<String>> {
     private final DatabaseReference commentsRef;
 
-    private final ValueEventListener listener = new ValueEventListener()
-    {
+    private final ValueEventListener listener = new ValueEventListener() {
         @Override
-        public void onDataChange(@NonNull DataSnapshot snapshot)
-        {
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
             List<String> values = new ArrayList<>();
 
-            for (DataSnapshot child : snapshot.getChildren())
-            {
+            for (DataSnapshot child : snapshot.getChildren()) {
                 values.add(child.getValue(CommentId.class).getId());
             }
 
@@ -32,26 +28,22 @@ public class CommentIdsLiveData extends LiveData<List<String>>
         }
 
         @Override
-        public void onCancelled(@NonNull DatabaseError error)
-        {
+        public void onCancelled(@NonNull DatabaseError error) {
 
         }
     };
 
-    public CommentIdsLiveData(DatabaseReference commentsRef)
-    {
+    public CommentIdsLiveData(DatabaseReference commentsRef) {
         this.commentsRef = commentsRef;
     }
 
     @Override
-    protected void onActive()
-    {
+    protected void onActive() {
         commentsRef.addValueEventListener(listener);
     }
 
     @Override
-    protected void onInactive()
-    {
+    protected void onInactive() {
         commentsRef.removeEventListener(listener);
     }
 }
